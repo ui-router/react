@@ -1,0 +1,24 @@
+{
+  "name": "ui-router-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --history-api-fallback --content-base example",
+    "build": "rimraf dist && mkdirp dist && ncp src/assets dist/assets && ncp src/index.html dist/index.html && ncp src/favicon.png dist/favicon.png && NODE_ENV=production webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ui-router-core": "^1.0.0-alpha.4"
+  },
+  "devDependencies": {
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2",
+    "ts-loader": "^0.8.2",
+    "typescript": "^1.8.10",
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
