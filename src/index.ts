@@ -4,6 +4,7 @@ import {ReactViewConfig, reactViewsBuilder} from "./ui-router-react"
 import {ReactViewDeclaration, ReactStateDeclaration} from "./interface"
 import {UiView} from "./components/UiView";
 import {UiSref} from "./components/UiSref";
+import {UiSrefActive} from "./components/UiSrefActive";
 
 // create router instance 
 let Router = new UIRouter();
@@ -27,6 +28,7 @@ export {
     Router,
     UiView,
     UiSref,
+    UiSrefActive,
     registerStates,
     ReactStateDeclaration
 }

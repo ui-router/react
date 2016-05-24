@@ -6,7 +6,8 @@ export class UiSref extends React.Component<any,any> {
     static propTypes = {
         to: React.PropTypes.string.isRequired,
         params: React.PropTypes.object,
-        options: React.PropTypes.object
+        options: React.PropTypes.object,
+        className: React.PropTypes.string
     }
     
     constructor (props) {
@@ -29,7 +30,7 @@ export class UiSref extends React.Component<any,any> {
     
     render () {
         return (
-            <a href="#" onClick={this.handleClick}>{this.props.children}</a>
+            <a href="#" onClick={this.handleClick} className={this.props.className}>{this.props.children}</a>
         );
     }
 }
