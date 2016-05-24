@@ -1,5 +1,5 @@
 import * as React from "react";
-import {UiView, UiSref} from "../src/index";
+import {UiView, UiSref, UiSrefActive} from "../src/index";
 
 export class Home extends React.Component<any,any> {
   render() {
@@ -7,9 +7,15 @@ export class Home extends React.Component<any,any> {
       <div>
         UI-Router + React proof of concept
         <UiView name="header"></UiView>
-        <UiSref to={'home'} params={{foo:'bar'}}>Home</UiSref>{' '}
-        <UiSref to={'home.child'}>Child</UiSref> {' '}
-        <a href="#/home/child/nest">Nest</a> {' '}
+        <UiSrefActive class={'active'}>
+          <UiSref to={'home'}>Home</UiSref>
+        </UiSrefActive>{' '}
+        <UiSrefActive class={'active'}>
+          <UiSref to={'home.child'}>Child</UiSref>
+        </UiSrefActive>{' '}
+        <UiSrefActive class={'active'}>
+          <UiSref to={'home.child.nest'}>Nest</UiSref>
+        </UiSrefActive>{' '}
         <h2>Home</h2> 
         <UiView/>
       </div>

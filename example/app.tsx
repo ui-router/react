@@ -17,5 +17,4 @@ Router.urlRouter.listen();
 Router.urlRouter.sync();
 
 var el = document.getElementById("react-app");
-console.log(el);
 ReactDOM.render(<UiView/>, el);
