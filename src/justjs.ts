@@ -81,21 +81,105 @@ services.$injector.annotate = function(fn) {
 };
 
 let loc = <any> services.location;
-
-loc.hash = () => "";
-loc.path = () => location.hash.replace(/^#/, "");
-loc.search = () => location.search;
-loc.url = (url) => { if (url) location.hash = url; return loc.path(); };
-loc.replace = () => { console.log(new Error("not impl")); };
-loc.onChange = (cb) => {
-  window.addEventListener("hashchange", cb, false);
-};
+let hashPrefix: string = '!';
+let baseHref: string = "";
 
 let locCfg = <any> services.locationConfig;
 
 locCfg.port = () => location.port;
 locCfg.protocol = () => location.protocol;
 locCfg.host = () => location.host;
-locCfg.baseHref = () => "";
+locCfg.baseHref = (newBaseHref: string): string => {
+  if(isDefined(newBaseHref)) {
+    baseHref = newBaseHref;
+  }
+  return baseHref;
+};
 locCfg.html5Mode = () => false;
-locCfg.hashPrefix = () => "";
+locCfg.hashPrefix = (newprefix: string): string => {
+  if(isDefined(newprefix)) {
+    hashPrefix = newprefix;
+  }
+  return hashPrefix;
+};
+
+
+
+
+
+
+
+
+
+
+const beforeAfterSubstr = char => str => {
+  if (!str) return ["", ""];
+  let idx = str.indexOf(char);
+  if (idx === -1) return [str, ""];
+  return [str.substr(0, idx), str.substr(idx + 1)];
+};
+
+const splitHash = beforeAfterSubstr("#");
+const splitQuery = beforeAfterSubstr("?");
+const splitEqual = beforeAfterSubstr("=");
+const trimHashVal = (str) => str ? str.replace(/^#/, "") : "";
+
+const keyValsToObjectR = (accum, [key, val]) => {
+  if (!accum.hasOwnProperty(key)) {
+    accum[key] = val;
+  } else if (isArray(accum[key])) {
+    accum[key].push(val);
+  } else {
+    accum[key] = [accum[key], val]
+  }
+
+  return accum;
+};
+
+const getParams = (queryString) => queryString.split("&").map(splitEqual).reduce(keyValsToObjectR, {});
+
+// Location: hash mode or pushstate mode
+export let hashLocation = {
+  hash: () =>
+      splitHash(trimHashVal(location.hash))[1],
+  path: () =>
+      splitHash(splitQuery(trimHashVal(location.hash))[0])[0],
+  search: () => {
+    getParams(splitQuery(splitHash(trimHashVal(location.hash))[1])[1]);
+  },
+  url: (url) => {
+    if(isDefined(url)) {
+      location.hash = url;
+    }
+    return loc.path();
+  },
+  replace: () => console.log(new Error('$location.replace() not impl')),
+  onChange: (cb) => window.addEventListener("hashchange", cb, false)
+};
+
+
+
+export let pushStateLocation = {
+  hash: () =>
+      trimHashVal(location.hash),
+  path: () => {
+    let base = locCfg.baseHref()
+    let path = location.pathname;
+    let idx = path.indexOf(base);
+    if (idx !== 0) throw new Error(`current url: ${path} does not start with <base> tag ${base}`);
+    return path.substr(base.length);
+  },
+  search: () =>
+      location.search,
+  url: (url) => {
+    if (isDefined(url) && url !== loc.url()) {
+      history.pushState(null, null, locCfg.baseHref() + url);
+    }
+    let hash = loc.hash();
+    return loc.path() + (hash ? "#" + hash : "");
+  },
+  replace: () => console.log(new Error('$location.replace() not impl')),
+  onChange: (cb) => window.addEventListener("popstate", cb, false)
+};
+
+Object.assign(loc, pushStateLocation);
