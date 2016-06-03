@@ -30,10 +30,15 @@ export class UiView extends React.Component<any,any> {
   
     constructor() {
         super();
+        this.state = {
+            component: 'div',
+            resolves: {}
+        }
     }
     
     render() {
-        let child = React.createElement(this.state && this.state.component || "h3"); 
+        let { component, resolves } = this.state;
+        let child = React.createElement(component, resolves); 
         return child;
     }
     
@@ -86,6 +91,14 @@ export class UiView extends React.Component<any,any> {
     viewConfigUpdated(newConfig: ReactViewConfig) {
         this.uiViewData.config = newConfig;
         let newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
-        this.setState({ component: newComponent })
+        let resolves = {};
+        if (newConfig) {
+            Object.keys(newConfig.node.resolves).forEach(function(key,index) {
+                if (key !== '$resolve$' && key !== '$stateParams') {
+                    resolves[key] = newConfig.node.resolves[key].data;
+                } 
+            });
+        }
+        this.setState({ component: newComponent || 'div', resolves })
     }
 }
