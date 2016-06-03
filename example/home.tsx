@@ -8,7 +8,7 @@ export class Home extends React.Component<any,any> {
         UI-Router + React proof of concept
         <UiView name="header"></UiView>
         <UiSrefActive class={'active'}>
-          <UiSref to={'home'}>Home</UiSref>
+          <UiSref to={'home'} params={{foo:'bar'}}>Home</UiSref>
         </UiSrefActive>{' '}
         <UiSrefActive class={'active'}>
           <UiSref to={'home.child'}>Child</UiSref>
