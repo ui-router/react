@@ -9,7 +9,23 @@ import {Header} from './header';
 
 let home = { name: 'home', component: Home, url: '/home?foo' };
 let child = { name: 'home.child', component: Child, url: '/child' };
-let nest = { name: 'home.child.nest', views: { $default: Nest, "header@home": Header }, url: '/nest' };
+let nest = {
+	name: 'home.child.nest',
+	views: {
+		$default: Nest,
+		"header@home": Header
+	},
+	url: '/nest',
+	resolve: {
+		foo: ($transition$) => {
+			return new Promise<string>((resolve, reject) => {
+				setTimeout(() => {
+					resolve('bar');
+				}, 1000);
+			});
+		}
+	}
+};
 registerStates([home, child, nest]);
 
 Router.urlRouterProvider.otherwise(() => Router.stateService.go("home.child"));
