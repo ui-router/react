@@ -144,9 +144,8 @@ export let hashLocation = {
       splitHash(trimHashVal(location.hash))[1],
   path: () =>
       splitHash(splitQuery(trimHashVal(location.hash))[0])[0],
-  search: () => {
-    getParams(splitQuery(splitHash(trimHashVal(location.hash))[1])[1]);
-  },
+  search: () =>
+    getParams(splitQuery(splitHash(trimHashVal(location.hash))[1])[1]),
   url: (url) => {
     if(isDefined(url)) {
       location.hash = url;
@@ -170,7 +169,7 @@ export let pushStateLocation = {
     return path.substr(base.length);
   },
   search: () =>
-      location.search,
+    getParams(splitQuery(location.search)[1]),
   url: (url) => {
     if (isDefined(url) && url !== loc.url()) {
       history.pushState(null, null, locCfg.baseHref() + url);
