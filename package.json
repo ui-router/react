@@ -2,11 +2,12 @@
   "name": "ui-router-react",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/ui-router-react.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --history-api-fallback --content-base example",
-    "build": "rimraf dist && mkdirp dist && ncp src/assets dist/assets && ncp src/index.html dist/index.html && ncp src/favicon.png dist/favicon.png && NODE_ENV=production webpack"
+    "dev": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config webpack.example.js --history-api-fallback --content-base example",
+    "build": "rimraf lib && mkdirp lib && NODE_ENV=production webpack --config webpack.build.js",
+    "postinstall": "rimraf lib && mkdirp lib && NODE_ENV=production webpack --config webpack.build.js"
   },
   "author": "",
   "license": "ISC",
