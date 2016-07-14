@@ -1,7 +1,7 @@
 {
   "name": "ui-router-react",
   "version": "0.1.0",
-  "description": "",
+  "description": "State based routing for React",
   "main": "lib/ui-router-react.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
     "build": "rimraf lib && mkdirp lib && NODE_ENV=production webpack --config webpack.build.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ui-router-core": "^1.0.0-beta.1"
   },
