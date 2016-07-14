@@ -5,7 +5,7 @@ import {ReactViewConfig} from "../ui-router-react";
 let id = 0;
 
 let uiViewContexts: {
-    [key: string]: { 
+    [key: string]: {
         fqn: string;
         context: ViewContext;
     }
@@ -13,21 +13,21 @@ let uiViewContexts: {
 
 export class UiView extends React.Component<any,any> {
     el;
-    
+
     viewContext: ViewContext;
     fqn: string;
-    
+
     uiViewData: ActiveUIView;
     deregister: Function;
-    
+
     static childContextTypes: React.ValidationMap<any> = {
         uiViewId: React.PropTypes.number
     }
-    
+
     static contextTypes: React.ValidationMap<any> = {
         uiViewId: React.PropTypes.number
     }
-  
+
     constructor() {
         super();
         this.state = {
@@ -35,13 +35,13 @@ export class UiView extends React.Component<any,any> {
             resolves: {}
         }
     }
-    
+
     render() {
         let { component, resolves } = this.state;
-        let child = React.createElement(component, resolves); 
+        let child = React.createElement(component, resolves);
         return child;
     }
-    
+
     getChildContext() {
         return {
             uiViewId: (this.state && this.state.id) || 0
@@ -50,11 +50,11 @@ export class UiView extends React.Component<any,any> {
 
     componentDidMount() {
         let router = (UIRouter as any).instance as UIRouter;
-        
+
         let parentFqn: string;
         let creationContext: ViewContext;
         let parentId: number = (this.context as any).uiViewId || 0;
-        
+
         if (parentId === 0) {
             parentFqn = "";
             creationContext = router.stateRegistry.root();
@@ -73,30 +73,32 @@ export class UiView extends React.Component<any,any> {
             configUpdated: this.viewConfigUpdated.bind(this),
             config: undefined
         } as ActiveUIView;
-                        
+
         uiViewContexts[uiViewData.id] = {
             get fqn() { return uiViewData.fqn; },
-            get context() { return uiViewData.config && uiViewData.config.viewDecl.$context; } 
+            get context() { return uiViewData.config && uiViewData.config.viewDecl.$context; }
         }
         
-        this.deregister = router.viewService.registerUiView(this.uiViewData);
+        this.deregister = router.viewService.registerUIView(this.uiViewData);
         this.setState({ id: uiViewData.id });
     }
-    
+
     componentWillUnmount() {
         this.deregister();
         delete uiViewContexts[this.uiViewData.id];
     }
-    
+
     viewConfigUpdated(newConfig: ReactViewConfig) {
         this.uiViewData.config = newConfig;
         let newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
         let resolves = {};
         if (newConfig) {
-            Object.keys(newConfig.node.resolves).forEach(function(key,index) {
-                if (key !== '$resolve$' && key !== '$stateParams') {
-                    resolves[key] = newConfig.node.resolves[key].data;
-                } 
+            let resolvables = newConfig.path[0].resolvables;
+            newConfig.path.forEach(pathNode => {
+                pathNode.resolvables.forEach(resolvable => {
+                    if (typeof resolvable.token === 'string')
+                    resolves[resolvable.token] = resolvable.data;
+                });
             });
         }
         this.setState({ component: newComponent || 'div', resolves })

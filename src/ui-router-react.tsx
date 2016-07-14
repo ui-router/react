@@ -1,4 +1,4 @@
-import { services, forEach, map, pick, Node, ViewConfig, ViewService, State} from "ui-router-core";
+import { services, forEach, map, pick, PathNode, ViewConfig, ViewService, State} from "ui-router-core";
 import {ReactViewDeclaration} from "./interface";
 
 /**
@@ -29,7 +29,7 @@ export function reactViewsBuilder(state: State) {
     config.$context = state;
     config.$name = name;
 
-    let normalized = ViewService.normalizeUiViewTarget(config.$context, config.$name);
+    let normalized = ViewService.normalizeUIViewTarget(config.$context, config.$name);
     config.$uiViewName = normalized.uiViewName;
     config.$uiViewContextAnchor = normalized.uiViewContextAnchor;
 
@@ -38,10 +38,12 @@ export function reactViewsBuilder(state: State) {
   return views;
 }
 
+let id = 0;
 export class ReactViewConfig implements ViewConfig {
   loaded: boolean = true;
+  $id: number = id++;
 
-  constructor(public node: Node, public viewDecl: ReactViewDeclaration) { }
+  constructor(public path: [PathNode], public viewDecl: ReactViewDeclaration) { }
 
   load() {
     return services.$q.when(this);
