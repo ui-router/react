@@ -1,6 +1,6 @@
 {
   "name": "ui-router-react",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "lib/ui-router-react.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ui-router-core": "^1.0.0-alpha.4"
+    "ui-router-core": "^1.0.0-beta.1"
   },
   "devDependencies": {
     "react": "^15.0.2",
