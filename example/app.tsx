@@ -28,7 +28,7 @@ let nest = {
 };
 registerStates([home, child, nest]);
 
-Router.urlRouterProvider.otherwise(() => Router.stateService.go("home.child"));
+Router.urlRouterProvider.otherwise(() => "/home");
 Router.urlRouter.listen();
 Router.urlRouter.sync();
 
