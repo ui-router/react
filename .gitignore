@@ -1,4 +1,7 @@
 .DS_Store
+.tslintrc
+tslint.json
+.eslintrc
 dist
 lib/
 node_modules/
