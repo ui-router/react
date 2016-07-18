@@ -1,5 +1,5 @@
 import { trace, UIRouter, PathNode } from 'ui-router-core';
-import './justjs.ts';
+import './justjs';
 import {ReactViewConfig, reactViewsBuilder} from "./ui-router-react"
 import {ReactViewDeclaration, ReactStateDeclaration} from "./interface"
 import {UiView} from "./components/UiView";
