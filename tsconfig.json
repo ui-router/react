@@ -5,8 +5,15 @@
     "allowSyntheticDefaultImports": true,
     "suppressImplicitAnyIndexErrors": true,
     "sourceMap": true,
+    "declaration": true,
     "jsx": "react"
   },
   "compileOnSave": false,
-  "buildOnSave": false
+  "buildOnSave": false,
+  "rules": {
+    "indent": [
+      true,
+      2
+    ]
+  }
 }
