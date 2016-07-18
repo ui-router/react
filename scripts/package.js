@@ -56,6 +56,8 @@ function preparePackageFolder (pkgName) {
 	ln('-sf', `${paths.basedir}/typings`, `${paths.package}/typings`);
 	ln('-sf', `${paths.basedir}/node_modules`, `${paths.package}/node_modules`);
 
+	['.gitignore', '.npmignore', 'README.md']
+		.forEach(file => cp(`${paths.basedir}/${file}`, `${paths.package}/${file}`));
 
 	echo('--> Building webpack bundles...');
 	cd(paths.package);
