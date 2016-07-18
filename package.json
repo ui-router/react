@@ -2,11 +2,12 @@
   "name": "ui-router-react",
   "version": "0.1.0",
   "description": "State based routing for React",
-  "main": "lib/ui-router-react.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config webpack.example.js --history-api-fallback --content-base example",
-    "build": "rimraf lib && mkdirp lib && NODE_ENV=production webpack --config webpack.build.js"
+    "build": "rimraf _bundles && mkdirp _bundles && NODE_ENV=production webpack",
+    "prepare-package": "node scripts/package"
   },
   "author": "",
   "license": "MIT",
@@ -19,9 +20,13 @@
     "ui-router-core": "^1.0.0-beta.1"
   },
   "devDependencies": {
+    "glob": "^7.0.5",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
+    "rimraf": "^2.5.3",
+    "shelljs": "^0.7.0",
     "ts-loader": "^0.8.2",
+    "tsc": "^1.20150623.0",
     "typescript": "^1.8.10",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"

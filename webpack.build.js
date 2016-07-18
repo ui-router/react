@@ -3,11 +3,11 @@ var webpack = require("webpack");
 
 var config = {
 	entry: {
-		"ui-router-react": ["./src/index.ts"],
-		"ui-router-react.min": ["./src/index.ts"]
+		"ui-router-react": ["./_src/index.ts"],
+		"ui-router-react.min": ["./_src/index.ts"]
 	},
 	output: {
-		path: path.resolve(__dirname, "lib"),
+		path: path.resolve(__dirname, "_bundles"),
 		filename: "[name].js",
 		libraryTarget: "umd",
 		library: "ui-router-react",
@@ -33,9 +33,7 @@ var config = {
 		]
 	},
 	ts: {
-		compilerOptions: {
-			declaration: false
-		}
+		configFileName: 'tsconfig.webpack.json'
 	},
 	externals: {
 		"react": { root: 'react', amd: 'react', commonjs2: 'react', commonjs: 'react' }

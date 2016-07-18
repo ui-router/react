@@ -5,4 +5,5 @@ tslint.json
 dist
 lib/
 node_modules/
+package/
 typings/
