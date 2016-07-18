@@ -1,0 +1,6 @@
+.*
+**/webpack.config.js
+**/tsconfig.json
+**/tsconfig.webpack.json
+**/node_modules
+typings
