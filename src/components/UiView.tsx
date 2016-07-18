@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {Component, PropTypes, ValidationMap, createElement} from 'react';
 import {UIRouter, ActiveUIView, ViewContext, ViewConfig} from "ui-router-core";
 import {ReactViewConfig} from "../ui-router-react";
 
@@ -11,7 +11,7 @@ let uiViewContexts: {
     }
 } = {};
 
-export class UiView extends React.Component<any,any> {
+export class UiView extends Component<any,any> {
     el;
 
     viewContext: ViewContext;
@@ -20,12 +20,12 @@ export class UiView extends React.Component<any,any> {
     uiViewData: ActiveUIView;
     deregister: Function;
 
-    static childContextTypes: React.ValidationMap<any> = {
-        uiViewId: React.PropTypes.number
+    static childContextTypes: ValidationMap<any> = {
+        uiViewId: PropTypes.number
     }
 
-    static contextTypes: React.ValidationMap<any> = {
-        uiViewId: React.PropTypes.number
+    static contextTypes: ValidationMap<any> = {
+        uiViewId: PropTypes.number
     }
 
     constructor() {
@@ -38,7 +38,7 @@ export class UiView extends React.Component<any,any> {
 
     render() {
         let { component, resolves } = this.state;
-        let child = React.createElement(component, resolves);
+        let child = createElement(component, resolves);
         return child;
     }
 
@@ -78,7 +78,7 @@ export class UiView extends React.Component<any,any> {
             get fqn() { return uiViewData.fqn; },
             get context() { return uiViewData.config && uiViewData.config.viewDecl.$context; }
         }
-        
+
         this.deregister = router.viewService.registerUIView(this.uiViewData);
         this.setState({ id: uiViewData.id });
     }

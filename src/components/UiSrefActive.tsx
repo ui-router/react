@@ -1,13 +1,13 @@
-import * as React from 'react';
+import {Component, PropTypes, cloneElement} from 'react';
 import {Router, UiSref} from '../index';
 import {find} from '../utils';
 
-export class UiSrefActive extends React.Component<any,any> {
+export class UiSrefActive extends Component<any,any> {
     uiSref;
 
     static propTypes = {
-        class: React.PropTypes.string.isRequired,
-        children: React.PropTypes.element.isRequired
+        class: PropTypes.string.isRequired,
+        children: PropTypes.element.isRequired
     }
 
     constructor (props) {
@@ -31,7 +31,7 @@ export class UiSrefActive extends React.Component<any,any> {
         return (
             !isActive
                 ? this.props.children
-                : React.cloneElement(this.props.children, { className: this.props.class })
+                : cloneElement(this.props.children, { className: this.props.class })
         );
     }
 }
