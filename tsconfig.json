@@ -8,12 +8,11 @@
     "declaration": true,
     "jsx": "react"
   },
+  "exclude": [
+    "node_modules",
+    "package",
+    "lib"
+  ],
   "compileOnSave": false,
-  "buildOnSave": false,
-  "rules": {
-    "indent": [
-      true,
-      2
-    ]
-  }
+  "buildOnSave": false
 }
