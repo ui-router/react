@@ -1,5 +1,5 @@
 import {Component, PropTypes, createElement} from 'react';
-import {Router} from '../index';
+import UIRouterReact from '../index';
 import {extend} from 'ui-router-core';
 
 export class UiSref extends Component<any,any> {
@@ -15,7 +15,7 @@ export class UiSref extends Component<any,any> {
     }
 
     getOptions = () => {
-        let parent = Router.globals.$current.parent.name;
+        let parent = UIRouterReact.instance.globals.$current.parent.name;
         let defOpts = { relative: parent, inherit: true };
         return extend(defOpts, this.props.options || {});
     }
@@ -25,7 +25,7 @@ export class UiSref extends Component<any,any> {
         let params = this.props.params || {};
         let to = this.props.to;
         let options = this.getOptions();
-        Router.stateService.go(to, params, options);
+        UIRouterReact.instance.stateService.go(to, params, options);
     }
 
     render () {

@@ -1,5 +1,6 @@
 import {Component, PropTypes, ValidationMap, createElement} from 'react';
-import {UIRouter, ActiveUIView, ViewContext, ViewConfig} from "ui-router-core";
+import {ActiveUIView, ViewContext, ViewConfig} from "ui-router-core";
+import UIRouterReact from "../index";
 import {ReactViewConfig} from "../ui-router-react";
 
 let id = 0;
@@ -49,7 +50,7 @@ export class UiView extends Component<any,any> {
     }
 
     componentDidMount() {
-        let router = (UIRouter as any).instance as UIRouter;
+        let router = UIRouterReact.instance;
 
         let parentFqn: string;
         let creationContext: ViewContext;

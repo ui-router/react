@@ -1,5 +1,5 @@
 import {Component, PropTypes, cloneElement} from 'react';
-import {Router, UiSref} from '../index';
+import UIRouterReact, { UiSref } from '../index';
 import {find} from '../utils';
 
 export class UiSrefActive extends Component<any,any> {
@@ -22,7 +22,7 @@ export class UiSrefActive extends Component<any,any> {
     }
 
     isActive = () => {
-        let currentState = Router.globals.current.name;
+        let currentState = UIRouterReact.instance.globals.current.name;
         return this.uiSref && this.uiSref.props.to === currentState;
     }
 
