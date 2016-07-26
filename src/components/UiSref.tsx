@@ -1,9 +1,11 @@
-import {Component, PropTypes, createElement} from 'react';
+import {Component, PropTypes, createElement, cloneElement, isValidElement} from 'react';
+import * as classNames from 'classnames';
 import UIRouterReact from '../index';
 import {extend} from 'ui-router-core';
 
 export class UISref extends Component<any,any> {
     static propTypes = {
+        children: PropTypes.element.isRequired,
         to: PropTypes.string.isRequired,
         params: PropTypes.object,
         options: PropTypes.object,
@@ -29,9 +31,11 @@ export class UISref extends Component<any,any> {
     }
 
     render () {
-        return createElement('a', {
+        let childrenProps = this.props.children.props;
+        let props = Object.assign({}, childrenProps, {
             onClick: this.handleClick,
-            className: this.props.className
-        }, this.props.children);
+            className: classNames(this.props.className, childrenProps.className)
+        });
+        return cloneElement(this.props.children, props);
     }
 }

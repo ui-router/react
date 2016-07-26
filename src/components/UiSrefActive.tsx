@@ -1,4 +1,5 @@
 import {Component, PropTypes, cloneElement} from 'react';
+import * as classNames from 'classnames';
 import UIRouterReact, { UISref } from '../index';
 import {find} from '../utils';
 
@@ -31,7 +32,9 @@ export class UISrefActive extends Component<any,any> {
         return (
             !isActive
                 ? this.props.children
-                : cloneElement(this.props.children, { className: this.props.class })
+                : cloneElement(this.props.children, Object.assign({}, this.props.children.props, {
+                    className: classNames(this.props.children.props.className, this.props.class)
+                }))
         );
     }
 }
