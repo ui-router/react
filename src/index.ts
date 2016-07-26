@@ -2,9 +2,9 @@ import {trace, UIRouter, PathNode} from 'ui-router-core';
 import './justjs';
 import {ReactViewConfig, reactViewsBuilder} from "./ui-router-react"
 import {ReactViewDeclaration, ReactStateDeclaration} from "./interface"
-import {UiView} from "./components/UiView";
-import {UiSref} from "./components/UiSref";
-import {UiSrefActive} from "./components/UiSrefActive";
+import {UIView} from "./components/UIView";
+import {UISref} from "./components/UISref";
+import {UISrefActive} from "./components/UISrefActive";
 
 // Set up view config factory
 let viewConfigFactory = (node: [PathNode], config: ReactViewDeclaration) =>
@@ -22,8 +22,8 @@ export default class UIRouterReact extends UIRouter {
 }
 
 export {
-    UiView,
-    UiSref,
-    UiSrefActive,
+    UIView,
+    UISref,
+    UISrefActive,
     ReactStateDeclaration
 }

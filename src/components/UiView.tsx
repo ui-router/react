@@ -12,7 +12,7 @@ let uiViewContexts: {
     }
 } = {};
 
-export class UiView extends Component<any,any> {
+export class UIView extends Component<any,any> {
     el;
 
     viewContext: ViewContext;

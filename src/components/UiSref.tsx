@@ -2,7 +2,7 @@ import {Component, PropTypes, createElement} from 'react';
 import UIRouterReact from '../index';
 import {extend} from 'ui-router-core';
 
-export class UiSref extends Component<any,any> {
+export class UISref extends Component<any,any> {
     static propTypes = {
         to: PropTypes.string.isRequired,
         params: PropTypes.object,

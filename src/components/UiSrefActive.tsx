@@ -1,8 +1,8 @@
 import {Component, PropTypes, cloneElement} from 'react';
-import UIRouterReact, { UiSref } from '../index';
+import UIRouterReact, { UISref } from '../index';
 import {find} from '../utils';
 
-export class UiSrefActive extends Component<any,any> {
+export class UISrefActive extends Component<any,any> {
     uiSref;
 
     static propTypes = {
@@ -17,7 +17,7 @@ export class UiSrefActive extends Component<any,any> {
     componentDidMount () {
         const child = this.props.children;
         this.uiSref = find(child, component => {
-            return typeof component.type === 'function' && component.type.name === 'UiSref';
+            return typeof component.type === 'function' && component.type.name === 'UISref';
         });
     }
 
