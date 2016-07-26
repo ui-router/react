@@ -1,5 +1,5 @@
 import {Component, PropTypes, ValidationMap, createElement} from 'react';
-import {ActiveUIView, ViewContext, ViewConfig} from "ui-router-core";
+import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext} from "ui-router-core";
 import UIRouterReact from "../index";
 import {ReactViewConfig} from "../ui-router-react";
 
@@ -33,13 +33,13 @@ export class UIView extends Component<any,any> {
         super();
         this.state = {
             component: 'div',
-            resolves: {}
+            props: {}
         }
     }
 
     render() {
-        let { component, resolves } = this.state;
-        let child = createElement(component, resolves);
+        let { component, props } = this.state;
+        let child = createElement(component, props);
         return child;
     }
 
@@ -94,6 +94,8 @@ export class UIView extends Component<any,any> {
         let newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
         let resolves = {};
         if (newConfig) {
+            let ctx = new ResolveContext(newConfig.path);
+            var trans = ctx.getResolvable(Transition).data;
             let resolvables = newConfig.path[0].resolvables;
             newConfig.path.forEach(pathNode => {
                 pathNode.resolvables.forEach(resolvable => {
@@ -102,6 +104,7 @@ export class UIView extends Component<any,any> {
                 });
             });
         }
-        this.setState({ component: newComponent || 'div', resolves })
+        let props = {resolves: resolves, transition: trans};
+        this.setState({ component: newComponent || 'div', props: newComponent ? props : {} })
     }
 }
