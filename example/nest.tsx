@@ -1,5 +1,5 @@
 import * as React from "react";
-import {UiView} from "../src/index";
+import {UIView} from "../src/index";
 
 export class Nest extends React.Component<any,any> {
   constructor (props) {

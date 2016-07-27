@@ -1,23 +1,25 @@
 import * as React from "react";
-import {UiView, UiSref, UiSrefActive} from "../src/index";
+import {UIView, UISref, UISrefActive} from "../src/index";
 
 export class Home extends React.Component<any,any> {
   render() {
     return (
       <div>
         UI-Router + React proof of concept
-        <UiView name="header"></UiView>
-        <UiSrefActive class={'active'}>
-          <UiSref to={'home'} params={{foo:'bar'}}>Home</UiSref>
-        </UiSrefActive>{' '}
-        <UiSrefActive class={'active'}>
-          <UiSref to={'home.child'}>Child</UiSref>
-        </UiSrefActive>{' '}
-        <UiSrefActive class={'active'}>
-          <UiSref to={'home.child.nest'}>Nest</UiSref>
-        </UiSrefActive>{' '}
+        <UIView name="header"></UIView>
+        <UISrefActive class={'active'}>
+          <UISref to={'home'} params={{foo:'bar'}}><a>Home</a></UISref>
+        </UISrefActive>{' '}
+        <UISrefActive class={'active'}>
+          <UISref to={'home.child'}><a>Child</a></UISref>
+        </UISrefActive>{' '}
+        <UISrefActive class={'active'}>
+          <UISref to={'home.child.nest'}>
+            <button style={{marginLeft:100}}className="is-button" data-sorcio="foo">Nest</button>
+          </UISref>
+        </UISrefActive>{' '}
         <h2>Home</h2> 
-        <UiView/>
+        <UIView/>
       </div>
     );
   }

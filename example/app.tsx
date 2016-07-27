@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Router, registerStates, UiView } from '../src/index';
+import UIRouterReact, { UIView, ReactStateDeclaration, trace } from '../src/index';
 
 import {Home} from './home';
 import {Child} from './child';
@@ -10,27 +10,36 @@ import {Header} from './header';
 let home = { name: 'home', component: Home, url: '/home?foo' };
 let child = { name: 'home.child', component: Child, url: '/child' };
 let nest = {
-	name: 'home.child.nest',
-	views: {
-		$default: Nest,
-		"header@home": Header
-	},
-	url: '/nest',
-	resolve: {
-		foo: ($transition$) => {
-			return new Promise<string>((resolve, reject) => {
-				setTimeout(() => {
-					resolve('bar');
-				}, 1000);
-			});
-		}
-	}
-};
-registerStates([home, child, nest]);
+  name: 'home.child.nest',
+  views: {
+    $default: Nest,
+    "header@home": Header
+  },
+  url: '/nest',
+  resolve: [{
+    token: 'foo',
+    resolveFn: ($transition$) => {
+      return new Promise<string>((resolve, reject) => {
+        setTimeout(() => {
+          resolve('bar');
+        }, 1000);
+      });
+    }
+  }]
+} as ReactStateDeclaration;
 
-Router.urlRouterProvider.otherwise(() => "/home");
-Router.urlRouter.listen();
-Router.urlRouter.sync();
+// create new instance of UIRouterReact
+const Router = new UIRouterReact();
+// register states
+[home, child, nest].forEach(state => {
+  Router.stateRegistry.register(state);
+});
+
+
+Router.urlRouterProvider.otherwise("/home");
+trace.enable(1);
+Router.start();
+//Router.urlRouter.sync();
 
 var el = document.getElementById("react-app");
-ReactDOM.render(<UiView/>, el);
+ReactDOM.render(<UIView/>, el);
