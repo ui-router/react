@@ -16,8 +16,12 @@ export default class UIRouterReact extends UIRouter {
     super();
     this.viewService.viewConfigFactory('react', viewConfigFactory);
     this.stateRegistry.decorator("views", reactViewsBuilder);
-    this.stateRegistry.stateQueue.autoFlush(this.stateService);
     UIRouterReact.instance = this;
+  }
+  start() {
+    this.stateRegistry.stateQueue.autoFlush(this.stateService);
+    this.urlRouter.listen();
+    this.urlRouter.sync();
   }
 }
 
@@ -25,5 +29,6 @@ export {
     UIView,
     UISref,
     UISrefActive,
-    ReactStateDeclaration
+    ReactStateDeclaration,
+    trace
 }
