@@ -3,6 +3,7 @@
 tslint.json
 .eslintrc
 dist
+build/
 lib/
 node_modules/
 package/

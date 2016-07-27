@@ -1,41 +1,49 @@
 import {Component, PropTypes, ValidationMap, createElement, isValidElement} from 'react';
-import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext} from "ui-router-core";
+import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, applyPairs} from "ui-router-core";
 import UIRouterReact from "../index";
 import {ReactViewConfig} from "../ui-router-react";
 
 let id = 0;
 
-let uiViewContexts: {
-    [key: string]: {
-        fqn: string;
-        context: ViewContext;
-    }
-} = {};
-
-export class UIView extends Component<any,any> {
-    el;
-
-    viewContext: ViewContext;
+export interface UIViewAddress {
+    context: ViewContext;
     fqn: string;
+}
 
+export interface IProps {
+    name?: string;
+}
+
+export interface IState {
+    id?: number;
+    loaded?: boolean;
+    component?: string;
+    props?: any;
+}
+
+export class UIView extends Component<IProps, IState> {
+    // This object contains all the metadata for this UIView
     uiViewData: ActiveUIView;
+
+    // This object contains only the state context which created this <UIView/> component
+    // and the UIView's fully qualified name. This object is made available to children via `context`
+    uiViewAddress: UIViewAddress;
+
+    // Deregisters the UIView when it is unmounted
     deregister: Function;
 
+    state: IState = {
+        loaded: false,
+        component: 'div',
+        props: {}
+    }
+
     static childContextTypes: ValidationMap<any> = {
-        uiViewId: PropTypes.number
+        parentUIViewAddress: PropTypes.object
     }
 
     static contextTypes: ValidationMap<any> = {
-        uiViewId: PropTypes.number
-    }
-
-    constructor() {
-        super();
-        this.state = {
-            loaded: false,
-            component: 'div',
-            props: {}
-        }
+        parentUIViewAddress: PropTypes.object
     }
 
     render() {
@@ -49,65 +57,56 @@ export class UIView extends Component<any,any> {
 
     getChildContext() {
         return {
-            uiViewId: (this.state && this.state.id) || 0
+            parentUIViewAddress: this.uiViewAddress
         }
     }
 
     componentWillMount() {
         let router = UIRouterReact.instance;
 
-        let parentFqn: string;
-        let creationContext: ViewContext;
-        let parentId: number = (this.context as any).uiViewId || 0;
-
-        if (parentId === 0) {
-            parentFqn = "";
-            creationContext = router.stateRegistry.root();
-        } else {
-            parentFqn = uiViewContexts[parentId].fqn;
-            creationContext = uiViewContexts[parentId].context;
-        }
+        // Check the context for the parent UIView's fqn and State
+        let parent: UIViewAddress = this.context['parentUIViewAddress'];
+        // Not found in context, this is a root UIView
+        parent = parent || { fqn: "", context: router.stateRegistry.root() };
 
         let name = this.props.name || "$default";
-        var uiViewData = this.uiViewData = {
+
+        this.uiViewData = {
             $type: 'react',
             id: ++id,
             name: name,
-            fqn: parentFqn ? parentFqn + "." + name : name,
-            creationContext: creationContext,
+            fqn: parent.fqn ? parent.fqn + "." + name : name,
+            creationContext: parent.context,
             configUpdated: this.viewConfigUpdated.bind(this),
             config: undefined
         } as ActiveUIView;
 
-        uiViewContexts[uiViewData.id] = {
-            get fqn() { return uiViewData.fqn; },
-            get context() { return uiViewData.config && uiViewData.config.viewDecl.$context; }
-        }
+        this.uiViewAddress = { fqn: this.uiViewData.fqn, context: undefined };
 
         this.deregister = router.viewService.registerUIView(this.uiViewData);
-        this.setState({ id: uiViewData.id });
+
+        this.setState({ id: this.uiViewData.id });
     }
 
     componentWillUnmount() {
         this.deregister();
-        delete uiViewContexts[this.uiViewData.id];
     }
 
     viewConfigUpdated(newConfig: ReactViewConfig) {
-        this.uiViewData.config = newConfig;
         let newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
-        let resolves = {};
+        let trans: Transition = undefined, resolves = {};
+
         if (newConfig) {
+            let context: ViewContext = newConfig.viewDecl && newConfig.viewDecl.$context;
+            this.uiViewAddress = { fqn: this.uiViewAddress.fqn, context };
+
             let ctx = new ResolveContext(newConfig.path);
-            var trans = ctx.getResolvable(Transition).data;
-            let resolvables = newConfig.path[0].resolvables;
-            newConfig.path.forEach(pathNode => {
-                pathNode.resolvables.forEach(resolvable => {
-                    if (typeof resolvable.token === 'string')
-                    resolves[resolvable.token] = resolvable.data;
-                });
-            });
+            trans = ctx.getResolvable(Transition).data;
+            let stringTokens = trans.getResolveTokens().filter(x => typeof x === 'string');
+            resolves = stringTokens.map(token => [token, trans.getResolveValue(token)]).reduce(applyPairs, {});
         }
+
+        this.uiViewData.config = newConfig;
         let props = {resolves: resolves, transition: trans};
         this.setState({ component: newComponent || 'div', props: newComponent ? props : {}, loaded: newComponent ? true : false })
     }

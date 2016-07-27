@@ -1,9 +1,17 @@
 import {Component, PropTypes, createElement, cloneElement, isValidElement, ValidationMap} from 'react';
 import * as classNames from 'classnames';
 import UIRouterReact from '../index';
-import {extend} from 'ui-router-core';
+import {extend, TransitionOptions} from 'ui-router-core';
+import {UIViewAddress} from "./UIView";
 
-export class UISref extends Component<any,any> {
+export interface IProps {
+    children?: any;
+    to: string;
+    params?: { [key: string]: any };
+    options?: TransitionOptions;
+    className?: string;
+}
+export class UISref extends Component<IProps,any> {
     static propTypes = {
         children: PropTypes.element.isRequired,
         to: PropTypes.string.isRequired,
@@ -13,16 +21,12 @@ export class UISref extends Component<any,any> {
     }
 
     static contextTypes: ValidationMap<any> = {
-        uiViewId: PropTypes.number
-    }
-
-    constructor (props) {
-        super(props);
+        parentUIViewAddress: PropTypes.object
     }
 
     getOptions = () => {
-        let parent = UIRouterReact.instance.globals.$current.parent.name;
-        let defOpts = { relative: parent, inherit: true };
+        let parent: UIViewAddress = this.context['parentUIViewAddress'];
+        let defOpts = { relative: parent.context, inherit: true };
         return extend(defOpts, this.props.options || {});
     }
 

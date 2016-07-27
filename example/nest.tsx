@@ -1,7 +1,9 @@
 import * as React from "react";
-import {UIView} from "../src/index";
 
-export class Nest extends React.Component<any,any> {
+export interface IProps {
+  foo: string;
+}
+export class Nest extends React.Component<IProps,any> {
   constructor (props) {
     super(props);
   }
