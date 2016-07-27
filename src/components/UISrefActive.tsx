@@ -15,7 +15,7 @@ export class UISrefActive extends Component<any,any> {
         super(props);
     }
 
-    componentDidMount () {
+    componentWillMount () {
         const child = this.props.children;
         this.uiSref = find(child, component => {
             return typeof component.type === 'function' && component.type.name === 'UISref';
