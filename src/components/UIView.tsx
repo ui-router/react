@@ -1,4 +1,4 @@
-import {Component, PropTypes, ValidationMap, createElement} from 'react';
+import {Component, PropTypes, ValidationMap, createElement, isValidElement} from 'react';
 import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext} from "ui-router-core";
 import UIRouterReact from "../index";
 import {ReactViewConfig} from "../ui-router-react";
@@ -32,14 +32,18 @@ export class UIView extends Component<any,any> {
     constructor() {
         super();
         this.state = {
+            loaded: false,
             component: 'div',
             props: {}
         }
     }
 
     render() {
-        let { component, props } = this.state;
-        let child = createElement(component, props);
+        let { children } = this.props;
+        let { component, props, loaded } = this.state;
+        let child = !loaded && isValidElement(children)
+            ? children
+            : createElement(component, props);
         return child;
     }
 
@@ -49,7 +53,7 @@ export class UIView extends Component<any,any> {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         let router = UIRouterReact.instance;
 
         let parentFqn: string;
@@ -105,6 +109,6 @@ export class UIView extends Component<any,any> {
             });
         }
         let props = {resolves: resolves, transition: trans};
-        this.setState({ component: newComponent || 'div', props: newComponent ? props : {} })
+        this.setState({ component: newComponent || 'div', props: newComponent ? props : {}, loaded: newComponent ? true : false })
     }
 }
