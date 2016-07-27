@@ -9,6 +9,7 @@ var config = {
 	resolve: {
 		extensions: ["", ".ts", ".tsx", ".js"]
 	},
+	devtool: "inline-source-map",
 	module: {
 		loaders: [
 			{

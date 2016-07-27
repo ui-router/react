@@ -16,7 +16,7 @@ var config = {
 	resolve: {
 		extensions: ["", ".ts", ".tsx", ".js"]
 	},
-	devtool: 'source-map',
+	devtool: 'inline-source-map',
 	plugins: [
 		new webpack.optimize.UglifyJsPlugin({
 			minimize: true,
