@@ -1,4 +1,4 @@
-import {Component, PropTypes, createElement, cloneElement, isValidElement} from 'react';
+import {Component, PropTypes, createElement, cloneElement, isValidElement, ValidationMap} from 'react';
 import * as classNames from 'classnames';
 import UIRouterReact from '../index';
 import {extend} from 'ui-router-core';
@@ -10,6 +10,10 @@ export class UISref extends Component<any,any> {
         params: PropTypes.object,
         options: PropTypes.object,
         className: PropTypes.string
+    }
+
+    static contextTypes: ValidationMap<any> = {
+        uiViewId: PropTypes.number
     }
 
     constructor (props) {
