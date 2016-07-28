@@ -8,6 +8,7 @@
 ### Added
 - `UISref` and `UISrefActive` properly copy over all props and class names of thir children, adding more flexibility for the user.
 - `UIView` rendered component exposes two props from the router: `resolves` and `transition`. They act as an injected dependecy of the state-component, and are used to interact with the router itself.
+- `UIView` registers as `onBefore` hook the `uiCanExit` method of the component instance it renders.
 
 
 # [0.1.2] (2016-07-18)
