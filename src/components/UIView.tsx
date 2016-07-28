@@ -32,6 +32,11 @@ export class UIView extends Component<IProps, IState> {
     // Deregisters the UIView when it is unmounted
     deregister: Function;
 
+    // Bind the rendered component instance in order to call its uiCanExit hook
+    componentInstance: any;
+    // Removes th Hook when the UIView is unmounted
+    removeHook: Function;
+
     state: IState = {
         loaded: false,
         component: 'div',
@@ -49,6 +54,11 @@ export class UIView extends Component<IProps, IState> {
     render() {
         let { children } = this.props;
         let { component, props, loaded } = this.state;
+        // register reference of child component
+        props.ref = c => this.componentInstance = c;
+        // register new hook right after component has been rendered
+        let stateName: string = this.uiViewAddress && this.uiViewAddress.context && this.uiViewAddress.context.name;
+        setTimeout(() => this.registerUiCanExitHook(stateName));
         let child = !loaded && isValidElement(children)
             ? children
             : createElement(component, props);
@@ -109,5 +119,15 @@ export class UIView extends Component<IProps, IState> {
         this.uiViewData.config = newConfig;
         let props = {resolves: resolves, transition: trans};
         this.setState({ component: newComponent || 'div', props: newComponent ? props : {}, loaded: newComponent ? true : false })
+    }
+
+    registerUiCanExitHook (stateName: string) {
+        typeof this.removeHook === 'function' && this.removeHook();
+        let criteria = { exiting: stateName };
+        let callback = this.componentInstance && typeof this.componentInstance.uiCanExit === 'function' && this.componentInstance.uiCanExit;
+        if (stateName && callback) {
+            let transitions = UIRouterReact.instance.transitionService;
+            this.removeHook = transitions.onBefore(criteria, callback, {});
+        }
     }
 }
