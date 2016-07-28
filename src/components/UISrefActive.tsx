@@ -1,9 +1,15 @@
-import {Component, PropTypes, cloneElement} from 'react';
+import {Component, PropTypes, cloneElement, ValidationMap} from 'react';
 import * as classNames from 'classnames';
 import UIRouterReact, { UISref } from '../index';
+import {UIViewAddress} from "./UIView";
 import {find} from '../utils';
 
-export class UISrefActive extends Component<any,any> {
+export interface IProps {
+    class?: string;
+    children?: any;
+}
+
+export class UISrefActive extends Component<IProps,any> {
     uiSref;
 
     static propTypes = {
@@ -11,8 +17,8 @@ export class UISrefActive extends Component<any,any> {
         children: PropTypes.element.isRequired
     }
 
-    constructor (props) {
-        super(props);
+    static contextTypes: ValidationMap<any> = {
+        parentUIViewAddress: PropTypes.object
     }
 
     componentWillMount () {
@@ -23,8 +29,10 @@ export class UISrefActive extends Component<any,any> {
     }
 
     isActive = () => {
-        let currentState = UIRouterReact.instance.globals.current.name;
-        return this.uiSref && this.uiSref.props.to === currentState;
+        let parentUIViewAddress: UIViewAddress = this.context['parentUIViewAddress'];
+        let {to, params} = this.uiSref.props, {stateService} = UIRouterReact.instance;
+        let state = stateService.get(to, parentUIViewAddress.context) || { name: to };
+        return this.uiSref && (stateService.is(state.name, params) || stateService.includes(state.name, params));
     }
 
     render () {
