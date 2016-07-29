@@ -10,7 +10,7 @@ export interface IProps {
 }
 
 export interface IStates {
-    state: string;
+    state: { name: string; [key: string]: any };
     params: Object;
     hash: string;
 }
@@ -96,8 +96,8 @@ export class UISrefActive extends Component<IProps,any> {
         let {exact} = this.props;
         this.states.forEach(s => {
             let { state, params, hash } = s;
-            if (!exact && stateService.includes(state, params)) activeClasses.push(this.activeClasses[hash]);
-            if (exact && stateService.is(state, params)) activeClasses.push(this.activeClasses[hash]);
+            if (!exact && stateService.includes(state.name, params)) activeClasses.push(this.activeClasses[hash]);
+            if (exact && stateService.is(state.name, params)) activeClasses.push(this.activeClasses[hash]);
         });
         return activeClasses;
     }
