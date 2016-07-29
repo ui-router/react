@@ -25,10 +25,9 @@ export class UISref extends Component<IProps,any> {
         parentUiSrefActiveAddStateInfo: PropTypes.func
     }
 
-    constructor (props, context) {
-        super(props);
-        const addStateInfo = context['parentUiSrefActiveAddStateInfo'];
-        typeof addStateInfo === 'function' && addStateInfo(props.to, props.params);
+    componentWillMount () {
+        const addStateInfo = this.context['parentUiSrefActiveAddStateInfo'];
+        typeof addStateInfo === 'function' && addStateInfo(this.props.to, this.props.params);
     }
 
     getOptions = () => {
