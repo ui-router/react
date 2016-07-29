@@ -21,7 +21,14 @@ export class UISref extends Component<IProps,any> {
     }
 
     static contextTypes: ValidationMap<any> = {
-        parentUIViewAddress: PropTypes.object
+        parentUIViewAddress: PropTypes.object,
+        parentUiSrefActiveAddStateInfo: PropTypes.func
+    }
+
+    constructor (props, context) {
+        super(props);
+        const addStateInfo = context['parentUiSrefActiveAddStateInfo'];
+        typeof addStateInfo === 'function' && addStateInfo(props.to, props.params);
     }
 
     getOptions = () => {

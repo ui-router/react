@@ -2,15 +2,23 @@ import {Component, PropTypes, cloneElement, ValidationMap} from 'react';
 import * as classNames from 'classnames';
 import UIRouterReact, { UISref } from '../index';
 import {UIViewAddress} from "./UIView";
-import {find} from '../utils';
 
 export interface IProps {
     class?: string;
+    exact?: Boolean;
     children?: any;
 }
 
+export interface IStates {
+    state: string;
+    params: Object;
+    hash: string;
+}
+
 export class UISrefActive extends Component<IProps,any> {
-    uiSref;
+    // keep track of states to watch and their activeClasses
+    states: Array<IStates> = [];
+    activeClasses: { [key: string]: string } = {};
 
     static propTypes = {
         class: PropTypes.string.isRequired,
@@ -21,28 +29,85 @@ export class UISrefActive extends Component<IProps,any> {
         parentUIViewAddress: PropTypes.object
     }
 
-    componentWillMount () {
-        const child = this.props.children;
-        this.uiSref = find(child, component => {
-            return typeof component.type === 'function' && component.type.name === 'UISref';
-        });
+    static childContextTypes: ValidationMap<any> = {
+        parentUiSrefActiveAddStateInfo: PropTypes.func
     }
 
-    isActive = () => {
-        let parentUIViewAddress: UIViewAddress = this.context['parentUIViewAddress'];
-        let {to, params} = this.uiSref.props, {stateService} = UIRouterReact.instance;
-        let state = stateService.get(to, parentUIViewAddress.context) || { name: to };
-        return this.uiSref && (stateService.is(state.name, params) || stateService.includes(state.name, params));
+    getChildContext() {
+        return {
+            parentUiSrefActiveAddStateInfo: this.addStateInfo
+        }
+    }
+
+    componentWillMount () {
+        // register the states in case user is specyfing explicit states
+        const activeClasses = this.props.class;
+        if (activeClasses && typeof activeClasses === 'object') {
+            Object.keys(activeClasses).forEach(stateOrName => {
+                let activeClass = activeClasses[stateOrName];
+                if (typeof stateOrName === 'string' && stateOrName) {
+                    this.addState(stateOrName, {}, activeClass);
+                }
+            });
+        }
+    }
+
+    addStateInfo = (stateName, stateParams) => {
+        const activeClass = this.props.class;
+        // if the class props is an object we already got explicit states
+        // provided by UISrefActive components, so we shadow the one
+        // coming from UISref
+        if (typeof activeClass === 'object' && this.states.length > 0) return;
+        let deregister = this.addState(stateName, stateParams, activeClass);
+        this.forceUpdate();
+        return deregister;
+    }
+
+    addState = (stateName, stateParams, activeClass) => {
+        const {stateService} = UIRouterReact.instance;
+        let stateContext = this.context['parentUIViewAddress'].context;
+        let state = stateService.get(stateName, stateContext);
+        let stateHash = this.createStateHash(stateName, stateParams);
+        let stateInfo = {
+            state: state || { name: stateName },
+            params: stateParams,
+            hash: stateHash
+        }
+        this.states.push(stateInfo);
+        this.activeClasses[stateHash] = activeClass;
+        return () => {
+            let idx = state.indexOf(stateInfo);
+            if (idx !== -1) this.states.splice(idx, 1);
+        }
+    }
+
+    createStateHash = (state: string, params: Object) => {
+        if (typeof state !== 'string') {
+            throw new Error('state should be a string');
+        }
+        return params && typeof params === 'object'
+            ? state + JSON.stringify(params)
+            : state;
+    }
+    
+    getActiveClasses = () => {
+        let activeClasses = [];
+        let {stateService} = UIRouterReact.instance;
+        let {exact} = this.props;
+        this.states.forEach(s => {
+            let { state, params, hash } = s;
+            if (!exact && stateService.includes(state, params)) activeClasses.push(this.activeClasses[hash]);
+            if (exact && stateService.is(state, params)) activeClasses.push(this.activeClasses[hash]);
+        });
+        return activeClasses;
     }
 
     render () {
-        let isActive = this.isActive();
-        return (
-            !isActive
-                ? this.props.children
-                : cloneElement(this.props.children, Object.assign({}, this.props.children.props, {
-                    className: classNames(this.props.children.props.className, this.props.class)
-                }))
-        );
+        let activeClasses = this.getActiveClasses();
+        return activeClasses.length > 0
+            ? cloneElement(this.props.children, Object.assign({}, this.props.children.props, {
+                className: classNames(this.props.children.props.className, activeClasses)
+            }))
+            : this.props.children;
     }
 }
