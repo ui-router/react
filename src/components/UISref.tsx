@@ -45,9 +45,11 @@ export class UISref extends Component<IProps,any> {
     }
 
     render () {
+        let params = this.props.params || {}, to = this.props.to, options = this.getOptions();
         let childrenProps = this.props.children.props;
         let props = Object.assign({}, childrenProps, {
             onClick: this.handleClick,
+            href: UIRouterReact.instance.stateService.href(to, params, options),
             className: classNames(this.props.className, childrenProps.className)
         });
         return cloneElement(this.props.children, props);
