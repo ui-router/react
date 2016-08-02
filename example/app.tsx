@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import UIRouterReact, { UIView, ReactStateDeclaration, trace } from '../src/index';
+import UIRouterReact, { UIView, UISrefActive, UISref, ReactStateDeclaration, trace } from '../src/index';
 
 import {Home} from './home';
 import {Child} from './child';
@@ -42,5 +42,13 @@ Router.urlRouterProvider.otherwise("/home");
 trace.enable(1);
 Router.start();
 
-var el = document.getElementById("react-app");
-ReactDOM.render(<UIView/>, el);
+let el = document.getElementById("react-app");
+let app = (
+  <div>
+    <UISrefActive class="active">
+      <UISref to="home"><a>Home</a></UISref>
+    </UISrefActive>
+    <UIView/>
+  </div>
+);
+ReactDOM.render(app, el);
