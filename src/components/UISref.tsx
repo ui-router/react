@@ -32,7 +32,8 @@ export class UISref extends Component<IProps,any> {
 
     getOptions = () => {
         let parent: UIViewAddress = this.context['parentUIViewAddress'];
-        let defOpts = { relative: parent.context, inherit: true };
+        let parentContext = parent && parent.context || UIRouterReact.instance.stateRegistry.root();
+        let defOpts = { relative: parentContext, inherit: true };
         return extend(defOpts, this.props.options || {});
     }
 
