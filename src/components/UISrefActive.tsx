@@ -20,6 +20,9 @@ export class UISrefActive extends Component<IProps,any> {
     states: Array<IStates> = [];
     activeClasses: { [key: string]: string } = {};
 
+    // deregister the callback for state changed when unmounted
+    deregister: Function;
+
     static propTypes = {
         class: PropTypes.string.isRequired,
         children: PropTypes.element.isRequired
@@ -50,6 +53,12 @@ export class UISrefActive extends Component<IProps,any> {
                 }
             });
         }
+        // register callback for state change
+        this.deregister = UIRouterReact.instance.transitionService.onSuccess({}, () => this.forceUpdate());
+    }
+
+    componentWillUnmount () {
+        this.deregister();
     }
 
     addStateInfo = (stateName, stateParams) => {
@@ -65,7 +74,8 @@ export class UISrefActive extends Component<IProps,any> {
 
     addState = (stateName, stateParams, activeClass) => {
         const {stateService} = UIRouterReact.instance;
-        let stateContext = this.context['parentUIViewAddress'].context;
+        let parent = this.context['parentUIViewAddress'];
+        let stateContext = parent && parent.context || UIRouterReact.instance.stateRegistry.root();
         let state = stateService.get(stateName, stateContext);
         let stateHash = this.createStateHash(stateName, stateParams);
         let stateInfo = {
@@ -89,7 +99,7 @@ export class UISrefActive extends Component<IProps,any> {
             ? state + JSON.stringify(params)
             : state;
     }
-    
+
     getActiveClasses = () => {
         let activeClasses = [];
         let {stateService} = UIRouterReact.instance;
