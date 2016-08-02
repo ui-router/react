@@ -1,3 +1,7 @@
+# [0.2.2] (2016-08-03)
+### Fix
+- **UISrefActive**: register stateChange callback for proper rendering [(634e9d1)](https://github.com/ui-router/react/commit/634e9d174f0186db9a1fa6b0c3468395d3c846f5)
+
 # [0.2.1] (2016-08-02)
 ### Fix
 - **UISref**: doesn't need to be nested inside a UIView in order to work [(3c00270)](https://github.com/ui-router/react/commit/3c00270928c1fc2d98821e95903e73d96b5ec967)
