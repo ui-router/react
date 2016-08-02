@@ -2,6 +2,9 @@ import * as React from "react";
 import {UIView} from "../src/index";
 
 export class Child extends React.Component<any,any> {
+  uiCanExit = () => {
+    return Promise.resolve();
+  }
   render() {
     return (
       <div>

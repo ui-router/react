@@ -30,6 +30,8 @@ let nest = {
 
 // create new instance of UIRouterReact
 const Router = new UIRouterReact();
+// set up html5Mode
+Router.html5Mode(true);
 // register states
 [home, child, nest].forEach(state => {
   Router.stateRegistry.register(state);
@@ -39,7 +41,6 @@ const Router = new UIRouterReact();
 Router.urlRouterProvider.otherwise("/home");
 trace.enable(1);
 Router.start();
-//Router.urlRouter.sync();
 
 var el = document.getElementById("react-app");
 ReactDOM.render(<UIView/>, el);

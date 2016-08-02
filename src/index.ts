@@ -1,5 +1,6 @@
-import {trace, UIRouter, PathNode} from 'ui-router-core';
+import {trace, UIRouter, PathNode, services} from 'ui-router-core';
 import './justjs';
+import {hashLocation, pushStateLocation} from './justjs';
 import {ReactViewConfig, reactViewsBuilder} from "./ui-router-react"
 import {ReactViewDeclaration, ReactStateDeclaration} from "./interface"
 import {UIView} from "./components/UIView";
@@ -18,10 +19,18 @@ export default class UIRouterReact extends UIRouter {
     this.stateRegistry.decorator("views", reactViewsBuilder);
     UIRouterReact.instance = this;
   }
-  start() {
+  start(): void {
     this.stateRegistry.stateQueue.autoFlush(this.stateService);
     this.urlRouter.listen();
     this.urlRouter.sync();
+  }
+  html5Mode (mode: Boolean): void {
+    if (mode === true) {
+      let loc = <any> services.location;
+      let locCfg = <any> services.locationConfig;
+      locCfg.html5Mode = () => true;
+      Object.assign(loc, pushStateLocation);
+    }
   }
 }
 

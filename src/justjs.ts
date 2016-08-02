@@ -81,7 +81,7 @@ services.$injector.annotate = function(fn) {
 };
 
 let loc = <any> services.location;
-let hashPrefix: string = '!';
+let hashPrefix: string = '';
 let baseHref: string = "";
 
 let locCfg = <any> services.locationConfig;
@@ -181,4 +181,4 @@ export let pushStateLocation = {
   onChange: (cb) => window.addEventListener("popstate", cb, false)
 };
 
-Object.assign(loc, pushStateLocation);
+Object.assign(loc, hashLocation);
