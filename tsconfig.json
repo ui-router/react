@@ -7,7 +7,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "declaration": true,
+    "declaration": false,
     "jsx": "react"
   },
   "exclude": [
