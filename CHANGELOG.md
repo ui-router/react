@@ -1,3 +1,7 @@
+# [0.2.1] (2016-08-02)
+### Fix
+- **UISref**: doesn't need to be nested inside a UIView in order to work [(3c00270)](https://github.com/ui-router/react/commit/3c00270928c1fc2d98821e95903e73d96b5ec967)
+
 # [0.2.0] (2016-08-02)
 ### Changed
 - Exported default value is now the `UIRouterReact` class instead of an instance.
