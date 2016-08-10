@@ -16,7 +16,7 @@ export class Home extends React.Component<any,any> {
           </UISref>
         </UISrefActive>{' '}
         <h2>Home</h2> 
-        <UIView/>
+        <UIView className="home-uiview"/>
       </div>
     );
   }

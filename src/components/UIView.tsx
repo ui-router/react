@@ -1,5 +1,5 @@
-import {Component, PropTypes, ValidationMap, createElement, isValidElement} from 'react';
-import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, applyPairs} from "ui-router-core";
+import {Component, PropTypes, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
+import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, applyPairs, extend} from "ui-router-core";
 import UIRouterReact from "../index";
 import {ReactViewConfig} from "../ui-router-react";
 
@@ -12,6 +12,8 @@ export interface UIViewAddress {
 
 export interface IProps {
   name?: string;
+  className?: string;
+  style?: Object;
 }
 
 export interface IState {
@@ -43,6 +45,12 @@ export class UIView extends Component<IProps, IState> {
     props: {}
   }
 
+  static propTypes: ValidationMap<IProps> = {
+    name: PropTypes.string,
+    className: PropTypes.string,
+    style: PropTypes.object
+  }
+
   static childContextTypes: ValidationMap<any> = {
     parentUIViewAddress: PropTypes.object
   }
@@ -58,9 +66,9 @@ export class UIView extends Component<IProps, IState> {
     props.ref = c => this.componentInstance = c;
     // register new hook right after component has been rendered
     let stateName: string = this.uiViewAddress && this.uiViewAddress.context && this.uiViewAddress.context.name;
-    setTimeout(() => this.registerUiCanExitHook(stateName));
+    setTimeout(() => this.registerUiCanExitHook(stateName));    
     let child = !loaded && isValidElement(children)
-      ? children
+      ? cloneElement(children, props)
       : createElement(component, props);
     return child;
   }
@@ -117,8 +125,22 @@ export class UIView extends Component<IProps, IState> {
     }
 
     this.uiViewData.config = newConfig;
-    let props = {resolves: resolves, transition: trans};
-    this.setState({ component: newComponent || 'div', props: newComponent ? props : {}, loaded: newComponent ? true : false })
+    let props = {resolves, transition: trans};
+
+    // attach any style or className to the rendered component
+    // specified on the UIView itself
+    let styleProps: {
+      className?:string,
+      style?: Object
+    } = {}
+    if (this.props.className) styleProps.className = this.props.className;
+    if (this.props.className) styleProps.style = this.props.style;
+
+    this.setState({
+      component: newComponent || 'div',
+      props: newComponent ? extend(props, styleProps) : styleProps,
+      loaded: newComponent ? true : false 
+    });
   }
 
   registerUiCanExitHook (stateName: string) {
