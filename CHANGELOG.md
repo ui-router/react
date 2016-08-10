@@ -1,15 +1,15 @@
-# [0.2.2] (2016-08-03)
+# Unreleased
+### Added
+- **UIView**: Pass down to rendered element/component `className` and `style` props (if defined) [(52e4132)](https://github.com/ui-router/react/commit/52e41325041439c68daa42cc5b4449734d289788).
+
+# [0.2.2](https://github.com/ui-router/react/releases/tag/0.2.2) (2016-08-03)
 ### Fix
 - **UISrefActive**: register stateChange callback for proper rendering [(634e9d1)](https://github.com/ui-router/react/commit/634e9d174f0186db9a1fa6b0c3468395d3c846f5)
-
-# [0.2.1] (2016-08-02)
-### Fix
 - **UISref**: doesn't need to be nested inside a UIView in order to work [(3c00270)](https://github.com/ui-router/react/commit/3c00270928c1fc2d98821e95903e73d96b5ec967)
 
-# [0.2.0] (2016-08-02)
+# [0.2.0](https://github.com/ui-router/react/releases/tag/0.2.0) (2016-08-02)
 ### Changed
-- Exported default value is now the `UIRouterReact` class instead of an instance.
-- The class takes now care of setting up the `viewConfigFactory` and `reactViewBuilder` so user doesn't need to.
+- Module default export is now the `UIRouterReact` class. It takes now care of setting up the `viewConfigFactory` and `reactViewBuilder` so user doesn't need to.
 - Renamed all symbols to UI* from Ui* for consistency with `ui-router-core`.
 - `UISref` only accepts a single valid element as child.
 - `UISrefActive` properly track multiple descendants `UISref` component and track their specified states for applying the active class.
