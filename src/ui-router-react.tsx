@@ -13,12 +13,12 @@ import {ReactViewDeclaration} from "./interface";
 export function reactViewsBuilder(state: State) {
   let views = {}, viewsDefinitionObject;
   if (!state.views) {
-      viewsDefinitionObject = { "$default": pick(state, "component") };
+    viewsDefinitionObject = { "$default": pick(state, "component") };
   } else {
-      viewsDefinitionObject = map(state.views, (val: any, key) => {
-          if (val.component) return val;
-          return { component: val };
-      })
+    viewsDefinitionObject = map(state.views, (val: any, key) => {
+      if (val.component) return val;
+      return { component: val };
+    })
   }
 
   forEach(viewsDefinitionObject, function (config, name) {
