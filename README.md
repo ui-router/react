@@ -48,4 +48,5 @@ ReactDOM.render(
 ## Resources
 Here you can find resources to get you started with UI-Router:
 
+- [Sample application](https://ui-router.github.io/sample-app-react)
 - [Tutorials](https://ui-router.github.io/react/) 
