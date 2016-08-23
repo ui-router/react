@@ -2,6 +2,7 @@
 .tslintrc
 tslint.json
 .eslintrc
+.vscode
 dist
 build/
 lib/
