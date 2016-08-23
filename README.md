@@ -1,6 +1,3 @@
-> Warning! This project is a WIP and it is actively developed. This should NOT be considered production ready in any way.
-> Feel free to try it out and please provide feedbacks by filing an issue or opening a PR.
-
 # UI-Router-React
 UI-Router provides extremely flexible, state based routing to the [React](https://facebook.github.io/react/) ecosystem.
 
@@ -47,3 +44,8 @@ ReactDOM.render(
 	document.getElementById('root')
 );
 ```
+
+## Resources
+Here you can find resources to get you started with UI-Router:
+
+- [Tutorials](https://ui-router.github.io/react/) 
