@@ -1,6 +1,6 @@
 {
   "name": "ui-router-react",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "State based routing for React",
   "main": "index.js",
   "scripts": {

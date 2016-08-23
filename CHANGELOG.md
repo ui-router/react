@@ -1,4 +1,4 @@
-# Unreleased
+# [0.2.3](https://github.com/ui-router/react/releases/tag/0.2.3) (2016-08-23)
 ### Added
 - **UIView**: Pass down to rendered element/component `className` and `style` props (if defined) [(52e4132)](https://github.com/ui-router/react/commit/52e41325041439c68daa42cc5b4449734d289788).
 
@@ -22,17 +22,17 @@
 - `html5Mode` added to UIRouterReact class for using `pushStateLocation` instead of `hashLocation` as history strategy (WARNING: This is a temporary api and will likely change in the future)
 
 
-# [0.1.2] (2016-07-18)
+# [0.1.2]() (2016-07-18)
 ### Fix
 - Removed file extension preventing compiled code to work properly.
 
 
-# [0.1.1] (2016-07-18)
+# [0.1.1]() (2016-07-18)
 ### Added
 - Typings are specified by `typings.json` file and must be installed using typings CLI.
 - Added `es6-shim` for Promises.
 
 
-# [0.1.0] (2016-07-14)
+# [0.1.0]() (2016-07-14)
 ### First Release
 - First alpha release of `ui-router-react`
