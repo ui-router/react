@@ -10,7 +10,7 @@
     - [`urlRouterProvider`](#urlrouterprovider-urlrouterprovider)
     - [`viewService`](#viewservice-viewservice)
     - [`start()`](#start-void)
-    - [`html5mode()`](#html5modemode-boolean--void)
+    - [`html5mode()`](#html5modemode-boolean-void)
 
 - [State Declaration](#state-declaration)
     - [`abstract`](#abstract-boolean)
