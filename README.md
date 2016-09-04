@@ -1,9 +1,18 @@
-# UI-Router-React
+# UI-Router-React [![npm package][npm-badge]][npm]
+
+<img src="/logo/logo.png" height="150"/>
+
 UI-Router provides extremely flexible, state based routing to the [React](https://facebook.github.io/react/) ecosystem.
 
 Routing frameworks for SPAs update the browser's URL as the user navigates through the app.  Conversely, this allows changes to the browser's URL to drive navigation through the app, thus allowing the user to create a bookmark to a location deep within the SPA.
 
 UI-Router applications are modeled as a hierarchical tree of states. UI-Router provides a [*state machine*](https://en.wikipedia.org/wiki/Finite-state_machine) to manage the transitions between those application states in a transaction-like manner.
+
+## Docs & Resources
+
+- [Tutorials and Docs](/docs)
+- [UI-Router website](https://ui-router.github.io/)
+- [Changelog](/CHANGELOG.md)
 
 ## Getting started
 The UI-Router package is distributed using [npm](https://www.npmjs.com/), the node package manager.
@@ -45,8 +54,5 @@ ReactDOM.render(
 );
 ```
 
-## Resources
-Here you can find resources to get you started with UI-Router:
-
-- [Sample application](https://github.com/ui-router/sample-app-react)
-- [Tutorials](https://ui-router.github.io/react/) 
+[npm-badge]: https://img.shields.io/npm/v/ui-router-react.svg?style=flat-square
+[npm]: https://www.npmjs.org/package/ui-router-react
