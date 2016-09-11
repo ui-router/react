@@ -63,10 +63,13 @@ export class UIView extends Component<IProps, IState> {
     let { children } = this.props;
     let { component, props, loaded } = this.state;
     // register reference of child component
-    props.ref = c => this.componentInstance = c;
     // register new hook right after component has been rendered
     let stateName: string = this.uiViewAddress && this.uiViewAddress.context && this.uiViewAddress.context.name;
-    setTimeout(() => this.registerUiCanExitHook(stateName));    
+    props.ref = c => {
+      this.componentInstance = c;
+      this.registerUiCanExitHook(stateName);
+    };
+    
     let child = !loaded && isValidElement(children)
       ? cloneElement(children, props)
       : createElement(component, props);
