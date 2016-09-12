@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {Component, PropTypes, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
 import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, applyPairs, extend} from "ui-router-core";
 import UIRouterReact from "../index";
