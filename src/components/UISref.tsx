@@ -38,11 +38,13 @@ export class UISref extends Component<IProps,any> {
   }
 
   handleClick = (e) => {
-    e.preventDefault();
-    let params = this.props.params || {};
-    let to = this.props.to;
-    let options = this.getOptions();
-    UIRouterReact.instance.stateService.go(to, params, options);
+    if (!e.defaultPrevented && !(e.button == 1 || e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      let params = this.props.params || {};
+      let to = this.props.to;
+      let options = this.getOptions();
+      UIRouterReact.instance.stateService.go(to, params, options);
+    }
   }
 
   render () {
