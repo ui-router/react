@@ -43,16 +43,6 @@ export class UISrefActive extends Component<IProps,any> {
   }
 
   componentWillMount () {
-    // register the states in case user is specyfing explicit states
-    const activeClasses = this.props.class;
-    if (activeClasses && typeof activeClasses === 'object') {
-      Object.keys(activeClasses).forEach(stateOrName => {
-        let activeClass = activeClasses[stateOrName];
-        if (typeof stateOrName === 'string' && stateOrName) {
-          this.addState(stateOrName, {}, activeClass);
-        }
-      });
-    }
     // register callback for state change
     this.deregister = UIRouterReact.instance.transitionService.onSuccess({}, () => this.forceUpdate());
   }
