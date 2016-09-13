@@ -13,7 +13,9 @@
   "exclude": [
     "node_modules",
     "package",
-    "lib"
+    "lib",
+    "src/components/__tests__",
+    "src/__tests__"
   ],
   "compileOnSave": false,
   "buildOnSave": false
