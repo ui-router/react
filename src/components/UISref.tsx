@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {Component, PropTypes, createElement, cloneElement, isValidElement, ValidationMap} from 'react';
 import * as classNames from 'classnames';
 import UIRouterReact from '../index';
