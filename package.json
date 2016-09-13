@@ -41,6 +41,7 @@
     "glob": "^7.0.5",
     "jest": "^15.1.1",
     "react": "^15.0.2",
+    "react-addons-test-utils": "^15.3.1",
     "react-dom": "^15.0.2",
     "react-test-renderer": "^15.3.1",
     "rimraf": "^2.5.3",
