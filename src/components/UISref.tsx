@@ -13,6 +13,8 @@ export interface IProps {
   className?: string;
 }
 export class UISref extends Component<IProps,any> {
+  // deregister function for parent UISrefActive
+  deregister: Function;
   static propTypes = {
     children: PropTypes.element.isRequired,
     to: PropTypes.string.isRequired,
@@ -28,7 +30,13 @@ export class UISref extends Component<IProps,any> {
 
   componentWillMount () {
     const addStateInfo = this.context['parentUiSrefActiveAddStateInfo'];
-    typeof addStateInfo === 'function' && addStateInfo(this.props.to, this.props.params);
+    this.deregister = typeof addStateInfo === 'function'
+      ? addStateInfo(this.props.to, this.props.params)
+      : () => {};
+  }
+
+  componentWillUnmount () {
+    this.deregister();
   }
 
   getOptions = () => {
