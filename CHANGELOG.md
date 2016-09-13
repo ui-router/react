@@ -1,3 +1,8 @@
+# Unreleased
+### Fix
+- **uiCanExit**: Remove `uiCanExit` hook `setTimeout` wrapper that prevents hook from being called when state is entered and exited synchronously [(82bad02)](https://github.com/ui-router/react/commit/82bad02e4bab7b44b682294401e4df36f35b5610).
+- **UISref**: Fix right-click / meta+click behaviour (open in a new tab) on UISref tags [(9a45de1)](https://github.com/ui-router/react/commit/9a45de18aa079356eab4d4b08644da38fbf5e425).
+
 # [0.2.3](https://github.com/ui-router/react/releases/tag/0.2.3) (2016-08-23)
 ### Added
 - **UIView**: Pass down to rendered element/component `className` and `style` props (if defined) [(52e4132)](https://github.com/ui-router/react/commit/52e41325041439c68daa42cc5b4449734d289788).
