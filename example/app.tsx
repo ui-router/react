@@ -48,7 +48,7 @@ let app = (
     <UISrefActive class="active">
       <UISref to="home"><a>Home</a></UISref>
     </UISrefActive>
-    <UIView/>
+    <UIView><p>Content will load here</p></UIView>
   </div>
 );
 ReactDOM.render(app, el);

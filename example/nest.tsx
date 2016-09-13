@@ -7,6 +7,13 @@ export class Nest extends React.Component<IProps,any> {
   constructor (props) {
     super(props);
   }
+  uiCanExit = () => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve();
+      }, 1000);
+    });
+  }
   render() {
     return (
         <div>
