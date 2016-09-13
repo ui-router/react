@@ -54,10 +54,6 @@ export class UISrefActive extends Component<IProps,any> {
 
   addStateInfo = (stateName, stateParams) => {
     const activeClass = this.props.class;
-    // if the class props is an object we already got explicit states
-    // provided by UISrefActive components, so we shadow the one
-    // coming from UISref
-    if (typeof activeClass === 'object' && this.states.length > 0) return;
     let deregister = this.addState(stateName, stateParams, activeClass);
     this.forceUpdate();
     return deregister;
@@ -77,7 +73,7 @@ export class UISrefActive extends Component<IProps,any> {
     this.states.push(stateInfo);
     this.activeClasses[stateHash] = activeClass;
     return () => {
-      let idx = state.indexOf(stateInfo);
+      let idx = this.states.indexOf(stateInfo);
       if (idx !== -1) this.states.splice(idx, 1);
     }
   }
