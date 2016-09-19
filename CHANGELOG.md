@@ -1,10 +1,36 @@
-# Unreleased
+# [0.3.0](https://github.com/ui-router/react/releases/tag/0.3.0) (2016-09-19)
+### Breaking Changes
+1) State Glob patterns have been changed slightly.
+
+    Previously, a single wildcard `foo.*` could match "missing segments" on the end of a state name.
+    For example, `foo.*` would match the state `foo`.
+    Likewise, `foo.*.*.*` would also match the `foo` state.
+
+    Now, a single wildcard matches exactly one segment. 
+    `foo.*` will match `foo.bar` and `foo.baz`, but neither `foo` nor `foo.bar.baz`.
+
+    If you previously relied on the single wildcard to match missing segments, use a double wildcard, `foo.**`.
+
+    Double wildcards match 0 or more segments.
+
+    [Read more about Glob matching](https://ui-router.github.io/docs/latest/classes/common.glob.html)
+
+2) (obscure) Renamed `Transition.previous()` to `Transition.redirectedFrom()`
+3) (obscure) Location provider: remove `url(url)` and `replace()` in favor of `setUrl(url, replace)`.
+
+[[full ui-router-core 1.0.0-beta.2 changelog]](https://github.com/angular-ui/ui-router/blob/master/CHANGELOG.md#100-beta2-2016-09-09).
+
+### Changed
+- **ui-router-core**: Updated to version `1.0.0-beta.2` [(9ad732e)](https://github.com/ui-router/react/commit/9ad732ef1c47cbdf4d5feae3b378ec571bef6685)
+- **UMD**: The UMD build is exported as `window.UIRouterReact` instead of `window.ui-router-react`. [(68ebd4c)](https://github.com/ui-router/react/commit/68ebd4c62839680204c7c009ee0e9917b3af01b8)
+
 ### Fix
 - **uiCanExit**: Remove `uiCanExit` hook `setTimeout` wrapper that prevents hook from being called when state is entered and exited synchronously [(82bad02)](https://github.com/ui-router/react/commit/82bad02e4bab7b44b682294401e4df36f35b5610).
 - **UISref**:
     - Fix right-click / meta+click behaviour (open in a new tab) on UISref tags [(9a45de1)](https://github.com/ui-router/react/commit/9a45de18aa079356eab4d4b08644da38fbf5e425).
     - Add call to deregister function when component is unmounted [(0740825)](https://github.com/ui-router/react/commit/0740825e53a04462dd6a049d6a33fcf9945c987b).
 - **UISrefActive**: Fix state info deregister function [(b6c93b5)](https://github.com/ui-router/react/commit/b6c93b569f2d96067dc5e65c809c6cb74ac4274e).
+- **UMD**: The UMD build now looks react as `window.React` instead of `window.react`. [(68ebd4c)](https://github.com/ui-router/react/commit/68ebd4c62839680204c7c009ee0e9917b3af01b8)
 
 # [0.2.3](https://github.com/ui-router/react/releases/tag/0.2.3) (2016-08-23)
 ### Added
