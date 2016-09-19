@@ -59,8 +59,18 @@ function preparePackageFolder (pkgName) {
 	['.gitignore', '.npmignore', 'README.md']
 		.forEach(file => cp(`${paths.basedir}/${file}`, `${paths.package}/${file}`));
 
-	echo('--> Building webpack bundles...');
 	cd(paths.package);
+
+	echo('--> Removing tests files from package folder (__tests__)');
+	let tests = find('.').filter(file => file.match(/__tests__$/));
+	if(tests.length > 0) {
+		echo(`Found tests:\n -> ${tests.join('\n -> ')}`);
+		rm('-rf', tests);
+	} else {
+		echo(`No test found.`);
+	}
+
+	echo('--> Building webpack bundles...');
 	exec(`npm run build`);
 
 	echo('--> Building commonjs and typings using tsc...');

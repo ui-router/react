@@ -13,10 +13,6 @@
     "sourceRoot": "_src",
     "rootDir": "_src"
   },
-  "exclude": [
-    "src/components/__tests__",
-    "src/__tests__"
-  ],
   "compileOnSave": false,
   "buildOnSave": false,
   "rules": {
