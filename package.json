@@ -30,7 +30,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "es6-shim": "^0.35.1",
-    "ui-router-core": "^1.0.0-beta.1"
+    "ui-router-core": "1.0.0-beta.2"
   },
   "devDependencies": {
     "babel-jest": "^15.0.0",
