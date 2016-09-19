@@ -10,7 +10,7 @@ var config = {
 		path: path.resolve(__dirname, "_bundles"),
 		filename: "[name].js",
 		libraryTarget: "umd",
-		library: "ui-router-react",
+		library: "UIRouterReact",
 		umdNamedDefine: true
 	},
 	resolve: {
@@ -36,7 +36,7 @@ var config = {
 		configFileName: 'tsconfig.webpack.json'
 	},
 	externals: {
-		"react": { root: 'react', amd: 'react', commonjs2: 'react', commonjs: 'react' }
+		"react": { root: 'React', amd: 'react', commonjs2: 'react', commonjs: 'react' }
 	}
 };
 
