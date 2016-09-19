@@ -1,4 +1,4 @@
-# UI-Router-React [![npm package][npm-badge]][npm]
+# UI-Router-React [![travis build][travis-badge]][travis] [![npm package][npm-badge]][npm]
 
 <img src="/logo/logo.png" height="150"/>
 
@@ -56,3 +56,6 @@ ReactDOM.render(
 
 [npm-badge]: https://img.shields.io/npm/v/ui-router-react.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/ui-router-react
+
+[travis-badge]: https://img.shields.io/travis/ui-router/react/master.svg?style=flat-square
+[travis]: https://travis-ci.org/ui-router/react
