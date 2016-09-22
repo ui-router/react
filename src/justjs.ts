@@ -132,7 +132,7 @@ export let hashLocation = {
   path: () =>
       splitHash(splitQuery(trimHashVal(location.hash))[0])[0],
   search: () =>
-    getParams(splitQuery(splitHash(trimHashVal(location.hash))[1])[1]),
+    getParams(splitQuery(splitHash(trimHashVal(location.hash))[0])[1]),
   setUrl: (url: string, replace: boolean = true) => {
     if (url) location.hash = url;
   },
