@@ -4,12 +4,10 @@ tslint.json
 .eslintrc
 .vscode
 .idea
-*.ipw
+*.ipr
 *.iml
 *.iws
-dist
-build/
 lib/
+lib-esm/
+_bundles/
 node_modules/
-package/
-typings/
