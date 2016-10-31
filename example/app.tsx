@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import UIRouterReact, { UIView, UISrefActive, UISref, ReactStateDeclaration, trace } from '../src/index';
+import UIRouterReact, { UIView, UISrefActive, UISref, ReactStateDeclaration, trace, browserHistory } from '../src/index';
 
 import {Home} from './home';
 import {Child} from './child';
@@ -29,9 +29,7 @@ let nest = {
 } as ReactStateDeclaration;
 
 // create new instance of UIRouterReact
-const Router = new UIRouterReact();
-// set up html5Mode
-Router.html5Mode(true);
+const Router = new UIRouterReact(browserHistory);
 // register states
 [home, child, nest].forEach(state => {
   Router.stateRegistry.register(state);
