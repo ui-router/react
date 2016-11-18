@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Component, PropTypes, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
 import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, applyPairs, extend} from "ui-router-core";
 import UIRouterReact from "../index";
-import {ReactViewConfig} from "../ui-router-react";
+import {ReactViewConfig} from "../reactViews";
 
 let id = 0;
 
@@ -70,7 +70,7 @@ export class UIView extends Component<IProps, IState> {
       this.componentInstance = c;
       this.registerUiCanExitHook(stateName);
     };
-    
+
     let child = !loaded && isValidElement(children)
       ? cloneElement(children, props)
       : createElement(component, props);
@@ -143,7 +143,7 @@ export class UIView extends Component<IProps, IState> {
     this.setState({
       component: newComponent || 'div',
       props: newComponent ? extend(props, styleProps) : styleProps,
-      loaded: newComponent ? true : false 
+      loaded: newComponent ? true : false
     });
   }
 
