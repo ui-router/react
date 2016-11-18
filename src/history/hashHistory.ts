@@ -35,9 +35,6 @@ const locationService: LocationServices = {
   setUrl: (url: string, replace: boolean = true) => {
     if (url) location.hash = url;
   },
-  url: () => {
-    return services.location.path();
-  },
   onChange: (cb: EventListener) => window.addEventListener("hashchange", cb, false) as any
 }
 

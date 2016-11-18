@@ -43,10 +43,6 @@ const locationService: LocationServices = {
       else history.pushState(null, null, services.locationConfig.baseHref() + url);
     }
   },
-  url: () => {
-    let hash = services.location.hash();
-    return services.location.path() + (hash ? "#" + hash : "");
-  },
   onChange: (cb: EventListener) => window.addEventListener("popstate", cb, false) as any
 };
 
