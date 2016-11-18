@@ -7,7 +7,7 @@ export {ReactStateDeclaration} from "./interface";
 export {browserHistory} from "./history/browserHistory";
 export {hashHistory} from "./history/hashHistory";
 
-export {UIView} from "./components/UIView";
+export {UIView, InjectedProps, Resolves} from "./components/UIView";
 export {UISref} from "./components/UISref";
 export {UISrefActive} from "./components/UISrefActive";
 

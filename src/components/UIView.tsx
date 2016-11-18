@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Component, PropTypes, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
-import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, applyPairs, extend} from "ui-router-core";
+import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, StateParams, applyPairs, extend} from "ui-router-core";
 import UIRouterReact from "../index";
 import {ReactViewConfig} from "../reactViews";
 
@@ -9,6 +9,19 @@ let id = 0;
 export interface UIViewAddress {
   context: ViewContext;
   fqn: string;
+}
+
+export interface Resolves {
+  [key: string]: any,
+  $stateParams: StateParams,
+  $transition$: Transition
+}
+
+export interface InjectedProps {
+  transition?: Transition,
+  resolves?: Resolves,
+  className?:string,
+  style?: Object
 }
 
 export interface IProps {
