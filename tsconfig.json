@@ -1,22 +1,26 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
     "module": "commonjs",
     "target": "es5",
-    "outDir": "build",
+    "lib": [ "es2015", "dom" ],
+    "outDir": "lib",
     "allowSyntheticDefaultImports": true,
     "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "jsx": "react"
   },
-  "exclude": [
-    "node_modules",
-    "package",
-    "lib",
-    "src/components/__tests__",
-    "src/__tests__"
+  "files": [
+    "./src/index.ts"
   ],
   "compileOnSave": false,
-  "buildOnSave": false
+  "buildOnSave": false,
+  "rules": {
+    "indent": [
+      true,
+      2
+    ]
+  }
 }

@@ -3,8 +3,8 @@ var webpack = require("webpack");
 
 var config = {
 	entry: {
-		"ui-router-react": ["./_src/index.ts"],
-		"ui-router-react.min": ["./_src/index.ts"]
+		"ui-router-react": ["./src/index.ts"],
+		"ui-router-react.min": ["./src/index.ts"]
 	},
 	output: {
 		path: path.resolve(__dirname, "_bundles"),
@@ -27,13 +27,10 @@ var config = {
 		loaders: [
 			{
 				test: /\.tsx?$/,
-				loader: "ts-loader",
+				loader: "awesome-typescript-loader",
 				exclude: /(node_modules|__tests__)/
 			}
 		]
-	},
-	ts: {
-		configFileName: 'tsconfig.webpack.json'
 	},
 	externals: {
 		"react": { root: 'React', amd: 'react', commonjs2: 'react', commonjs: 'react' }
