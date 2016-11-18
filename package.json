@@ -46,7 +46,7 @@
     "babel-preset-react": "^6.11.1",
     "enzyme": "^2.4.1",
     "glob": "^7.0.5",
-    "jest": "^15.1.1",
+    "jest": "^17.0.3",
     "react": "^15.0.2",
     "react-addons-test-utils": "^15.3.1",
     "react-dom": "^15.0.2",
@@ -54,14 +54,16 @@
     "shelljs": "^0.7.0",
     "shx": "^0.1.4",
     "sinon": "^1.17.5",
-    "ts-jest": "0.1.4",
+    "ts-jest": "^17.0.0",
     "typescript": "^2.0.6",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"
   },
   "jest": {
     "rootDir": "src",
-    "scriptPreprocessor": "../node_modules/ts-jest/preprocessor.js",
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../node_modules/ts-jest/preprocessor.js"
+    },
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -69,12 +71,6 @@
       "json"
     ],
     "testURL": "http://localhost:4000",
-    "testRegex": "/__tests__/.*\\.(ts|tsx|js)$",
-    "globals": {
-      "__TS_CONFIG__": {
-        "module": "commonjs",
-        "jsx": "react"
-      }
-    }
+    "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
   }
 }
