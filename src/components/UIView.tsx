@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Component, PropTypes, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, StateParams, applyPairs, extend} from "ui-router-core";
 import UIRouterReact from "../index";
 import {ReactViewConfig} from "../reactViews";
@@ -17,6 +18,14 @@ export interface Resolves {
   $transition$: Transition
 }
 
+export interface TransitionGroup {
+    appear?: boolean,
+    appearTimeout?: number,
+    name?: number,
+    enterTimeout?: number,
+    leaveTimeout?: number
+}
+
 export interface InjectedProps {
   transition?: Transition,
   resolves?: Resolves,
@@ -27,6 +36,7 @@ export interface InjectedProps {
 export interface IProps {
   name?: string;
   className?: string;
+  transitionGroup?: TransitionGroup;
   style?: Object;
 }
 
@@ -74,7 +84,7 @@ export class UIView extends Component<IProps, IState> {
   }
 
   render() {
-    let { children } = this.props;
+    let { children, transitionGroup } = this.props;
     let { component, props, loaded } = this.state;
     // register reference of child component
     // register new hook right after component has been rendered
@@ -84,9 +94,24 @@ export class UIView extends Component<IProps, IState> {
       this.registerUiCanExitHook(stateName);
     };
 
+    // add a key prop, for css transition group
+    props.key = stateName;
+
     let child = !loaded && isValidElement(children)
       ? cloneElement(children, props)
       : createElement(component, props);
+
+
+    if (transitionGroup) {
+      return React.createElement(ReactCSSTransitionGroup, {
+        transitionAppear: typeof transitionGroup.appear === "boolean" ? transitionGroup.appear : true,
+        transitionAppearTimeout: transitionGroup.appearTimeout || 0,
+        transitionName: transitionGroup.name || "",
+        transitionEnterTimeout: transitionGroup.enterTimeout || 0,
+        transitionLeaveTimeout: transitionGroup.leaveTimeout || 0
+      }, child);
+    }
+
     return child;
   }
 

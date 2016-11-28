@@ -26,6 +26,7 @@ const locationServiceConfig: LocationConfig = {
 }
 
 const locationService: LocationServices = {
+  url: () => "",
   hash: () =>
       splitHash(trimHashVal(location.hash))[1],
   path: () =>
