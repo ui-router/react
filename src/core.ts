@@ -8,7 +8,7 @@ import {hashHistory} from './history/hashHistory';
 let viewConfigFactory = (node: [PathNode], config: ReactViewDeclaration) =>
   new ReactViewConfig(node, config);
 
-export default class UIRouterReact extends UIRouter {
+export class UIRouterReact extends UIRouter {
   static instance;
   constructor(history: HistoryImplementation = hashHistory) {
     super();
