@@ -9,12 +9,10 @@ let viewConfigFactory = (node: [PathNode], config: ReactViewDeclaration) =>
   new ReactViewConfig(node, config);
 
 export class UIRouterReact extends UIRouter {
-  static instance;
   constructor(history: HistoryImplementation = hashHistory) {
     super();
     this.viewService.viewConfigFactory('react', viewConfigFactory);
     this.stateRegistry.decorator("views", reactViewsBuilder);
-    UIRouterReact.instance = this;
     // Patch location service & config with history implementation
     Object.assign(services.location, history.service);
     Object.assign(services.locationConfig, history.configuration);

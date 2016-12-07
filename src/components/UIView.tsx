@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Component, PropTypes, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
 import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, StateParams, applyPairs, extend} from "ui-router-core";
-import UIRouterReact from "../index";
+import {UIRouterReact} from "../index";
 import {ReactViewConfig} from "../reactViews";
 
 let id = 0;
@@ -70,6 +70,7 @@ export class UIView extends Component<IProps, IState> {
   }
 
   static contextTypes: ValidationMap<any> = {
+    router: PropTypes.object,
     parentUIViewAddress: PropTypes.object
   }
 
@@ -97,7 +98,7 @@ export class UIView extends Component<IProps, IState> {
   }
 
   componentWillMount() {
-    let router = UIRouterReact.instance;
+    let router = this.context['router'];
 
     // Check the context for the parent UIView's fqn and State
     let parent: UIViewAddress = this.context['parentUIViewAddress'];
@@ -165,7 +166,7 @@ export class UIView extends Component<IProps, IState> {
     let criteria = { exiting: stateName };
     let callback = this.componentInstance && typeof this.componentInstance.uiCanExit === 'function' && this.componentInstance.uiCanExit;
     if (stateName && callback) {
-      let transitions = UIRouterReact.instance.transitionService;
+      let transitions = this.context['router'].transitionService;
       this.removeHook = transitions.onBefore(criteria, callback, {});
     }
   }
