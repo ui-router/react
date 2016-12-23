@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { UIRouter, UIRouterReact, UIView, UISrefActive, UISref, ReactStateDeclaration, trace, browserHistory } from '../src/index';
+import { UIRouter, UIRouterReact, UIView, UISrefActive, UISref, ReactStateDeclaration, trace, pushStateLocationPlugin } from '../src/index';
 
 import {Home} from './home';
 import {Child} from './child';
@@ -36,7 +36,7 @@ const routerConfig = (router: UIRouterReact) => {
 
 let el = document.getElementById("react-app");
 let app = (
-  <UIRouter history={browserHistory} states={[home, child, nest]} config={routerConfig}>
+  <UIRouter plugins={[pushStateLocationPlugin]} states={[home, child, nest]} config={routerConfig}>
     <div>
       <UISrefActive class="active">
         <UISref to="home"><a>Home</a></UISref>
