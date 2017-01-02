@@ -11,5 +11,6 @@ export {UIRouterReact} from "./core";
 export {
   hashLocationPlugin,
   pushStateLocationPlugin,
-  memoryLocationPlugin
+  memoryLocationPlugin,
+  servicesPlugin
 } from 'ui-router-core/lib/vanilla';

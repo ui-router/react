@@ -21,7 +21,7 @@ export interface IState {
 const InstanceOrPluginsMissingError =  new Error(`Router instance or plugins missing.
 You must either provide a location plugin via the plugins prop:
 
-<UIRouter plugins={[pushStateLocationPlugin]}>
+<UIRouter plugins={[pushStateLocationPlugin]} states={[···]}>
   <UIView />
 </UIRouter>
 
@@ -59,7 +59,7 @@ export class UIRouter extends Component<IProps, IState> {
       this.router = new UIRouterReact();
       this.router.plugin(servicesPlugin);
       props.plugins.forEach(plugin => this.router.plugin(plugin));
-      props.states.forEach(state => this.router.stateRegistry.register(state));
+      (props.states || []).forEach(state => this.router.stateRegistry.register(state));
       if (props.config) props.config(this.router);
     } else {
       throw InstanceOrPluginsMissingError;
