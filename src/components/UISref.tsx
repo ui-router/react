@@ -34,6 +34,10 @@ export class UISref extends Component<IProps,any> {
     this.deregister = typeof addStateInfo === 'function'
       ? addStateInfo(this.props.to, this.props.params)
       : () => {};
+    let router = this.context['router'];
+    if (typeof router === 'undefined') {
+      throw new Error(`UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`);
+    }
   }
 
   componentWillUnmount () {

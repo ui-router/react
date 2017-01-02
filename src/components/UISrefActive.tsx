@@ -45,6 +45,10 @@ export class UISrefActive extends Component<IProps,any> {
   }
 
   componentWillMount () {
+    let router = this.context['router'];
+    if (typeof router === 'undefined') {
+      throw new Error(`UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`);
+    }
     // register callback for state change
     this.deregister = this.context['router'].transitionService.onSuccess({}, () => this.forceUpdate());
   }

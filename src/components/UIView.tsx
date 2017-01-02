@@ -99,6 +99,9 @@ export class UIView extends Component<IProps, IState> {
 
   componentWillMount() {
     let router = this.context['router'];
+    if (typeof router === 'undefined') {
+      throw new Error(`UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`);
+    }
 
     // Check the context for the parent UIView's fqn and State
     let parent: UIViewAddress = this.context['parentUIViewAddress'];
