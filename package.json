@@ -39,7 +39,7 @@
     "@types/classnames": "0.0.31",
     "@types/react": "^0.14.43",
     "@types/react-dom": "^0.14.18",
-    "awesome-typescript-loader": "^2.2.4",
+    "awesome-typescript-loader": "3.0.0-beta.17",
     "babel-jest": "^15.0.0",
     "babel-polyfill": "^6.13.0",
     "babel-preset-es2015": "^6.14.0",
