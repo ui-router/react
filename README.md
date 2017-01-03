@@ -1,6 +1,10 @@
-# UI-Router-React [![travis build][travis-badge]][travis] [![npm package][npm-badge]][npm]
+<div align="center">
+  <img src="/logo/logo.png" height="150"/>
 
-<img src="/logo/logo.png" height="150"/>
+  # UI-Router-React
+
+  [![travis build][travis-badge]][travis] [![npm package][npm-badge]][npm]
+</div>
 
 UI-Router provides extremely flexible, state based routing to the [React](https://facebook.github.io/react/) ecosystem.
 
@@ -13,6 +17,7 @@ UI-Router applications are modeled as a hierarchical tree of states. UI-Router p
 - [Tutorials and Docs](/docs)
 - [UI-Router website](https://ui-router.github.io/)
 - [Changelog](/CHANGELOG.md)
+- [Upgrading from `0.3.x` to `0.4.x`](/docs/upgrading-from-0.3.x-to-0.4.x.md)
 
 ## Getting started
 The UI-Router package is distributed using [npm](https://www.npmjs.com/), the node package manager.
@@ -21,36 +26,31 @@ The UI-Router package is distributed using [npm](https://www.npmjs.com/), the no
 npm install --save ui-router-react
 ```
 
-Import the `UIRouterReact` into your project, create a new instance and start the router!
+Import `UIRouter` into your project, define some states and you're good to go!
+
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-import UIRouterReact, {UIView} from 'ui-router-react';
+import {UIRouter, UIView, pushStateLocationPlugin} from 'ui-router-react';
 import Home from './components/Home';
 
-// Create a new instance of the Router
-const router = new UIRouterReact();
+// define your states
+const states = [{
+  name: 'home',
+  url: '/home',
+  component: Home
+}];
 
-// Register state
-router.stateRegistry.register({
-	name: 'home',
-	url: '/home',
-	component: Home
-});
-
-// Setup html5Mode: There are two configuration modes which control the format
-// of the URL in the browser address bar: hashLocation mode (the default)
-// and the HTML5 mode which is based on using the HTML5 History API.
-// WARNING: this is a temporary API and will likely change in the future versions!
-router.html5Mode(true);
-
-// Start the router
-router.start();
-
+// select your plugins
+const plugins = [
+  pushStateLocationPlugin
+];
 
 ReactDOM.render(
-	<UIView/>,
-	document.getElementById('root')
+  <UIRouter plugins={plugins} states={states}>
+    <UIView/>
+  </UIRouter>,
+  document.getElementById('root')
 );
 ```
 
