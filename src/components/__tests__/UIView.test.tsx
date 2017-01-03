@@ -4,7 +4,7 @@ import * as React from "react";
 import { shallow, mount, render } from "enzyme";
 import * as sinon from "sinon";
 
-import UIRouterReact, {UIView, ReactStateDeclaration} from "../../index";
+import {UIRouterReact, UIRouter, UIView, ReactStateDeclaration, memoryLocationPlugin, servicesPlugin} from "../../index";
 
 const states = [
   {
@@ -45,24 +45,24 @@ describe('<UIView>', () => {
     let router;
     beforeEach(() => {
       router = new UIRouterReact();
+      router.plugin(memoryLocationPlugin);
       router.start();
     });
 
     it('renders an empty <div>', () => {
-      expect(
-        shallow(<UIView />).contains(<div/>)
-      ).toBe(true);
+      const wrapper = mount(<UIRouter router={router}><UIView /></UIRouter>);
+      expect(wrapper.html()).toBe('<div></div>');
     });
 
     it('renders its child if provided', () => {
       expect(
-        shallow(<UIView><span/></UIView>).contains(<span/>)
+        mount(<UIRouter router={router}><UIView><span/></UIView></UIRouter>).contains(<span/>)
       ).toBe(true);
     });
 
     it('injects props correctly', () => {
       expect(
-        shallow(<UIView className="myClass" style={{margin:5}}><span/></UIView>).contains(<span className="myClass" style={{margin:5}} />)
+        mount(<UIRouter router={router}><UIView className="myClass" style={{margin:5}}><span/></UIView></UIRouter>).contains(<span className="myClass" style={{margin:5}} />)
       ).toBe(true);
     });
 
@@ -73,14 +73,16 @@ describe('<UIView>', () => {
     let router;
     beforeEach(() => {
       router = new UIRouterReact();
+      router.plugin(servicesPlugin);
+      router.plugin(memoryLocationPlugin);
       states.forEach(state => router.stateRegistry.register(state));
       router.start();
     })
 
     it('renders its State Component', () => {
+      const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
       return router.stateService.go('parent')
         .then(() => {
-          const wrapper = mount(<UIView/>);
           expect(wrapper.html()).toEqual(
             `<div><span>parent</span><div></div></div>`
           )
@@ -91,7 +93,7 @@ describe('<UIView>', () => {
       const Comp = () => <span>component</span>
       router.stateRegistry.register({name: '__state', component: Comp});
       router.start(); 
-      const wrapper = mount(<UIView/>)
+      const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>)
       return router.stateService.go('__state').then(() => {
         expect(wrapper.find(Comp).props().resolves).not.toBeUndefined();
         expect(wrapper.find(Comp).props().transition).not.toBeUndefined();
@@ -102,7 +104,7 @@ describe('<UIView>', () => {
       const Comp = () => <span>component</span>
       router.stateRegistry.register({name: '__state', component: Comp, resolve: [{token: 'foo', resolveFn: () => 'bar'}]});
       router.start(); 
-      const wrapper = mount(<UIView/>)
+      const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
       return router.stateService.go('__state').then(() => {
         expect(wrapper.find(Comp).props().resolves.foo).toBe('bar');
       })
@@ -111,7 +113,7 @@ describe('<UIView>', () => {
     it('renders nested State Components', () => {
       return router.stateService.go('parent.child')
         .then(() => {
-          const wrapper = mount(<UIView/>);
+          const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
           expect(wrapper.html()).toEqual(
             `<div><span>parent</span><span>child</span></div>`
           )
@@ -121,7 +123,7 @@ describe('<UIView>', () => {
     it('renders multiple nested unmounted <UIView>', () => {
       return router.stateService.go('namedParent')
         .then(() => {
-          const wrapper = mount(<UIView/>);
+          const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
           expect(wrapper.html()).toEqual(
             `<div><span>namedParent</span><div></div><div></div></div>`
           )
@@ -131,7 +133,7 @@ describe('<UIView>', () => {
     it('renders multiple nested mounted <UIView>', () => {
       return router.stateService.go('namedParent.namedChild')
         .then(() => {
-          const wrapper = mount(<UIView/>);
+          const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
           expect(wrapper.html()).toEqual(
             `<div><span>namedParent</span><span>child1</span><span>child2</span></div>`
           )
@@ -139,7 +141,7 @@ describe('<UIView>', () => {
     })
 
     it('unmounts State Component when changing state', () => {
-      const wrapper = mount(<UIView/>);
+      const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
       return router.stateService.go('parent.child')
         .then(() => {
           expect(wrapper.html()).toEqual(
@@ -161,10 +163,10 @@ describe('<UIView>', () => {
       }
       const Exit = () => <span>exit</span>;
       router = new UIRouterReact();
-      router.stateRegistry.register({ name: '__state', component: Comp });
-      router.stateRegistry.register({ name: 'exit', component: Exit });
+      router.stateRegistry.register({ name: '__state', component: Comp } as ReactStateDeclaration);
+      router.stateRegistry.register({ name: 'exit', component: Exit } as ReactStateDeclaration);
       router.start();
-      const wrapper = mount(<UIView/>);
+      const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
       return router.stateService.go('__state')
         .then(() => {
           expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
@@ -178,7 +180,7 @@ describe('<UIView>', () => {
 
     it('deregisters the UIView when unmounted', () => {
       const Component = props => (
-        <div>{props.show ? <UIView/> : <div></div>}</div>
+        <UIRouter router={router}>{props.show ? <UIView/> : <div></div>}</UIRouter>
       );
       const wrapper = mount(<Component show={true}/>);
       let stub = sinon.stub(wrapper.find(UIView).get(0), 'deregister');

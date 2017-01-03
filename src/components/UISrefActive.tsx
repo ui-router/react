@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Component, PropTypes, cloneElement, ValidationMap} from 'react';
 import * as classNames from 'classnames';
-import UIRouterReact, { UISref } from '../index';
+import { UIRouterReact, UISref } from '../index';
 import {UIViewAddress} from "./UIView";
 
 export interface IProps {
@@ -30,6 +30,7 @@ export class UISrefActive extends Component<IProps,any> {
   }
 
   static contextTypes: ValidationMap<any> = {
+    router: PropTypes.object,
     parentUIViewAddress: PropTypes.object
   }
 
@@ -44,8 +45,12 @@ export class UISrefActive extends Component<IProps,any> {
   }
 
   componentWillMount () {
+    let router = this.context['router'];
+    if (typeof router === 'undefined') {
+      throw new Error(`UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`);
+    }
     // register callback for state change
-    this.deregister = UIRouterReact.instance.transitionService.onSuccess({}, () => this.forceUpdate());
+    this.deregister = this.context['router'].transitionService.onSuccess({}, () => this.forceUpdate());
   }
 
   componentWillUnmount () {
@@ -60,9 +65,9 @@ export class UISrefActive extends Component<IProps,any> {
   }
 
   addState = (stateName, stateParams, activeClass) => {
-    const {stateService} = UIRouterReact.instance;
+    const {stateService} = this.context['router'];
     let parent = this.context['parentUIViewAddress'];
-    let stateContext = parent && parent.context || UIRouterReact.instance.stateRegistry.root();
+    let stateContext = parent && parent.context || this.context['router'].stateRegistry.root();
     let state = stateService.get(stateName, stateContext);
     let stateHash = this.createStateHash(stateName, stateParams);
     let stateInfo = {
@@ -89,7 +94,7 @@ export class UISrefActive extends Component<IProps,any> {
 
   getActiveClasses = () => {
     let activeClasses = [];
-    let {stateService} = UIRouterReact.instance;
+    let {stateService} = this.context['router'];
     let {exact} = this.props;
     this.states.forEach(s => {
       let { state, params, hash } = s;

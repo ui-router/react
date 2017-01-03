@@ -4,7 +4,7 @@ import * as React from "react";
 import { shallow, mount, render } from "enzyme";
 import * as sinon from "sinon";
 
-import UIRouterReact, {UIView, UISref, ReactStateDeclaration, browserHistory} from "../index";
+import {UIRouterReact, UIView, UISref, ReactStateDeclaration} from "../index";
 import {services, UrlMatcher} from 'ui-router-core';
 
 describe("UIRouterReact class", () => {
@@ -19,10 +19,6 @@ describe("UIRouterReact class", () => {
 
   afterEach(() => {
     sandbox.restore();
-  });
-
-  it('creates a new instance correctly', () => { 
-    expect(router).toEqual(UIRouterReact.instance);
   });
 
   it('starts the router with start() method', () => {

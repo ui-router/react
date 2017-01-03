@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Component, PropTypes, createElement, cloneElement, isValidElement, ValidationMap} from 'react';
 import * as classNames from 'classnames';
-import UIRouterReact from '../index';
+import {UIRouterReact} from '../index';
 import {extend, TransitionOptions} from 'ui-router-core';
 import {UIViewAddress} from "./UIView";
 
@@ -24,6 +24,7 @@ export class UISref extends Component<IProps,any> {
   }
 
   static contextTypes: ValidationMap<any> = {
+    router: PropTypes.object,
     parentUIViewAddress: PropTypes.object,
     parentUiSrefActiveAddStateInfo: PropTypes.func
   }
@@ -33,6 +34,10 @@ export class UISref extends Component<IProps,any> {
     this.deregister = typeof addStateInfo === 'function'
       ? addStateInfo(this.props.to, this.props.params)
       : () => {};
+    let router = this.context['router'];
+    if (typeof router === 'undefined') {
+      throw new Error(`UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`);
+    }
   }
 
   componentWillUnmount () {
@@ -41,7 +46,7 @@ export class UISref extends Component<IProps,any> {
 
   getOptions = () => {
     let parent: UIViewAddress = this.context['parentUIViewAddress'];
-    let parentContext = parent && parent.context || UIRouterReact.instance.stateRegistry.root();
+    let parentContext = parent && parent.context || this.context['router'].stateRegistry.root();
     let defOpts = { relative: parentContext, inherit: true };
     return extend(defOpts, this.props.options || {});
   }
@@ -52,7 +57,7 @@ export class UISref extends Component<IProps,any> {
       let params = this.props.params || {};
       let to = this.props.to;
       let options = this.getOptions();
-      UIRouterReact.instance.stateService.go(to, params, options);
+      this.context['router'].stateService.go(to, params, options);
     }
   }
 
@@ -61,7 +66,7 @@ export class UISref extends Component<IProps,any> {
     let childrenProps = this.props.children.props;
     let props = Object.assign({}, childrenProps, {
         onClick: this.handleClick,
-        href: UIRouterReact.instance.stateService.href(to, params, options),
+        href: this.context['router'].stateService.href(to, params, options),
         className: classNames(this.props.className, childrenProps.className)
     });
     return cloneElement(this.props.children, props);

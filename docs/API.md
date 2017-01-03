@@ -10,7 +10,8 @@
     - [`urlRouterProvider`](#urlrouterprovider-urlrouterprovider)
     - [`viewService`](#viewservice-viewservice)
     - [`start()`](#start-void)
-    - [`html5mode()`](#html5modemode-boolean-void)
+    - [`plugin()`](#plugin-uirouterplugin)
+    - [`html5mode()`](#html5modemode-boolean-void) - *deprecated*
 
 - [State Declaration](#state-declaration)
     - [`abstract`](#abstract-boolean)
@@ -28,6 +29,7 @@
     - [`views`](#views-object)
 
 - [Components](#components)
+    - [`<UIRouter>`](#uirouter)
     - [`<UIView>`](#uiview)
     - [`<UISref>`](#uisref)
     - [`<UISrefActive>`](#uisrefactive)
@@ -35,6 +37,11 @@
 - [State Components](#state-components)
 
 - [Transitions](#transitions)
+
+- [Plugins](#plugins)
+    - [`pushStateLocationPlugin`](#pushStateLocationPlugin)
+    - [`hashLocationPlugin`](#hashLocationPlugin)
+    - [`memoryLocationPlugin`](#memoryLocationPlugin)
 
 - [Utilities](#utilities)
     - [`trace`](#trace)
@@ -108,13 +115,15 @@ Take a look at the [ViewService Class](https://ui-router.github.io/docs/latest/c
 #### `start()`: void
 Starts the router. It tells the router to listen for state changes and to sync the url accordingly.
 
+#### `plugin()`: UIRouterPlugin
+Register a plugin in the router instance, the plugin is returned by the function.
+
 #### `html5mode(mode: boolean)`: void
+
+**Deprecated in 0.4.0!**
 
 By default UI-Router works with a `HashLocation` history implementation.
 If `mode` is true, the HTML5 `PushStateLocation` will be used instead.
-
-> WARNING, html5mode() is a temporary API and will likely change in the future.
-> Future versions of UI-Router React will provide a way to specify custom history implementation.
 
 ## State Declaration
 A state declaration object is used to register a new state. It is registered via the `stateRegistry`.
@@ -400,12 +409,94 @@ views: {
 
 ## Components
 
-### `<UIView>`
-The view component renders your state components when a state is active.
+### `<UIRouter>`
+
+Main router component that handles router instance and initialization.
 
 ```jsx
 render(
-  <UIView/>
+  <UIRouter plugins={[•••]} states={[•••]}>
+    <UIView />
+  </UIRouter>,
+  document.getElementById('root')
+);
+```
+
+#### Props
+
+##### `children`: element
+
+You may define a single child element. Descendants of this component will have access to the router instance via React context.
+
+##### `plugins`: array
+
+Plugins to apply to the router instance. By default, the component applies the `servicesPlugin` which is in charge of handling the DI mechanism as well as the promises implementation.
+
+In order for the router to work, you need to specify a location plugin.
+The library by default provides three location implementation plugins: `hash`, `pushState` and `memory`.
+
+There are other plugins that extend the router base functionalities and you can also write your own plugin.
+
+##### `states`: array
+
+You may provide an array of state definition that are registered right after the router is initialized.
+
+##### `config`: function
+
+THe config prop accepts a function that will be called with the newly router instance as argument.
+You can use this function to configure the router:
+
+```jsx
+const configRouter = router => {
+  router.urlRouterProvider.otherwise("/home");
+}
+
+render(
+  <UIRouter plugins={[•••]} states={[•••]} config={configRouter}>
+    <UIView />
+  </UIRouter>,
+  document.getElementById('root')
+);
+```
+
+##### `router`: UIRouterReact
+
+Since UI-Router is framework agnostic, you can set-up the router manually in "vanilla" ui-router, and pass the instance to the component.
+This way the component will skip the previous props and just use the provided instance.
+
+```jsx
+import {UIRouterReact, UIRouter, UIView, servicesPlugin, pushStateLocationPlugin} from 'ui-router-react';
+
+const someState = { name: 'some', url: '', component: SomeComponent };
+// create instance
+const router = new UIRouterReact();
+// activate plugins
+router.plugin(servicesPlugin);
+router.plugin(pushStateLocationPlugin);
+// register states
+router.stateRegistry.register(someState);
+// start the router
+router.start();
+
+ReactDOM.render(
+  <UIRouter router={router}>
+    <UIView />
+  </UIRouter>,
+  document.getElementById("root")
+);
+```
+
+> NB: since you are manually bootstrapping the router, you must register the `servicesPlugin` as well as the location plugin of your choice (in this example the `pushStateLocationPlugin`).
+
+### `<UIView>`
+
+The view component renders your state components when a state is active. It must be a descendant of `<UIRouter>` component in order to work.
+
+```jsx
+render(
+  <UIRouter {•••}>
+    <UIView/>
+  </UIRouter>,
   document.getElementById('root')
 );
 ```
@@ -530,6 +621,25 @@ This object contains all contextual information about the to/from states, parame
 The transitions are always inject in the state components via the `transition` prop.
 
 Take a look at the [Transition Class](https://ui-router.github.io/docs/latest/classes/transition.transition-1.html) for more info.
+
+## Plugins
+
+Plugins are a handy way to extend UI-Router functionalities. The router internally uses a DI mechanism as well as a Promise implementation.
+Both are implemented as the `servicesPlugin`.
+
+Location implementation are also implemented as plugins:
+
+### `pushStateLocationPlugin`
+
+Location strategy via html5 `pushState` API.
+
+### `hashLocationPlugin`
+
+Location strategy via url hash portion (i.e. `myurl.com/#/home`).
+
+### `memoryLocationPlugin`
+
+Location strategy via in-memory object, useful for environments where a location is not present (server-side code for SSR).
 
 ## Utilities
 
