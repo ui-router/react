@@ -33,7 +33,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "es6-shim": "^0.35.1",
-    "ui-router-core": "^2.0.0"
+    "ui-router-core": "^3.1.0"
   },
   "devDependencies": {
     "@types/classnames": "0.0.31",

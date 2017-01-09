@@ -142,7 +142,7 @@ export class UIView extends Component<IProps, IState> {
       let ctx = new ResolveContext(newConfig.path);
       trans = ctx.getResolvable(Transition).data;
       let stringTokens = trans.getResolveTokens().filter(x => typeof x === 'string');
-      resolves = stringTokens.map(token => [token, trans.getResolveValue(token)]).reduce(applyPairs, {});
+      resolves = stringTokens.map(token => [token, trans.injector().get(token)]).reduce(applyPairs, {});
     }
 
     this.uiViewData.config = newConfig;

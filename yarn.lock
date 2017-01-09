@@ -3910,9 +3910,9 @@ uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
 
-ui-router-core@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ui-router-core/-/ui-router-core-2.0.0.tgz#1680489418f2751cb03731bae4c07330b9cbe0dd"
+ui-router-core@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ui-router-core/-/ui-router-core-3.1.0.tgz#c297e8198631ab2e36892a95d0f9a92c18efbc17"
 
 uid-number@~0.0.6:
   version "0.0.6"

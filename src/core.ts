@@ -14,7 +14,6 @@ export class UIRouterReact extends UIRouter {
   }
   start(): void {
     this.urlMatcherFactory.$get();
-    this.stateRegistry.stateQueue.autoFlush(this.stateService);
     this.urlRouter.listen();
     this.urlRouter.sync();
   }

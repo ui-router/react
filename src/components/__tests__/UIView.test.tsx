@@ -163,6 +163,8 @@ describe('<UIView>', () => {
       }
       const Exit = () => <span>exit</span>;
       router = new UIRouterReact();
+      router.plugin(servicesPlugin);
+      router.plugin(memoryLocationPlugin);
       router.stateRegistry.register({ name: '__state', component: Comp } as ReactStateDeclaration);
       router.stateRegistry.register({ name: 'exit', component: Exit } as ReactStateDeclaration);
       router.start();
