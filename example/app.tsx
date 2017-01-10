@@ -30,7 +30,7 @@ let nest = {
 
 
 const routerConfig = (router: UIRouterReact) => {
-  router.urlRouterProvider.otherwise("/home");
+  router.urlRouter.otherwise("/home");
   trace.enable(1);
 }
 
