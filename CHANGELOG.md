@@ -1,3 +1,19 @@
+# [0.4.0](https://github.com/ui-router/react/releases/tag/0.4.0) (2017-01-10)
+Version 0.4.0 is based on ui-router-ore 3.1.0 and as such introduced a lot of new features/fixes alongside some breaking changes.
+
+[[full ui-router-core 3.0.0 changelog]](https://github.com/ui-router/core/blob/master/CHANGELOG.md#300-2017-01-08)
+
+### Breaking Changes
+- **html5Mode()**: deprecated in favor of `pushStateLocationPlugin`.
+
+### Changed
+- **ui-router-core**: Updated to version `3.1.0` [(91661b1)](https://github.com/ui-router/react/commit/91661b19e8dbd9ba5fb9420c1e51c9af25598185).
+
+### Add
+- **UIRouter**: Add new `UIRouter` component for handling router instance and declarative bootstrapping [(9b59d68)](https://github.com/ui-router/react/commit/9b59d68b742478de98c011ad87435cc67f82ce7c).
+
+[Take a look at the guide for upgrading from `0.3.0` to `0.4.0`](https://github.com/ui-router/react/blob/master/docs/upgrading-from-0.3.x-to-0.4.x.md)
+
 # [0.3.0](https://github.com/ui-router/react/releases/tag/0.3.0) (2016-09-19)
 ### Breaking Changes
 1) State Glob patterns have been changed slightly.
