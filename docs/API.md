@@ -7,7 +7,7 @@
     - [`transitionService`](#transitionservice-transitionservice)
     - [`urlMatcherFactory`](#urlmatcherfactory-urlmatcherfactory)
     - [`urlRouter`](#urlrouter-urlrouter)
-    - [`urlRouterProvider`](#urlrouterprovider-urlrouterprovider)
+    - [`urlRouterProvider`](#urlrouterprovider-urlrouterprovider) - *deprecated*
     - [`viewService`](#viewservice-viewservice)
     - [`start()`](#start-void)
     - [`plugin()`](#plugin-uirouterplugin)
@@ -18,7 +18,7 @@
     - [`data`](#data-any)
     - [`name`](#name-string)
     - [`params`](#params-object)
-    - [`parent`](#parent-string-statedeclaration)
+    - [`parent`](#parent-string--statedeclaration)
     - [`redirectTo`](#redirectto-function)
     - [`onEnter`](#onenter-transitionstatehookfn)
     - [`onExit`](#onexit-transitionstatehookfn)
@@ -101,6 +101,9 @@ Internal class for handling the URL inside the router.
 Take a look at [UrlRouter Class](https://ui-router.github.io/docs/latest/classes/url.urlrouter.html) for more info.
 
 #### `urlRouterProvider`: UrlRouterProvider
+
+**Deprecated in 0.4.0:** `urlRouterProvider` has been merged with `urlRouter`.
+
 This class manages the router rules for what to do when the URL changes.
 
 Take a look at [UrlRouterProvider](https://ui-router.github.io/docs/latest/classes/url.urlrouterprovider.html) for more info.
@@ -448,7 +451,7 @@ You can use this function to configure the router:
 
 ```jsx
 const configRouter = router => {
-  router.urlRouterProvider.otherwise("/home");
+  router.urlRouter.otherwise("/home");
 }
 
 render(
