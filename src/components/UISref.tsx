@@ -1,3 +1,7 @@
+/**
+ * @reactapi
+ * @module components
+ */ /** */
 import * as React from 'react';
 import {Component, PropTypes, createElement, cloneElement, isValidElement, ValidationMap} from 'react';
 import * as classNames from 'classnames';
@@ -5,14 +9,15 @@ import {UIRouterReact} from '../index';
 import {extend, TransitionOptions} from 'ui-router-core';
 import {UIViewAddress} from "./UIView";
 
-export interface IProps {
+export interface UISrefProps {
   children?: any;
   to: string;
   params?: { [key: string]: any };
   options?: TransitionOptions;
   className?: string;
 }
-export class UISref extends Component<IProps,any> {
+
+export class UISref extends Component<UISrefProps,any> {
   // deregister function for parent UISrefActive
   deregister: Function;
   static propTypes = {

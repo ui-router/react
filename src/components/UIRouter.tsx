@@ -1,23 +1,33 @@
+/**
+ * # Components
+ * 
+ * React Components and their APIs
+ *
+ * @preferred
+ * @reactapi
+ * @module components
+ */ /** */
 import * as React from 'react';
 import {Component, PropTypes, Children} from 'react';
 import {UIRouterReact, ReactStateDeclaration} from '../index';
 import {UIRouterPlugin} from 'ui-router-core';
 import {servicesPlugin} from 'ui-router-core/lib/vanilla';
 
-export interface IProps {
+export interface UIRouterProps {
   plugins?: any[]; // should fix type
   states?: ReactStateDeclaration[];
   config?: (router: UIRouterReact) => void;
   router?: UIRouterReact;
 }
 
-export interface IState {
+export interface UIRouterState {
   id?: number;
   loaded?: boolean;
   component?: string;
   props?: any;
 }
 
+/** @hidden */
 const InstanceOrPluginsMissingError =  new Error(`Router instance or plugins missing.
 You must either provide a location plugin via the plugins prop:
 
@@ -35,7 +45,7 @@ router.plugin(pushStateLocationPlugin);
 </UIRouter>
 `);
 
-export class UIRouter extends Component<IProps, IState> {
+export class UIRouter extends Component<UIRouterProps, UIRouterState> {
   static propTypes = {
     plugins: PropTypes.arrayOf(PropTypes.func),
     states: PropTypes.arrayOf(PropTypes.object),

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "es5",
+    "lib": [ "es2015", "dom" ],
+    "outDir": "lib",
+    "allowSyntheticDefaultImports": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": false,
+    "sourceMap": false,
+    "jsx": "react"
+  },
+  "files": [
+    "src/index.ts",
+    "../ui-router-core/src/index.ts",
+    "node_modules/typescript/lib/lib.es6.d.ts"
+  ]
+}

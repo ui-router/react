@@ -1,19 +1,44 @@
+/**
+ * @reactapi
+ * @module components
+ */ /** */
 import * as React from 'react';
 import {Component, PropTypes, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
 import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, StateParams, applyPairs, extend} from "ui-router-core";
 import {UIRouterReact} from "../index";
 import {ReactViewConfig} from "../reactViews";
 
+/** @internalapi */
 let id = 0;
 
+/** @internalpi */
 export interface UIViewAddress {
   context: ViewContext;
   fqn: string;
 }
 
+/**
+ * Interface for [[InjectedProps.resolves]]
+ *
+ * This Typescript interface shows what fields are available on the `resolves` field.
+ */
 export interface Resolves {
+  /**
+   * Any key/value pair defined by a state's resolve
+   *
+   * If a state defines any [[ReactStateDeclaration.resolve]]s, they will be found on this object.
+   */
   [key: string]: any,
+  /**
+   * The `StateParams` for the `Transition` that activated the component
+   *
+   * This is an alias for:
+   * ```js
+   * let $stateParams = $transition$.params("to");
+   * ```
+   */
   $stateParams: StateParams,
+  /** The `Transition` that activated the component */
   $transition$: Transition
 }
 
@@ -24,20 +49,22 @@ export interface InjectedProps {
   style?: Object
 }
 
-export interface IProps {
+/** Component Props for `UIView` */
+export interface UIViewProps {
   name?: string;
   className?: string;
   style?: Object;
 }
 
-export interface IState {
+/** Component State for `UIView` */
+export interface UIViewState {
   id?: number;
   loaded?: boolean;
   component?: string;
   props?: any;
 }
 
-export class UIView extends Component<IProps, IState> {
+export class UIView extends Component<UIViewProps, UIViewState> {
   // This object contains all the metadata for this UIView
   uiViewData: ActiveUIView;
 
@@ -53,13 +80,13 @@ export class UIView extends Component<IProps, IState> {
   // Removes th Hook when the UIView is unmounted
   removeHook: Function;
 
-  state: IState = {
+  state: UIViewState = {
     loaded: false,
     component: 'div',
     props: {}
   }
 
-  static propTypes: ValidationMap<IProps> = {
+  static propTypes: ValidationMap<UIViewProps> = {
     name: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object
@@ -131,6 +158,11 @@ export class UIView extends Component<IProps, IState> {
     this.deregister();
   }
 
+  /**
+   * View config updated callback
+   *
+   * This is called by UI-Router when a state was activated, and one of its views targets this `UIView`
+   */
   viewConfigUpdated(newConfig: ReactViewConfig) {
     let newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
     let trans: Transition = undefined, resolves = {};

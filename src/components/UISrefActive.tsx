@@ -1,24 +1,28 @@
+/**
+ * @reactapi
+ * @module components
+ */ /** */
 import * as React from 'react';
 import {Component, PropTypes, cloneElement, ValidationMap} from 'react';
 import * as classNames from 'classnames';
 import { UIRouterReact, UISref } from '../index';
 import {UIViewAddress} from "./UIView";
 
-export interface IProps {
+export interface UISrefActiveProps {
   class?: string;
   exact?: Boolean;
   children?: any;
 }
 
-export interface IStates {
+export interface UISrefActiveState {
   state: { name: string; [key: string]: any };
   params: Object;
   hash: string;
 }
 
-export class UISrefActive extends Component<IProps,any> {
+export class UISrefActive extends Component<UISrefActiveProps,any> {
   // keep track of states to watch and their activeClasses
-  states: Array<IStates> = [];
+  states: Array<UISrefActiveState> = [];
   activeClasses: { [key: string]: string } = {};
 
   // deregister the callback for state changed when unmounted
