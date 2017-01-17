@@ -4281,8 +4281,8 @@ typedoc-plugin-external-module-name@^1.0.8:
   resolved "https://registry.yarnpkg.com/typedoc-plugin-external-module-name/-/typedoc-plugin-external-module-name-1.0.8.tgz#636a94a228d1f5ab4e563e45d875ec861227824c"
 
 typedoc-plugin-internal-external@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/typedoc-plugin-internal-external/-/typedoc-plugin-internal-external-1.0.8.tgz#dbef62c7f9fbab2ade5e0509789bb72af91c3199"
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/typedoc-plugin-internal-external/-/typedoc-plugin-internal-external-1.0.9.tgz#ba476d138e81c50836e982665cdfea815bc83d1a"
 
 typedoc-plugin-ui-router@^1.0.6:
   version "1.0.6"

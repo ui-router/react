@@ -51,7 +51,7 @@ for (var i = 0; i < 5; i++) {
     with: ' $1' + dots + '/../ui-router-core/src',
     files: [
       'src/' + stars + '.tsx',
-      'src/' + stars + '.tsx',
+      'src/' + stars + '.ts',
     ]
   });
 }
@@ -64,6 +64,6 @@ shelljs.exec(typedocCmd);
 
 // Restore original sources
 // console.log("Restoring `src/` from `src.bak/`");
-// shelljs.rm('-rf', 'src');
-shelljs.mv('src', 'src.docs');
+shelljs.rm('-rf', 'src');
+// shelljs.mv('src', 'src.docs');
 shelljs.mv('src.bak', 'src');
