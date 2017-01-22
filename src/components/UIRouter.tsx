@@ -11,7 +11,7 @@ import * as React from 'react';
 import {Component, PropTypes, Children} from 'react';
 import {UIRouterReact, ReactStateDeclaration} from '../index';
 import {UIRouterPlugin} from 'ui-router-core';
-import {servicesPlugin} from 'ui-router-core/lib/vanilla';
+import {servicesPlugin} from 'ui-router-core';
 
 export interface UIRouterProps {
   plugins?: any[]; // should fix type

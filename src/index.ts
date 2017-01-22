@@ -24,4 +24,4 @@ export {
   pushStateLocationPlugin,
   memoryLocationPlugin,
   servicesPlugin
-} from 'ui-router-core/lib/vanilla';
+} from 'ui-router-core';
