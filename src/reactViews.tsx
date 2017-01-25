@@ -1,3 +1,7 @@
+/**
+ * @reactapi
+ * @module react
+ */ /** */
 import { services, forEach, map, pick, PathNode, ViewConfig, ViewService, State} from "ui-router-core";
 import {ReactViewDeclaration} from "./interface";
 
@@ -9,6 +13,8 @@ import {ReactViewDeclaration} from "./interface";
  *
  * If no `views: {}` property exists on the [[StateDeclaration]], then it creates the `views` object and
  * applies the state-level configuration to a view named `$default`.
+ *
+ * @internalapi
  */
 export function reactViewsBuilder(state: State) {
   let views = {}, viewsDefinitionObject;
@@ -38,7 +44,10 @@ export function reactViewsBuilder(state: State) {
   return views;
 }
 
+/** @internalapi */
 let id = 0;
+
+/** @internalapi */
 export class ReactViewConfig implements ViewConfig {
   loaded: boolean = true;
   $id: number = id++;

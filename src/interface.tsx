@@ -1,4 +1,7 @@
-/** @module ng2 */ /** */
+/**
+ * @reactapi
+ * @module react
+ */ /** */
 import {Component} from "react";
 import {StateDeclaration, _ViewDeclaration} from "ui-router-core";
 import {ParamDeclaration} from "ui-router-core";
@@ -10,9 +13,8 @@ import {Transition} from "ui-router-core";
  * The StateDeclaration object is used to define a state or nested state.
  * It should be registered with the [[StateRegistry]].
  *
- * @example
+ * #### Example:
  * ```js
- *
  * import {FoldersComponent} from "./folders";
  *
  * // StateDeclaration object
@@ -46,9 +48,8 @@ export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclar
    *
    *  Targets three named ui-views in the parent state's template
    *
-   * @example
+   * #### Example:
    * ```js
-   *
    * views: {
    *   header: HeaderComponent,
    *   body: BodyComponent,
@@ -56,9 +57,8 @@ export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclar
    * }
    * ```
    *
-   * @example
+   * #### Example:
    * ```js
-   *
    * // Targets named ui-view="header" in the template of the ancestor state 'top'
    * // and the named `ui-view="body" from the parent state's template.
    * views: {
@@ -76,9 +76,8 @@ export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclar
    *
    * Addresses without an `@` are anchored to the parent state.
    *
-   * @example
+   * #### Example:
    * ```js
-   *
    * // target the `<div ui-view='foo'></div>` created in the parent state's view
    * views: { foo: {...} }
    * ```
@@ -87,8 +86,7 @@ export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclar
    *
    * You can anchor the `ui-view` name to a specific state by including an `@`
    *
-   * @example
-   *
+   * #### Example:
    * ```js
    *
    * // target the `<div ui-view='foo'></div>` which was created in a
@@ -101,9 +99,8 @@ export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclar
    * You can address a `ui-view` absolutely, using dotted notation, by prefixing the address with a `!`.  Dotted
    * addresses map to the hierarchy of `ui-view`s active in the DOM:
    *
-   * @example
+   * #### Example:
    * ```js
-   *
    * // absolutely target the `<div ui-view='nested'></div>`... which was created
    * // in the unnamed/$default root `<ui-view></ui-view>`
    * views: { '!$default.nested': {...} }
@@ -114,18 +111,15 @@ export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclar
    * Absolute addressing is actually relative addressing, only anchored to the unnamed root state.  You can also use
    * relative addressing anchored to any state, in order to target a target deeply nested `ui-views`:
    *
-   * @example
+   * #### Example:
    * ```js
-   *
-   *
    * // target the `<div ui-view='bar'></div>`... which was created inside the
    * // `<div ui-view='bar'></div>`... which was created inside the parent state's template.
    * views: { 'foo.bar': {...} }
    * ```
    *
-   * @example
+   * #### Example:
    * ```js
-   *
    * // target the `<div ui-view='bar'></div>`...  which was created in
    * // `<div ui-view='foo'></div>`... which was created in a template crom the state `baz.qux`
    * views: { 'foo.bar@baz.qux': {...} }
@@ -141,6 +135,9 @@ export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclar
   views?: { [key: string]: ReactViewDeclaration; };
 }
 
+/**
+ * Declares a view on some state
+ */
 export interface ReactViewDeclaration extends _ViewDeclaration {
   /**
    * The React `Component` to use for this view.
@@ -153,9 +150,8 @@ export interface ReactViewDeclaration extends _ViewDeclaration {
    *
    * TODO: document react shorthand, like ng1's shorthand: inside a "views:" block, a bare string `"foo"` is shorthand for `{ component: "foo" }`
    *
-   * @example
+   * #### Example:
    * ```js
-   *
    * .state('profile', {
    *   // Use the <my-profile></my-profile> component for the Unnamed view
    *   component: MyProfileComponent,
@@ -199,9 +195,8 @@ export interface ReactViewDeclaration extends _ViewDeclaration {
    * Any component bindings that are omitted from this map get the default behavior of mapping to a resolve of the
    * same name.
    *
-   * @example
+   * #### Example:
    * ```js
-   *
    * $stateProvider.state('foo', {
    *   resolve: {
    *     foo: function(FooService) { return FooService.get(); },
@@ -260,9 +255,8 @@ export interface ReactComponent {
    * @param newValues an object containing the changed parameter values
    * @param $transition$ the new Transition which triggered this callback
    *
-   * @example:
+   * #### Example:
    * ```js
-   *
    * angular.module('foo').controller('FancyCtrl', function() {
    *   this.uiOnParamsChanged = function(newParams) {
    *     console.log("new params: ", newParams);
