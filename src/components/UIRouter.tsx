@@ -69,8 +69,8 @@ export class UIRouter extends Component<UIRouterProps, UIRouterState> {
       this.router = new UIRouterReact();
       this.router.plugin(servicesPlugin);
       props.plugins.forEach(plugin => this.router.plugin(plugin));
-      (props.states || []).forEach(state => this.router.stateRegistry.register(state));
       if (props.config) props.config(this.router);
+      (props.states || []).forEach(state => this.router.stateRegistry.register(state));
     } else {
       throw InstanceOrPluginsMissingError;
     }
