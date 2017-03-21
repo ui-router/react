@@ -4,10 +4,12 @@
  */ /** */
 import * as React from 'react';
 import {Component, PropTypes, createElement, cloneElement, isValidElement, ValidationMap} from 'react';
-import * as classNames from 'classnames';
+import * as _classNames from 'classnames';
 import {UIRouterReact} from '../index';
 import {extend, TransitionOptions} from 'ui-router-core';
 import {UIViewAddress} from "./UIView";
+
+let classNames = _classNames;
 
 export interface UISrefProps {
   children?: any;
