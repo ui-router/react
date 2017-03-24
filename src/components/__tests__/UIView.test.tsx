@@ -35,6 +35,14 @@ const states = [
       child1: () => <span>child1</span>,
       child2: { component: () => <span>child2</span> },
     }
+  },{
+    name: 'withrenderprop',
+    component: ({ foo }) => (
+      <div>
+        <span>withrenderprop</span>
+        {foo}
+      </div>
+    )
   }
 ]
 
@@ -188,7 +196,17 @@ describe('<UIView>', () => {
       let stub = sinon.stub(wrapper.find(UIView).get(0), 'deregister');
       wrapper.setProps({show:false});
       expect(stub.calledOnce).toBe(true);
-    })
+    });
+
+    it('renders the component using the render prop', () => {
+      const wrapper = mount(<UIRouter router={router}><UIView render={(Comp, props) => <Comp {...props} foo={<span>bar</span>} />}/></UIRouter>);
+      return router.stateService.go('withrenderprop')
+        .then(() => {
+          expect(wrapper.html()).toEqual(
+            `<div><span>withrenderprop</span><span>bar</span></div>`
+          )
+        });
+    });
 
   });
 })
