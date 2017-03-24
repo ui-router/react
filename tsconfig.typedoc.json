@@ -15,6 +15,6 @@
   "files": [
     "src/index.ts",
     "../ui-router-core/src/index.ts",
-    "node_modules/typescript/lib/lib.es6.d.ts"
+    "node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts"
   ]
 }
