@@ -2,7 +2,7 @@
  * @reactapi
  * @module react
  */ /** */
-import {Component} from "react";
+import {Component, ReactElement, StatelessComponent, ComponentClass, ClassicComponentClass} from "react";
 import {StateDeclaration, _ViewDeclaration} from "ui-router-core";
 import {ParamDeclaration} from "ui-router-core";
 import {IInjectable} from "ui-router-core";
@@ -177,7 +177,7 @@ export interface ReactViewDeclaration extends _ViewDeclaration {
    * }
    * ```
    */
-  component?: any;
+  component?: StatelessComponent<any> | ComponentClass<any> | ClassicComponentClass<any>;
 
   /**
    * @hidden

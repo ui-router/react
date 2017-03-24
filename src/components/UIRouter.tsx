@@ -1,9 +1,4 @@
 /**
- * # Components
- * 
- * React Components and their APIs
- *
- * @preferred
  * @reactapi
  * @module components
  */ /** */
