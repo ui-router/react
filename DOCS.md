@@ -11,21 +11,21 @@
 </div>
 
 
-Angular UI-Router is a client-side [Single Page Application](https://en.wikipedia.org/wiki/Single-page_application) 
-routing framework for [AngularJS](http://angularjs.org).  
+UI-Router React is a client-side [Single Page Application](https://en.wikipedia.org/wiki/Single-page_application) 
+routing framework for [React](https://facebook.github.io/react/).  
 
 **[View on Github](http://github.com/ui-router/react) |**
 **[View ui-router-core on Github](http://github.com/ui-router/core) |**
-**[Tutorials](https://ui-router.github.io/react/tutorials/)** |
+**[Tutorials](https://ui-router.github.io/react/tutorials/) |**
 **[Guides](https://ui-router.github.io/guide) |**
-**[Sample App](http://ui-router.github.io/resources/sampleapp/)
+**[Sample App](http://ui-router.github.io/resources/sampleapp/)**
   
 #### API Documentation Organization
 
 The documentation is arranged according to API concern, such as `components`, `url`, `resolve`, and `core`.
 By default, only the public API is shown.
 To view both public API and the internal APIs, check the "Internal UI-Router API" checkbox.
-  
+
 #### Typescript
 
 UI-Router is written in Typescript.
