@@ -8,8 +8,8 @@
   "scripts": {
     "test": "jest --watch",
     "test:ci": "jest",
-    "dev": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config webpack.example.js --history-api-fallback --content-base example",
-    "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && NODE_ENV=production webpack",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config webpack.example.js --history-api-fallback --content-base example",
+    "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && cross-env NODE_ENV=production webpack",
     "clean": "shx rm -rf _bundles lib lib-esm build",
     "docs": "./scripts/docs.js",
     "package": "npm run build"
@@ -46,6 +46,7 @@
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.11.1",
     "conventional-changelog-cli": "1.1.1",
+    "cross-env": "^4.0.0",
     "enzyme": "^2.4.1",
     "glob": "^7.0.5",
     "jest": "^19.0.2",
