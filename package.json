@@ -36,6 +36,9 @@
     "es6-shim": "^0.35.1",
     "ui-router-core": "=4.0.0"
   },
+  "peerDependencies": {
+    "react": "^15.0.0 || ^16.0.0-alpha"
+  },
   "devDependencies": {
     "@types/classnames": "0.0.31",
     "@types/react": "^0.14.43",
