@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "es6-shim": "^0.35.1",
     "ui-router-core": "=4.0.0"
   },
   "peerDependencies": {
