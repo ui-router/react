@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "prop-types": "^15.5.8",
     "ui-router-core": "=4.0.0"
   },
   "peerDependencies": {
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@types/classnames": "0.0.31",
+    "@types/prop-types": "^15.5.1",
     "@types/react": "^0.14.43",
     "@types/react-dom": "^0.14.18",
     "awesome-typescript-loader": "^3.1.2",
