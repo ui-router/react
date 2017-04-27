@@ -1,7 +1,7 @@
 import * as React from "react";
-import {InjectedProps} from '../src';
+import {UIViewInjectedProps} from '../src';
 
-export class Nest extends React.Component<InjectedProps,any> {
+export class Nest extends React.Component<UIViewInjectedProps,any> {
   uiCanExit = () => {
     return new Promise(resolve => {
       setTimeout(() => {
