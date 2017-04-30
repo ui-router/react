@@ -4,12 +4,11 @@
  */ /** */
 import * as React from 'react';
 import {Component, cloneElement, ValidationMap} from 'react';
-import * as _PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 import { UIRouterReact, UISref } from '../index';
 import {UIViewAddress} from "./UIView";
 
-let PropTypes = _PropTypes;
 let classNames = _classNames;
 
 export interface UISrefActiveProps {

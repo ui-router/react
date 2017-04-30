@@ -4,13 +4,11 @@
  */ /** */
 import * as React from 'react';
 import {Component, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
-import * as _PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import {ReactElement, SFC, ClassType, StatelessComponent, ComponentClass, ClassicComponentClass} from 'react';
 import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, StateParams, applyPairs, extend} from "ui-router-core";
 import {UIRouterReact} from "../index";
 import {ReactViewConfig} from "../reactViews";
-
-let PropTypes = _PropTypes;
 
 /** @internalapi */
 let id = 0;
