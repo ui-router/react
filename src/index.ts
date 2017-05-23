@@ -9,16 +9,11 @@
  * @reactapi
  * @module react
  */ /** */
-export {trace} from "ui-router-core";
-export {ReactStateDeclaration} from "./interface";
 
+export * from 'ui-router-core';
+export * from './interface';
+export * from './reactViews';
 export * from './components/components';
 
-export {UIRouterReact} from "./core";
-
-export {
-  hashLocationPlugin,
-  pushStateLocationPlugin,
-  memoryLocationPlugin,
-  servicesPlugin
-} from 'ui-router-core';
+export {UIRouterReact} from './core';
+export {UIRouter} from './components/components';
