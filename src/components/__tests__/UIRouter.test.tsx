@@ -1,6 +1,7 @@
 declare var jest, describe, it, expect, beforeEach;
 
 import * as React from "react";
+import * as PropTypes from "prop-types";
 import { shallow, mount, render } from "enzyme";
 import * as sinon from "sinon";
 
@@ -8,7 +9,7 @@ import {UIRouter, UIRouterReact, ReactStateDeclaration, memoryLocationPlugin} fr
 
 class Child extends React.Component<any, any> {
   static contextTypes: React.ValidationMap<any> = {
-    router: React.PropTypes.object
+    router: PropTypes.object
   }
   render () {
     return <div>child</div>;

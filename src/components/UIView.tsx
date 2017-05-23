@@ -3,7 +3,8 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import {Component, PropTypes, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
+import {Component, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
+import * as PropTypes from 'prop-types';
 import {ReactElement, SFC, ClassType, StatelessComponent, ComponentClass, ClassicComponentClass} from 'react';
 import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, StateParams, applyPairs, extend} from "ui-router-core";
 import {UIRouterReact} from "../index";

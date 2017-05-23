@@ -3,7 +3,8 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import {Component, PropTypes, createElement, cloneElement, isValidElement, ValidationMap} from 'react';
+import {Component, createElement, cloneElement, isValidElement, ValidationMap} from 'react';
+import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 import {UIRouterReact} from '../index';
 import {extend, TransitionOptions} from 'ui-router-core';
