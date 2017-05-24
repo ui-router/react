@@ -26,7 +26,7 @@ UI-Router applications are modeled as a hierarchical tree of states. UI-Router p
 The UI-Router package is distributed using [npm](https://www.npmjs.com/), the node package manager.
 
 ```
-npm install --save ui-router-react
+yarn add @uirouter/react
 ```
 
 Import `UIRouter` into your project, define some states and you're good to go!
@@ -34,7 +34,7 @@ Import `UIRouter` into your project, define some states and you're good to go!
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {UIRouter, UIView, pushStateLocationPlugin} from 'ui-router-react';
+import {UIRouter, UIView, pushStateLocationPlugin} from '@uirouter/react';
 import Home from './components/Home';
 
 // define your states
