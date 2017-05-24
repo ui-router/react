@@ -1,3 +1,28 @@
+# [0.5.0](https://github.com/ui-router/react/releases/tag/0.5.0) (2017-05-24)
+Version 0.5.0 is based on @uirouter/core 5.3.0 and as such introduced a lot of new features and fixes, alongside some breaking changes.
+
+[[full @uirouter/core 5.0.0 changelog]](https://github.com/ui-router/core/blob/master/CHANGELOG.md#500-2017-04-21)
+
+### Breaking Changes
+- Rename `Resolves` interface to `UIViewResolves` for consistency [(1047b84)](https://github.com/ui-router/react/commit/1047b843175b0459682ed03e36315afe4a175a0c).
+- Rename `InjectedProps` interface to `UIViewResolves` for consistency [(1047b84)](https://github.com/ui-router/react/commit/1047b843175b0459682ed03e36315afe4a175a0c).
+
+[[take a look at the breaking changes brought by the new @uirouter/core]](https://github.com/ui-router/core/blob/master/CHANGELOG.md#breaking-changes)
+
+### Changed
+- **@uirouter/core**: Updated to version `5.3.0` [(5f60537)](https://github.com/ui-router/react/commit/5f605372a26a310282fa5ebc9f7bd04b480d34e9).
+- **peerDependency**: move `react` and `prop-types` to `peerDependency` to fix warnings [(43b947f)](https://github.com/ui-router/react/commit/43b947f7bb2182457e090a3f67234e461d4a6dc7).
+
+### Add
+- **UIView**: Add new `render` function prop API.This new API lets you control how
+the routed component is rendered by the `UIView` [(1047b84)](https://github.com/ui-router/react/commit/1047b843175b0459682ed03e36315afe4a175a0c):
+
+    ```jsx
+    <UIView render={(Comp, props) => <Comp {…props} />} />
+    ```
+- **cross-env**: Add `cross-env` package to support Windows development [(f7e26cd)](https://github.com/ui-router/react/commit/f7e26cdfb76f6a76f52cb39139f1f2e51e2801db).
+
+
 # [0.4.0](https://github.com/ui-router/react/releases/tag/0.4.0) (2017-01-10)
 Version 0.4.0 is based on ui-router-ore 3.1.0 and as such introduced a lot of new features/fixes alongside some breaking changes.
 
