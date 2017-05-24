@@ -1,27 +1,252 @@
-# [0.5.0](https://github.com/ui-router/react/releases/tag/0.5.0) (2017-05-24)
-Version 0.5.0 is based on @uirouter/core 5.3.0 and as such introduced a lot of new features and fixes, alongside some breaking changes.
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/ui-router/react/compare/0.4.0...v0.5.0) (2017-05-24)
 
-[[full @uirouter/core 5.0.0 changelog]](https://github.com/ui-router/core/blob/master/CHANGELOG.md#500-2017-04-21)
 
-### Breaking Changes
-- Rename `Resolves` interface to `UIViewResolves` for consistency [(1047b84)](https://github.com/ui-router/react/commit/1047b843175b0459682ed03e36315afe4a175a0c).
-- Rename `InjectedProps` interface to `UIViewResolves` for consistency [(1047b84)](https://github.com/ui-router/react/commit/1047b843175b0459682ed03e36315afe4a175a0c).
+### Bug Fixes
 
-[[take a look at the breaking changes brought by the new @uirouter/core]](https://github.com/ui-router/core/blob/master/CHANGELOG.md#breaking-changes)
+* **UIRouter:** Apply config before registering states ([75f169a](https://github.com/ui-router/react/commit/75f169a))
+* **rollup:** Allow rollup to process 'import * as classNames' ([8434883](https://github.com/ui-router/react/commit/8434883)), closes [#33](https://github.com/ui-router/react/issues/33)
 
-### Changed
-- **@uirouter/core**: Updated to version `5.3.0` [(5f60537)](https://github.com/ui-router/react/commit/5f605372a26a310282fa5ebc9f7bd04b480d34e9).
-- **peerDependency**: move `react` and `prop-types` to `peerDependency` to fix warnings [(43b947f)](https://github.com/ui-router/react/commit/43b947f7bb2182457e090a3f67234e461d4a6dc7).
 
-### Add
-- **UIView**: Add new `render` function prop API.This new API lets you control how
-the routed component is rendered by the `UIView` [(1047b84)](https://github.com/ui-router/react/commit/1047b843175b0459682ed03e36315afe4a175a0c):
+### Features
 
-    ```jsx
-    <UIView render={(Comp, props) => <Comp {…props} />} />
-    ```
-- **cross-env**: Add `cross-env` package to support Windows development [(f7e26cd)](https://github.com/ui-router/react/commit/f7e26cdfb76f6a76f52cb39139f1f2e51e2801db).
+* export everything from core alongside the react stuff ([6d0b49b](https://github.com/ui-router/react/commit/6d0b49b)), closes [#41](https://github.com/ui-router/react/issues/41)
+* **UIView:** add render prop API ([1047b84](https://github.com/ui-router/react/commit/1047b84)), closes [#35](https://github.com/ui-router/react/issues/35) [#26](https://github.com/ui-router/react/issues/26) [#13](https://github.com/ui-router/react/issues/13)
 
+
+### BREAKING CHANGES
+
+* UIView: Rename `Resolves` interface to `UIViewResolves` for
+consistency.
+* UIView: Rename `InjectedProps` interface to `UIViewResolves`
+for consistency.
+
+
+
+### @uirouter/core changes
+## [5.0.3](https://github.com/ui-router/core/compare/3.1.0...5.0.3) (2017-05-24)
+
+
+### Bug Fixes
+
+* **BrowserLocationConfig:** fixed protocol + port value ([#38](https://github.com/ui-router/core/issues/38)) ([5559382](https://github.com/ui-router/core/commit/5559382))
+* **TransitionHook:** Transition hooks no longer expose the internal StateObject ([2b0e48b](https://github.com/ui-router/core/commit/2b0e48b))
+* **common:** Fix implementation of 'pick' -- use hasOwnProperty ([09848a4](https://github.com/ui-router/core/commit/09848a4))
+* **common:** Re-fix implementation of 'pick' using for .. in ([f2da7f4](https://github.com/ui-router/core/commit/f2da7f4))
+* **lazyLoad:** Allow `lazyLoad` stateBuilder: Get lazyLoad fn from internal State object, not StateDeclaration ([9313880](https://github.com/ui-router/core/commit/9313880))
+* **lazyLoad:** Wait for future state to be replaced before registering lazy children ([4bdce47](https://github.com/ui-router/core/commit/4bdce47))
+* **noImplicitAny:** Fix noimplicitany compliance ([1a6cdfc](https://github.com/ui-router/core/commit/1a6cdfc))
+* **pushStateLocation:** call listeners in url() ([#24](https://github.com/ui-router/core/issues/24)) ([7c90911](https://github.com/ui-router/core/commit/7c90911)), closes [#23](https://github.com/ui-router/core/issues/23)
+* **redirect:** Do not update URL after redirect with { location: false } ([652a760](https://github.com/ui-router/core/commit/652a760))
+* **resolve:** Allow resolve's state context to be injected as `$state$` ([a06948b](https://github.com/ui-router/core/commit/a06948b))
+* **tfs:** Rename $q.ts and $injector.ts files, removing leading dollar signs ([cb653ee](https://github.com/ui-router/core/commit/cb653ee))
+* **trace:** Re-add transitionStart trace ([b019036](https://github.com/ui-router/core/commit/b019036))
+* **transition:** Do not ignore transitions which have states being entered or exited ([175717e](https://github.com/ui-router/core/commit/175717e))
+* **transitionHook:** Do not process transition hooks after router has been disposed. ([666c6d7](https://github.com/ui-router/core/commit/666c6d7))
+* **typings:** Allow strictNullChecks for HookMatchCriteria ([d92d4d5](https://github.com/ui-router/core/commit/d92d4d5))
+* **ui-sref:** Improve performance of generating hrefs ([c3967bd](https://github.com/ui-router/core/commit/c3967bd))
+* **view:** Do not throw when uiView doesn't have a state context ([f76ee2a](https://github.com/ui-router/core/commit/f76ee2a))
+* **view:** Update views in order of ui-view depth and also by state depth ([46dea2b](https://github.com/ui-router/core/commit/46dea2b))
+
+
+### Features
+
+* **Globals:** implement Disposable and delete global transition data ([a794018](https://github.com/ui-router/core/commit/a794018))
+* **Rejection:** Add $id to ease debugging of transition rejections ([d456d54](https://github.com/ui-router/core/commit/d456d54))
+* **State:** Support registration of ES6 state classes (as opposed to object literals) ([3a5d055](https://github.com/ui-router/core/commit/3a5d055))
+* **State:** Switch Internal State Object to prototypally inherit from the State Declaration ([027c995](https://github.com/ui-router/core/commit/027c995)), closes [#34](https://github.com/ui-router/core/issues/34)
+* **StateObject:** Rename internal `State` object to `StateObject` ([feceaf9](https://github.com/ui-router/core/commit/feceaf9))
+* **StateRegistry:** improve perf for: `.register()` and `StateMatcher.find()` misses ([fdb3ab9](https://github.com/ui-router/core/commit/fdb3ab9))
+* **Transition:** Normalize all transition errors to a Rejection. ([a7464bb](https://github.com/ui-router/core/commit/a7464bb))
+* **Transition:** deprecate `Transition.is()` which was never implemented ([1edff4b](https://github.com/ui-router/core/commit/1edff4b))
+* **UIRouter:** Add `trace` global to the `UIRouter` object ([48c5af6](https://github.com/ui-router/core/commit/48c5af6))
+* **UrlService:** (`UrlRouter`) improve perf of registering Url Rules and sorting Url Rules ([64fbfff](https://github.com/ui-router/core/commit/64fbfff))
+* **UrlService:** Add `rules.initial("/home")` to config initial state (like otherwise) ([bbe4209](https://github.com/ui-router/core/commit/bbe4209))
+* **View:** Allow targeting views on own state using `viewname@.` (normalizeUIViewTarget) ([7078216](https://github.com/ui-router/core/commit/7078216)), closes [#25](https://github.com/ui-router/core/issues/25)
+* **abort:** Add API to manually abort/cancel a transition ([39f8a53](https://github.com/ui-router/core/commit/39f8a53))
+* **build:** Build and distribute UMD bundles ([0a8da85](https://github.com/ui-router/core/commit/0a8da85))
+* **common:** Perf improvements in hot functions: ([4193244](https://github.com/ui-router/core/commit/4193244))
+* **core:** Export all vanilla.* code from `ui-router-core` ([f3392d1](https://github.com/ui-router/core/commit/f3392d1))
+* **core:** Switch to [@uirouter](https://github.com/uirouter)/core npm module ([e3f389f](https://github.com/ui-router/core/commit/e3f389f))
+* **decorators:** Add state, resolve and resolve data decorators ([642df0b](https://github.com/ui-router/core/commit/642df0b))
+* **defaultErrorHandler:** Do not invoke default error handler for ABORTED transitions ([b07a24b](https://github.com/ui-router/core/commit/b07a24b))
+* **globals:** Removed `UIRouterGlobals` interface. Renamed `Globals` class to `UIRouterGlobals` ([8719334](https://github.com/ui-router/core/commit/8719334))
+* **onBefore:** Run onBefore hooks asynchronously. ([30b82aa](https://github.com/ui-router/core/commit/30b82aa))
+* **onEnter/Exit/Retain:** Use onExit/onEnter/onRetain from 56955state(), not state.self ([bc1f554](https://github.com/ui-router/core/commit/bc1f554))
+* **transition:** Ignore duplicate transitions (double clicks) ([bd1bd0b](https://github.com/ui-router/core/commit/bd1bd0b))
+* **transition:** Improve supersede logic: Do not supersede if the new trans is aborted before onStart ([3141a8f](https://github.com/ui-router/core/commit/3141a8f))
+* **transition:** Run hooks synchronously in current stack, when possible ([953e618](https://github.com/ui-router/core/commit/953e618))
+
+
+### BREAKING CHANGES
+
+### **TransitionHook:** Transition hooks no longer expose the internal `State` object (now named `StateObject`)
+
+#### Before:
+
+```js
+import { State } from "ui-router-core";
+const match = { to: (state: State) => state.data.auth };
+transitionsvc.onEnter(match, (trans: Transition, state: State) => {
+  // state is the internal State object
+  if (state.includes["foo"]) { // internal ui-router API
+    return false;
+  }
+}
+```
+
+#### Now:
+
+```js
+import { StateDeclaration } from "@uirouter/react";
+const match = { to: (state: StateDeclaration) => state.data.auth };
+transitionsvc.onEnter(match, (trans: Transition, state: StateDeclaration) => {
+  // state === the state object you registered
+  // Access internal ui-router API using $$state()
+  if (state.$$state().includes["foo"]) {
+    return false;
+  }
+}
+```
+
+#### Motivation:
+
+The `State` object (now named `StateObject`) is an internal API and should not be exposed via any public APIs.
+If you depend on the internal APIs, you can still access the internal object by calling `state.$$state()`.
+
+### **StateObject:** Renamed internal API `State` object to `StateObject`
+
+#### Before:
+
+```js
+import {State} from "ui-router-core";
+```
+
+#### Now:
+
+```js
+import {StateObject} from "@uirouter/react";
+```
+
+#### Motivation:
+
+We'd like to use the `State` name/symbol as a public API.  It will be an
+ES7/TS decorator for ES6/TS state definition classes, i.e:
+
+```js
+@State("foo")
+export class FooState implements StateDeclaration {
+  url = "/foo";
+  component = FooComponent;
+
+  @Resolve({ deps: [FooService] })
+  fooData(fooService) {
+    return fooService.getFoos();
+  }
+}
+```
+
+### **Transition:** All Transition errors are now wrapped in a Rejection object.
+
+#### Before:
+
+Previously, if a transition hook returned a rejected promise:
+```js
+.onStart({}, () => Promise.reject('reject transition'));
+```
+
+In `onError` or `transtion.promise.catch()`, the raw rejection was returned:
+```js
+.onError({}, (trans, err) => err === 'reject transition')
+```
+
+#### Now:
+
+Now, the error is wrapped in a Rejection object.
+
+- The detail (thrown error or rejected value) is still available as `.detail`.
+
+```js
+.onError({}, (trans, err) =>
+    err instanceof Rejection && err.detail === 'reject transition')
+```
+
+- The Rejection object indicates the `.type` of transition rejection (ABORTED, ERROR, SUPERSEDED and/or redirection).
+```js
+.onError({}, (trans, err) => {
+  err.type === RejectType.ABORTED === 3
+});
+```
+
+#### Motivation:
+
+Errors *thrown from* a hook and rejection values *returned from* a hook can now be processed in the same way.
+
+### **onBefore:** `onBefore` hooks are now run asynchronously like all the other hooks.
+
+#### Old behavior
+
+Previously, the `onBefore` hooks were run in the same stackframe as `transitionTo`.
+If they threw an error, it could be caught using try/catch.
+
+```js
+transitionService.onBefore({ to: 'foo' }), () => { throw new Error('doh'); });
+try {
+  stateService.go('foo');
+} catch (error) {
+  // handle error
+}
+```
+
+#### New behavior
+
+Now, `onBefore` hooks are processed asynchronously.
+To handle errors, use any of the async error handling paradigms:
+
+- Chain off the promise
+  ```js
+  transitionService.onBefore({ to: 'foo' }), () => { throw new Error('doh'); });
+  stateService.go('foo').catch(error => { //handle error });
+  ```
+- Define an error handler
+  ```js
+  transitionService.onBefore({ to: 'foo' }), () => { throw new Error('doh'); });
+  transitionService.onError({ to: 'foo' }), () => { // handle error });
+  stateService.go('foo');
+  ```
+- Use the global defaultErrorHandler
+  ```js
+  transitionService.onBefore({ to: 'foo' }), () => { throw new Error('doh'); });
+  stateService.go('foo');
+  stateService.defaultErrorHandler(error => { // global error handler });
+  ```
+
+#### Motivation
+
+Why introduce a BC?
+
+- No subtle behavior differences by hook type
+- Simpler code and mental model
+- Fewer edge cases to account for
+
+### **defaultErrorHandler:** ABORTED transitions do not invoke the `defaultErrorHandler`
+
+Returning `false` from a transition hook will abort the transition.
+
+#### Old behavior
+
+Previously, this case was considered an error and was logged by
+`defaultErrorHandler`.
+After your feedback, we agree that this is not typically an error.
+
+#### New behavior
+
+Now, aborted transitions do not trigger the `defaultErrorHandler`
+
+#### Motivation
+
+Most users do not consider ABORT to be an error.  The default error
+handler should match this assumption.
 
 # [0.4.0](https://github.com/ui-router/react/releases/tag/0.4.0) (2017-01-10)
 Version 0.4.0 is based on ui-router-ore 3.1.0 and as such introduced a lot of new features/fixes alongside some breaking changes.
