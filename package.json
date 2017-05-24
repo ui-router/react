@@ -12,7 +12,8 @@
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && cross-env NODE_ENV=production webpack",
     "clean": "shx rm -rf _bundles lib lib-esm build",
     "docs": "./scripts/docs.js",
-    "package": "npm run build"
+    "package": "npm run build",
+    "install": "node migrate/migratewarn.js"
   },
   "homepage": "https://ui-router.github.io/react",
   "contributors": [
