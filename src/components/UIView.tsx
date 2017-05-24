@@ -3,8 +3,10 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import {Component, PropTypes, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
-import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, StateParams, applyPairs, extend} from "ui-router-core";
+import {Component, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
+import * as PropTypes from 'prop-types';
+import {ReactElement, SFC, ClassType, StatelessComponent, ComponentClass, ClassicComponentClass} from 'react';
+import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, StateParams, applyPairs, extend} from "@uirouter/core";
 import {UIRouterReact} from "../index";
 import {ReactViewConfig} from "../reactViews";
 
@@ -22,7 +24,7 @@ export interface UIViewAddress {
  *
  * This Typescript interface shows what fields are available on the `resolves` field.
  */
-export interface Resolves {
+export interface UIViewResolves {
   /**
    * Any key/value pair defined by a state's resolve
    *
@@ -42,9 +44,17 @@ export interface Resolves {
   $transition$: Transition
 }
 
-export interface InjectedProps {
+/**
+ * Function type for [[UIViewProps.render]]
+ *
+ * If the `render` function prop is provided, the `UIView` will use it instead of rendering the component by itself.
+ * @internalapi
+ */
+export type RenderPropCallback = (Component: StatelessComponent<any> | ComponentClass<any> | ClassicComponentClass<any>, Props: any) => JSX.Element | null;
+
+export interface UIViewInjectedProps {
   transition?: Transition,
-  resolves?: Resolves,
+  resolves?: UIViewResolves,
   className?:string,
   style?: Object
 }
@@ -54,13 +64,14 @@ export interface UIViewProps {
   name?: string;
   className?: string;
   style?: Object;
+  render?: RenderPropCallback;
 }
 
 /** Component State for `UIView` */
 export interface UIViewState {
   id?: number;
   loaded?: boolean;
-  component?: string;
+  component?: string | SFC<any> | ClassType<any,any,any> | ComponentClass<any>;
   props?: any;
 }
 
@@ -89,7 +100,8 @@ export class UIView extends Component<UIViewProps, UIViewState> {
   static propTypes: ValidationMap<UIViewProps> = {
     name: PropTypes.string,
     className: PropTypes.string,
-    style: PropTypes.object
+    style: PropTypes.object,
+    render: PropTypes.func
   }
 
   static childContextTypes: ValidationMap<any> = {
@@ -102,7 +114,7 @@ export class UIView extends Component<UIViewProps, UIViewState> {
   }
 
   render() {
-    let { children } = this.props;
+    let { children, render } = this.props;
     let { component, props, loaded } = this.state;
     // register reference of child component
     // register new hook right after component has been rendered
@@ -115,7 +127,12 @@ export class UIView extends Component<UIViewProps, UIViewState> {
     let child = !loaded && isValidElement(children)
       ? cloneElement(children, props)
       : createElement(component, props);
-    return child;
+
+    // if a render function is passed use that,
+    // otherwise render the component normally
+    return typeof render !== 'undefined' && loaded
+      ? render(component, props)
+      : child;
   }
 
   getChildContext() {

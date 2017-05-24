@@ -14,7 +14,7 @@ var config = {
 		umdNamedDefine: true
 	},
 	resolve: {
-		extensions: ["", ".ts", ".tsx", ".js"]
+		extensions: [".ts", ".tsx", ".js"]
 	},
 	devtool: 'source-map',
 	plugins: [

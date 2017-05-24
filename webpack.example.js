@@ -7,7 +7,7 @@ var config = {
     filename: "bundle.js"
   },
   resolve: {
-    extensions: ["", ".ts", ".tsx", ".js"]
+    extensions: [".ts", ".tsx", ".js"]
   },
   devtool: "inline-source-map",
   module: {

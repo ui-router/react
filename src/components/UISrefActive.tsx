@@ -3,7 +3,8 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import {Component, PropTypes, cloneElement, ValidationMap} from 'react';
+import {Component, cloneElement, ValidationMap} from 'react';
+import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 import { UIRouterReact, UISref } from '../index';
 import {UIViewAddress} from "./UIView";

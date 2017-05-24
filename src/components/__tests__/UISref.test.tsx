@@ -8,7 +8,7 @@ import {UIRouterReact, UIRouter, UIView, UISref, ReactStateDeclaration, pushStat
 
 const states = [{
   name: 'state',
-  url: '/',
+  url: '',
   component: () => <UISref to="state2"><a>state2</a></UISref>
 }, {
   name: 'state2',
@@ -23,7 +23,6 @@ describe('<UISref>', () => {
     router = new UIRouterReact();
     router.plugin(servicesPlugin);
     router.plugin(pushStateLocationPlugin);
-    router.stateService.defaultErrorHandler(()=>{});
     states.forEach(state => router.stateRegistry.register(state));
     router.start();
   });
@@ -34,6 +33,19 @@ describe('<UISref>', () => {
       const props = wrapper.find('a').props();
       expect(typeof props.onClick).toBe('function');
       expect(props.href.includes('/state2')).toBe(true)
+    });
+  });
+
+  it('calls deregister active state checking when unmounting', () => {
+    const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
+    let spy;
+    return router.stateService.go('state').then(() => {
+      const uiSref = wrapper.find(UISref).nodes[0];
+      expect(wrapper.html()).toBe('<a href="/state2" class="">state2</a>');
+      spy = sinon.spy(uiSref, 'deregister');
+      return router.stateService.go('state2');
+    }).then(() => {
+      expect(spy.calledOnce).toBe(true);
     });
   });
 
@@ -71,17 +83,5 @@ describe('<UISref>', () => {
     expect(wrapper.find(UISref).node.context.parentUIViewAddress).toBeUndefined();
     expect(wrapper.find(UISref).node.getOptions().relative.name).toBe('');
   });
-
-  it('calls deregister active state checking when unmounting', () => {
-    router.stateService.defaultErrorHandler(()=>{});
-    const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
-    let stub;
-    return router.stateService.go('state').then(() => {
-      stub = sinon.stub(wrapper.find(UISref).get(0), 'deregister');
-      return router.stateService.go('state2');
-    }).then(() => {
-      expect(stub.calledOnce).toBe(true);
-    });
-  })
 
 });

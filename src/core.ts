@@ -2,7 +2,7 @@
  * @reactapi
  * @module react
  */ /** */
-import {UIRouter, PathNode, services} from 'ui-router-core';
+import {UIRouter, PathNode, services} from '@uirouter/core';
 import {ReactViewDeclaration, ReactStateDeclaration} from "./interface"
 import {ReactViewConfig, reactViewsBuilder} from "./reactViews";
 

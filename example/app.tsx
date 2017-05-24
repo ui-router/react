@@ -7,9 +7,9 @@ import {Child} from './child';
 import {Nest} from './nest';
 import {Header} from './header';
 
-let home = { name: 'home', component: Home, url: '/home?foo' };
-let child = { name: 'home.child', component: Child, url: '/child' };
-let nest = {
+let home:ReactStateDeclaration = { name: 'home', component: Home, url: '/home?foo' };
+let child:ReactStateDeclaration = { name: 'home.child', component: Child, url: '/child' };
+let nest:ReactStateDeclaration = {
   name: 'home.child.nest',
   views: {
     $default: Nest,
@@ -26,7 +26,7 @@ let nest = {
       });
     }
   }]
-} as ReactStateDeclaration;
+};
 
 
 const routerConfig = (router: UIRouterReact) => {
@@ -41,7 +41,7 @@ let app = (
       <UISrefActive class="active">
         <UISref to="home"><a>Home</a></UISref>
       </UISrefActive>
-      <UIView><p>Content will load here</p></UIView>
+      <UIView render={(Comp, props) => <Comp {...props} foo="bar" />}><p>Content will load here</p></UIView>
     </div>
   </UIRouter>
 );
