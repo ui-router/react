@@ -2,7 +2,7 @@
  * @reactapi
  * @module react
  */ /** */
-import { services, forEach, map, pick, PathNode, ViewConfig, ViewService, State} from "ui-router-core";
+import { services, forEach, map, pick, PathNode, ViewConfig, ViewService, StateObject} from "@uirouter/core";
 import {ReactViewDeclaration} from "./interface";
 
 /**
@@ -16,10 +16,10 @@ import {ReactViewDeclaration} from "./interface";
  *
  * @internalapi
  */
-export function reactViewsBuilder(state: State) {
+export function reactViewsBuilder(state: StateObject) {
   let views = {}, viewsDefinitionObject;
   if (!state.views) {
-    viewsDefinitionObject = { "$default": pick(state, "component") };
+    viewsDefinitionObject = { "$default": pick(state, ["component"]) };
   } else {
     viewsDefinitionObject = map(state.views, (val: any, key) => {
       if (val.component) return val;

@@ -43,6 +43,6 @@ describe('<UIRouter>', () => {
       </UIRouter>
     );
     expect(wrapper.find(Child).node.context.router.__TEST__).toBe(true);
-  }
+  });
 
 });

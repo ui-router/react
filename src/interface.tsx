@@ -3,10 +3,10 @@
  * @module react
  */ /** */
 import {Component, ReactElement, StatelessComponent, ComponentClass, ClassicComponentClass} from "react";
-import {StateDeclaration, _ViewDeclaration} from "ui-router-core";
-import {ParamDeclaration} from "ui-router-core";
-import {IInjectable} from "ui-router-core";
-import {Transition} from "ui-router-core";
+import {StateDeclaration, _ViewDeclaration} from "@uirouter/core";
+import {ParamDeclaration} from "@uirouter/core";
+import {IInjectable} from "@uirouter/core";
+import {Transition} from "@uirouter/core";
 
 
 /**

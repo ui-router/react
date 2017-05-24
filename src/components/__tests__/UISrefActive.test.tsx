@@ -88,10 +88,13 @@ describe('<UISrefActive>', () => {
   });
 
   it('throws if state name is not a string', () => {
+    let spy = sinon.spy();
+    router.stateService.defaultErrorHandler((err)=>{
+      if(err.detail instanceof Error) spy();
+    });
     const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
-    let stub = sinon.stub(console, 'error');
     return router.stateService.go('throw').then(() => {
-      expect(stub.calledOnce).toBe(true);
+      expect(spy.called).toBe(true);
     });
   });
 
