@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "5.11"
+  - "6.10"
 
 before_script:
   - npm install -g jest-cli
@@ -10,6 +10,6 @@ script:
 
 git:
   depth: 10
-  
+
 notifications:
   slack: angularbuddies:b6leQM9gkBCW0S7MNDsELpqU
