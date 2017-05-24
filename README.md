@@ -1,11 +1,11 @@
 <div align="center">
-  <img src="/logo/logo.png" height="150"/>
+  <img src="https://rawgit.com/ui-router/react/master/logo/logo.png" height="150"/>
   <h1>UI-Router-React</h1>
   <a href="https://travis-ci.org/ui-router/react">
     <img src="https://img.shields.io/travis/ui-router/react/master.svg?style=flat-square">
   </a>
-  <a href="https://www.npmjs.org/package/ui-router-react">
-    <img src="https://img.shields.io/npm/v/ui-router-react.svg?style=flat-square">
+  <a href="https://www.npmjs.org/package/@uirouter/react">
+    <img src="https://img.shields.io/npm/v/@uirouter/react.svg?style=flat-square">
   </a>
 </div>
 
