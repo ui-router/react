@@ -13,7 +13,8 @@
     "clean": "shx rm -rf _bundles lib lib-esm build",
     "docs": "./scripts/docs.js",
     "package": "npm run build",
-    "install": "node migrate/migratewarn.js"
+    "install": "node migrate/migratewarn.js",
+    "artifacts": "npm run build && node ./scripts/artifact_tagging.js react-hybrid"
   },
   "homepage": "https://ui-router.github.io/react",
   "contributors": [
@@ -61,6 +62,7 @@
     "react-addons-test-utils": "^15.3.1",
     "react-dom": "^15.0.2",
     "react-test-renderer": "^15.3.1",
+    "readline-sync": "^1.4.7",
     "replace-in-file": "^2.0.3",
     "shelljs": "^0.7.7",
     "shx": "^0.1.4",
