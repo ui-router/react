@@ -14,7 +14,7 @@
     "docs": "./scripts/docs.js",
     "package": "npm run build",
     "install": "node migrate/migratewarn.js",
-    "artifacts": "npm run build && node ./scripts/artifact_tagging.js react-hybrid"
+    "artifacts": "./scripts/artifact_tagging.js react-hybrid"
   },
   "homepage": "https://ui-router.github.io/react",
   "contributors": [
@@ -34,7 +34,7 @@
     "url": "https://github.com/ui-router/react.git"
   },
   "dependencies": {
-    "@uirouter/core": "=5.0.3",
+    "@uirouter/core": "=5.0.5",
     "classnames": "^2.2.5"
   },
   "peerDependencies": {
@@ -72,7 +72,7 @@
     "typedoc-plugin-external-module-name": "^1.0.8",
     "typedoc-plugin-internal-external": "^1.0.8",
     "typedoc-plugin-ui-router": "^1.0.6",
-    "typescript": "^2.3.3",
+    "typescript": "~2.4.1",
     "ui-router-typedoc-themes": "^1.0.2",
     "webpack": "^2.3.1",
     "webpack-dev-server": "^2.4.2"
