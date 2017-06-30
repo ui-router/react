@@ -70,7 +70,7 @@
     "typedoc-plugin-external-module-name": "^1.0.8",
     "typedoc-plugin-internal-external": "^1.0.8",
     "typedoc-plugin-ui-router": "^1.0.6",
-    "typescript": "^2.3.3",
+    "typescript": "2.3.3",
     "ui-router-typedoc-themes": "^1.0.2",
     "webpack": "^2.3.1",
     "webpack-dev-server": "^2.4.2"
