@@ -1,5 +1,5 @@
 import * as React from "react";
-import {UIView} from "../src/index";
+import {UIView} from "@uirouter/react";
 
 export class Header extends React.Component<any,any> {
   render() {

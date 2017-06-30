@@ -1,5 +1,5 @@
 import * as React from "react";
-import {UIView} from "../src/index";
+import {UIView} from "@uirouter/react";
 
 export class Child extends React.Component<any,any> {
   uiCanExit = () => {
@@ -9,7 +9,7 @@ export class Child extends React.Component<any,any> {
     return (
       <div>
         <h2>Child</h2>
-        <UIView/> 
+        <UIView />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 var path = require("path");
 
 var config = {
-  entry: ["./example/app.tsx"],
+  entry: ["./index.tsx"],
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js"

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {UIViewInjectedProps} from '../src';
+import {UIViewInjectedProps} from '@uirouter/react';
 
 export class Nest extends React.Component<UIViewInjectedProps,any> {
   uiCanExit = () => {
@@ -16,7 +16,7 @@ export class Nest extends React.Component<UIViewInjectedProps,any> {
         <div>
           <h2>Nested</h2>
           <p>Resolved foo is: {foo}</p>
-        </div> 
+        </div>
     );
   }
 }

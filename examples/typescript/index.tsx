@@ -1,19 +1,19 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { UIRouter, UIRouterReact, UIView, UISrefActive, UISref, ReactStateDeclaration, trace, pushStateLocationPlugin } from '../src/index';
+import { UIRouter, UIRouterReact, UIView, UISrefActive, UISref, ReactStateDeclaration, ReactViewDeclaration, trace, pushStateLocationPlugin } from '@uirouter/react';
 
-import {Home} from './home';
-import {Child} from './child';
-import {Nest} from './nest';
-import {Header} from './header';
+import { Child } from './components/Child';
+import { Header } from './components/Header';
+import { Home } from './components/Home';
+import { Nest } from './components/Nest';
 
 let home:ReactStateDeclaration = { name: 'home', component: Home, url: '/home?foo' };
 let child:ReactStateDeclaration = { name: 'home.child', component: Child, url: '/child' };
 let nest:ReactStateDeclaration = {
   name: 'home.child.nest',
   views: {
-    $default: Nest,
-    "header@home": Header
+    $default: Nest as ReactViewDeclaration,
+    "header@home": Header as ReactViewDeclaration
   },
   url: '/nest',
   resolve: [{
