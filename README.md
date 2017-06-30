@@ -18,6 +18,7 @@ UI-Router applications are modeled as a hierarchical tree of states. UI-Router p
 ## Docs & Resources
 
 - [Tutorials and Docs](/docs)
+- [Examples](/examples)
 - [UI-Router website](https://ui-router.github.io/)
 - [Changelog](/CHANGELOG.md)
 - [Upgrading from `0.3.x` to `0.4.x`](/docs/upgrading-from-0.3.x-to-0.4.x.md)
