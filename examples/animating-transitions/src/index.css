@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+/* State transition */
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+/* Menu */
+.app-menu {
+  height: 50px;
+  text-align: center;
+}
+
+.app-menu a {
+  line-height: 50px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #222;
+  font-weight: 600;
+  padding: 0 10px;
+}
+
+.app-menu a:hover {
+  text-decoration: underline;
+}
+
+/* Pages */
+.app-page {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: #fff;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.page-home {
+  background-color: #48929B;
+}
+
+.page-about {
+  background-color: #F47983;
+}
