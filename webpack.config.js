@@ -16,6 +16,7 @@ var config = {
 	resolve: {
 		extensions: [".ts", ".tsx", ".js"]
 	},
+        watch:  process.env.WATCH === 'true',
 	devtool: 'source-map',
 	plugins: [
 		new webpack.optimize.UglifyJsPlugin({
