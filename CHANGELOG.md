@@ -1,3 +1,26 @@
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/ui-router/react/compare/0.5.0...v0.5.1) (2017-07-03)
+
+This release updates `@uirouter/core` from 5.0.3 to 5.0.5
+
+## Changes in `@uirouter/core` between versions [5.0.3 and 5.0.5](https://github.com/ui-router/core/compare/5.0.3...5.0.5) (2017-07-03)
+
+### Bug Fixes
+
+* **future:** Allow future states to specify a `parent:` ([828fe1b](https://github.com/ui-router/core/commit/828fe1b))
+* **typescript:** Update to typescript 2.4 ([ce1669b](https://github.com/ui-router/core/commit/ce1669b))
+* **view:** only sync views which are of the same name *and type* ([c48da4a](https://github.com/ui-router/core/commit/c48da4a))
+
+
+### Features
+
+* **invalidTransition:** Better error messaging when param values are invalid ([2a15d1a](https://github.com/ui-router/core/commit/2a15d1a))
+* **Resolvable:** Add `.value()`: returns value (WAIT) or promise (NOWAIT) ([8769449](https://github.com/ui-router/core/commit/8769449))
+* **trace:** Trace view synchronization. Allow trace.enable(...string) ([284392d](https://github.com/ui-router/core/commit/284392d))
+* **urlMatcher:** add support for multiline urls ([5b11ce0](https://github.com/ui-router/core/commit/5b11ce0))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/ui-router/react/compare/0.4.0...v0.5.0) (2017-05-24)
 
