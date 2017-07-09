@@ -3,8 +3,8 @@
  * @module react
  */ /** */
 import {UIRouter, PathNode, services} from '@uirouter/core';
-import {ReactViewDeclaration, ReactStateDeclaration} from "./interface"
-import {ReactViewConfig, reactViewsBuilder} from "./reactViews";
+import {ReactViewDeclaration, ReactStateDeclaration} from './interface';
+import {ReactViewConfig, reactViewsBuilder} from './reactViews';
 
 /**
  * React View Config Factory
@@ -46,7 +46,7 @@ export class UIRouterReact extends UIRouter {
   constructor() {
     super();
     this.viewService._pluginapi._viewConfigFactory('react', viewConfigFactory);
-    this.stateRegistry.decorator("views", reactViewsBuilder);
+    this.stateRegistry.decorator('views', reactViewsBuilder);
   }
 
   /**

@@ -2,12 +2,21 @@
  * @reactapi
  * @module react
  */ /** */
-import {Component, ReactElement, StatelessComponent, ComponentClass, ClassicComponentClass} from "react";
-import {StateDeclaration, _ViewDeclaration} from "@uirouter/core";
-import {ParamDeclaration} from "@uirouter/core";
-import {IInjectable} from "@uirouter/core";
-import {Transition} from "@uirouter/core";
+import {
+  Component,
+  ReactElement,
+  StatelessComponent,
+  ComponentClass,
+  ClassicComponentClass,
+} from 'react';
 
+import {
+  StateDeclaration,
+  _ViewDeclaration,
+  ParamDeclaration,
+  IInjectable,
+  Transition,
+} from '@uirouter/core';
 
 /**
  * The StateDeclaration object is used to define a state or nested state.
@@ -30,7 +39,9 @@ import {Transition} from "@uirouter/core";
  * }
  * ```
  */
-export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclaration {
+export interface ReactStateDeclaration
+  extends StateDeclaration,
+    ReactViewDeclaration {
   /**
    * An optional object used to define multiple named views.
    *
@@ -132,7 +143,7 @@ export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclar
    * if _any view_ for a state is declared in the `views` object, then _all of the state's views_ must be defined in
    * the `views` object.
    */
-  views?: { [key: string]: ReactViewDeclaration; };
+  views?: {[key: string]: ReactViewDeclaration};
 }
 
 /**
@@ -177,7 +188,10 @@ export interface ReactViewDeclaration extends _ViewDeclaration {
    * }
    * ```
    */
-  component?: StatelessComponent<any> | ComponentClass<any> | ClassicComponentClass<any>;
+  component?:
+    | StatelessComponent<any>
+    | ComponentClass<any>
+    | ClassicComponentClass<any>;
 
   /**
    * @hidden

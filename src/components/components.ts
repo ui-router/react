@@ -12,7 +12,7 @@
  * @module components
  */ /** */
 
-export * from "./UIRouter";
-export * from "./UIView";
-export * from "./UISref";
-export * from "./UISrefActive";
+export * from './UIRouter';
+export * from './UIView';
+export * from './UISref';
+export * from './UISrefActive';

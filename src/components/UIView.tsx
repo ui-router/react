@@ -3,12 +3,34 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import {Component, ValidationMap, createElement, cloneElement, isValidElement} from 'react';
+import {
+  Component,
+  ValidationMap,
+  createElement,
+  cloneElement,
+  isValidElement,
+  ReactElement,
+  SFC,
+  ClassType,
+  StatelessComponent,
+  ComponentClass,
+  ClassicComponentClass,
+} from 'react';
 import * as PropTypes from 'prop-types';
-import {ReactElement, SFC, ClassType, StatelessComponent, ComponentClass, ClassicComponentClass} from 'react';
-import {ActiveUIView, ViewContext, ViewConfig, Transition, ResolveContext, StateParams, applyPairs, extend} from "@uirouter/core";
-import {UIRouterReact} from "../index";
-import {ReactViewConfig} from "../reactViews";
+
+import {
+  ActiveUIView,
+  ViewContext,
+  ViewConfig,
+  Transition,
+  ResolveContext,
+  StateParams,
+  applyPairs,
+  extend,
+} from '@uirouter/core';
+
+import {UIRouterReact} from '../index';
+import {ReactViewConfig} from '../reactViews';
 
 /** @internalapi */
 let id = 0;
@@ -30,7 +52,7 @@ export interface UIViewResolves {
    *
    * If a state defines any [[ReactStateDeclaration.resolve]]s, they will be found on this object.
    */
-  [key: string]: any,
+  [key: string]: any;
   /**
    * The `StateParams` for the `Transition` that activated the component
    *
@@ -39,9 +61,9 @@ export interface UIViewResolves {
    * let $stateParams = $transition$.params("to");
    * ```
    */
-  $stateParams: StateParams,
+  $stateParams: StateParams;
   /** The `Transition` that activated the component */
-  $transition$: Transition
+  $transition$: Transition;
 }
 
 /**
@@ -50,13 +72,19 @@ export interface UIViewResolves {
  * If the `render` function prop is provided, the `UIView` will use it instead of rendering the component by itself.
  * @internalapi
  */
-export type RenderPropCallback = (Component: StatelessComponent<any> | ComponentClass<any> | ClassicComponentClass<any>, Props: any) => JSX.Element | null;
+export type RenderPropCallback = (
+  Component:
+    | StatelessComponent<any>
+    | ComponentClass<any>
+    | ClassicComponentClass<any>,
+  Props: any,
+) => JSX.Element | null;
 
 export interface UIViewInjectedProps {
-  transition?: Transition,
-  resolves?: UIViewResolves,
-  className?:string,
-  style?: Object
+  transition?: Transition;
+  resolves?: UIViewResolves;
+  className?: string;
+  style?: Object;
 }
 
 /** Component Props for `UIView` */
@@ -71,7 +99,11 @@ export interface UIViewProps {
 export interface UIViewState {
   id?: number;
   loaded?: boolean;
-  component?: string | SFC<any> | ClassType<any,any,any> | ComponentClass<any>;
+  component?:
+    | string
+    | SFC<any>
+    | ClassType<any, any, any>
+    | ComponentClass<any>;
   props?: any;
 }
 
@@ -94,39 +126,43 @@ export class UIView extends Component<UIViewProps, UIViewState> {
   state: UIViewState = {
     loaded: false,
     component: 'div',
-    props: {}
-  }
+    props: {},
+  };
 
   static propTypes: ValidationMap<UIViewProps> = {
     name: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
-    render: PropTypes.func
-  }
+    render: PropTypes.func,
+  };
 
   static childContextTypes: ValidationMap<any> = {
-    parentUIViewAddress: PropTypes.object
-  }
+    parentUIViewAddress: PropTypes.object,
+  };
 
   static contextTypes: ValidationMap<any> = {
     router: PropTypes.object,
-    parentUIViewAddress: PropTypes.object
-  }
+    parentUIViewAddress: PropTypes.object,
+  };
 
   render() {
-    let { children, render } = this.props;
-    let { component, props, loaded } = this.state;
+    let {children, render} = this.props;
+    let {component, props, loaded} = this.state;
     // register reference of child component
     // register new hook right after component has been rendered
-    let stateName: string = this.uiViewAddress && this.uiViewAddress.context && this.uiViewAddress.context.name;
+    let stateName: string =
+      this.uiViewAddress &&
+      this.uiViewAddress.context &&
+      this.uiViewAddress.context.name;
     props.ref = c => {
       this.componentInstance = c;
       this.registerUiCanExitHook(stateName);
     };
 
-    let child = !loaded && isValidElement(children)
-      ? cloneElement(children, props)
-      : createElement(component, props);
+    let child =
+      !loaded && isValidElement(children)
+        ? cloneElement(children, props)
+        : createElement(component, props);
 
     // if a render function is passed use that,
     // otherwise render the component normally
@@ -137,38 +173,40 @@ export class UIView extends Component<UIViewProps, UIViewState> {
 
   getChildContext() {
     return {
-      parentUIViewAddress: this.uiViewAddress
-    }
+      parentUIViewAddress: this.uiViewAddress,
+    };
   }
 
   componentWillMount() {
     let router = this.context['router'];
     if (typeof router === 'undefined') {
-      throw new Error(`UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`);
+      throw new Error(
+        `UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`,
+      );
     }
 
     // Check the context for the parent UIView's fqn and State
     let parent: UIViewAddress = this.context['parentUIViewAddress'];
     // Not found in context, this is a root UIView
-    parent = parent || { fqn: "", context: router.stateRegistry.root() };
+    parent = parent || {fqn: '', context: router.stateRegistry.root()};
 
-    let name = this.props.name || "$default";
+    let name = this.props.name || '$default';
 
     this.uiViewData = {
       $type: 'react',
       id: ++id,
       name: name,
-      fqn: parent.fqn ? parent.fqn + "." + name : name,
+      fqn: parent.fqn ? parent.fqn + '.' + name : name,
       creationContext: parent.context,
       configUpdated: this.viewConfigUpdated.bind(this),
-      config: undefined
+      config: undefined,
     } as ActiveUIView;
 
-    this.uiViewAddress = { fqn: this.uiViewData.fqn, context: undefined };
+    this.uiViewAddress = {fqn: this.uiViewData.fqn, context: undefined};
 
     this.deregister = router.viewService.registerUIView(this.uiViewData);
 
-    this.setState({ id: this.uiViewData.id });
+    this.setState({id: this.uiViewData.id});
   }
 
   componentWillUnmount() {
@@ -181,17 +219,24 @@ export class UIView extends Component<UIViewProps, UIViewState> {
    * This is called by UI-Router when a state was activated, and one of its views targets this `UIView`
    */
   viewConfigUpdated(newConfig: ReactViewConfig) {
-    let newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
-    let trans: Transition = undefined, resolves = {};
+    let newComponent =
+      newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
+    let trans: Transition = undefined,
+      resolves = {};
 
     if (newConfig) {
-      let context: ViewContext = newConfig.viewDecl && newConfig.viewDecl.$context;
-      this.uiViewAddress = { fqn: this.uiViewAddress.fqn, context };
+      let context: ViewContext =
+        newConfig.viewDecl && newConfig.viewDecl.$context;
+      this.uiViewAddress = {fqn: this.uiViewAddress.fqn, context};
 
       let ctx = new ResolveContext(newConfig.path);
       trans = ctx.getResolvable(Transition).data;
-      let stringTokens = trans.getResolveTokens().filter(x => typeof x === 'string');
-      resolves = stringTokens.map(token => [token, trans.injector().get(token)]).reduce(applyPairs, {});
+      let stringTokens = trans
+        .getResolveTokens()
+        .filter(x => typeof x === 'string');
+      resolves = stringTokens
+        .map(token => [token, trans.injector().get(token)])
+        .reduce(applyPairs, {});
     }
 
     this.uiViewData.config = newConfig;
@@ -200,23 +245,26 @@ export class UIView extends Component<UIViewProps, UIViewState> {
     // attach any style or className to the rendered component
     // specified on the UIView itself
     let styleProps: {
-      className?:string,
-      style?: Object
-    } = {}
+      className?: string;
+      style?: Object;
+    } = {};
     if (this.props.className) styleProps.className = this.props.className;
     if (this.props.className) styleProps.style = this.props.style;
 
     this.setState({
       component: newComponent || 'div',
       props: newComponent ? extend(props, styleProps) : styleProps,
-      loaded: newComponent ? true : false
+      loaded: newComponent ? true : false,
     });
   }
 
-  registerUiCanExitHook (stateName: string) {
+  registerUiCanExitHook(stateName: string) {
     typeof this.removeHook === 'function' && this.removeHook();
-    let criteria = { exiting: stateName };
-    let callback = this.componentInstance && typeof this.componentInstance.uiCanExit === 'function' && this.componentInstance.uiCanExit;
+    let criteria = {exiting: stateName};
+    let callback =
+      this.componentInstance &&
+      typeof this.componentInstance.uiCanExit === 'function' &&
+      this.componentInstance.uiCanExit;
     if (stateName && callback) {
       let transitions = this.context['router'].transitionService;
       this.removeHook = transitions.onBefore(criteria, callback, {});

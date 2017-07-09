@@ -2,8 +2,18 @@
  * @reactapi
  * @module react
  */ /** */
-import { services, forEach, map, pick, PathNode, ViewConfig, ViewService, StateObject} from "@uirouter/core";
-import {ReactViewDeclaration} from "./interface";
+import {
+  services,
+  forEach,
+  map,
+  pick,
+  PathNode,
+  ViewConfig,
+  ViewService,
+  StateObject,
+} from '@uirouter/core';
+
+import {ReactViewDeclaration} from './interface';
 
 /**
  * This is a [[StateBuilder.builder]] function for react `views`.
@@ -17,25 +27,29 @@ import {ReactViewDeclaration} from "./interface";
  * @internalapi
  */
 export function reactViewsBuilder(state: StateObject) {
-  let views = {}, viewsDefinitionObject;
+  let views = {},
+    viewsDefinitionObject;
   if (!state.views) {
-    viewsDefinitionObject = { "$default": pick(state, ["component"]) };
+    viewsDefinitionObject = {$default: pick(state, ['component'])};
   } else {
     viewsDefinitionObject = map(state.views, (val: any, key) => {
       if (val.component) return val;
-      return { component: val };
-    })
+      return {component: val};
+    });
   }
 
-  forEach(viewsDefinitionObject, function (config, name) {
-    name = name || "$default"; // Account for views: { "": { template... } }
+  forEach(viewsDefinitionObject, function(config, name) {
+    name = name || '$default'; // Account for views: { "": { template... } }
     if (Object.keys(config).length == 0) return;
 
-    config.$type = "react";
+    config.$type = 'react';
     config.$context = state;
     config.$name = name;
 
-    let normalized = ViewService.normalizeUIViewTarget(config.$context, config.$name);
+    let normalized = ViewService.normalizeUIViewTarget(
+      config.$context,
+      config.$name,
+    );
     config.$uiViewName = normalized.uiViewName;
     config.$uiViewContextAnchor = normalized.uiViewContextAnchor;
 
@@ -52,7 +66,7 @@ export class ReactViewConfig implements ViewConfig {
   loaded: boolean = true;
   $id: number = id++;
 
-  constructor(public path: [PathNode], public viewDecl: ReactViewDeclaration) { }
+  constructor(public path: [PathNode], public viewDecl: ReactViewDeclaration) {}
 
   load() {
     return services.$q.when(this);

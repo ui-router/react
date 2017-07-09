@@ -1,71 +1,111 @@
 declare var jest, describe, it, expect, beforeEach;
 
-import * as React from "react";
-import { shallow, mount, render } from "enzyme";
-import * as sinon from "sinon";
+import * as React from 'react';
+import {shallow, mount, render} from 'enzyme';
+import * as sinon from 'sinon';
 
-import {UIRouterReact, UIRouter, UIView, UISref, UISrefActive, ReactStateDeclaration, pushStateLocationPlugin, servicesPlugin} from "../../index";
+import {
+  UIRouterReact,
+  UIRouter,
+  UIView,
+  UISref,
+  UISrefActive,
+  ReactStateDeclaration,
+  pushStateLocationPlugin,
+  servicesPlugin,
+} from '../../index';
 
-var states = [{
-  name: 'simple',
-  url: '',
-  component: () => (
-    <div>
-      <UISrefActive class="active"><UISref to="parent.child1"><a>child1</a></UISref></UISrefActive>
-    </div>
-  )
-}, {
-  name: 'simple2',
-  url: '',
-  component: () => (
-    <div>Simple2</div>
-  )
-}, {
-  name: 'parent',
-  url: '',
-  component: () => (
-    <div>
-      <UISrefActive class="active"><UISref to="parent.child1"><a>child1</a></UISref></UISrefActive>
-      <UISrefActive class="active"><UISref to="parent.child2"><a>child2</a></UISref></UISrefActive>
-      <UIView/>
-    </div>
-  )
-}, {
-  name: 'parent.child1',
-  url: '/child1',
-  component: () => <span>child1</span>
-}, {
-  name: 'parent.child2',
-  url: '/child2',
-  component: () => <span>child2</span>
-}, {
-  name: 'parent.child3',
-  url: '/child3',
-  component: <UISrefActive class="active"><UISref to="parent"><a>parent</a></UISref></UISrefActive>
-}, {
-  name: 'throw',
-  url: '/throw',
-  component: () => <UISrefActive class="active"><UISref to={(5 as any)}><a>child1</a></UISref></UISrefActive>
-}, {
-  name: 'withParams',
-  url: '/with?param',
-  component: () => <span>with params</span>
-}];
+var states = [
+  {
+    name: 'simple',
+    url: '',
+    component: () =>
+      <div>
+        <UISrefActive class="active">
+          <UISref to="parent.child1">
+            <a>child1</a>
+          </UISref>
+        </UISrefActive>
+      </div>,
+  },
+  {
+    name: 'simple2',
+    url: '',
+    component: () => <div>Simple2</div>,
+  },
+  {
+    name: 'parent',
+    url: '',
+    component: () =>
+      <div>
+        <UISrefActive class="active">
+          <UISref to="parent.child1">
+            <a>child1</a>
+          </UISref>
+        </UISrefActive>
+        <UISrefActive class="active">
+          <UISref to="parent.child2">
+            <a>child2</a>
+          </UISref>
+        </UISrefActive>
+        <UIView />
+      </div>,
+  },
+  {
+    name: 'parent.child1',
+    url: '/child1',
+    component: () => <span>child1</span>,
+  },
+  {
+    name: 'parent.child2',
+    url: '/child2',
+    component: () => <span>child2</span>,
+  },
+  {
+    name: 'parent.child3',
+    url: '/child3',
+    component: (
+      <UISrefActive class="active">
+        <UISref to="parent">
+          <a>parent</a>
+        </UISref>
+      </UISrefActive>
+    ),
+  },
+  {
+    name: 'throw',
+    url: '/throw',
+    component: () =>
+      <UISrefActive class="active">
+        <UISref to={5 as any}>
+          <a>child1</a>
+        </UISref>
+      </UISrefActive>,
+  },
+  {
+    name: 'withParams',
+    url: '/with?param',
+    component: () => <span>with params</span>,
+  },
+];
 
 describe('<UISrefActive>', () => {
-
   let router;
   beforeEach(() => {
     router = new UIRouterReact();
     router.plugin(servicesPlugin);
     router.plugin(pushStateLocationPlugin);
-    router.stateService.defaultErrorHandler(()=>{});
+    router.stateService.defaultErrorHandler(() => {});
     states.forEach(state => router.stateRegistry.register(state));
     router.start();
   });
 
   it('renders its child', () => {
-    const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
+    const wrapper = mount(
+      <UIRouter router={router}>
+        <UIView />
+      </UIRouter>,
+    );
     return router.stateService.go('simple').then(() => {
       const props = wrapper.find('a').props();
       expect(typeof props.onClick).toBe('function');
@@ -74,66 +114,95 @@ describe('<UISrefActive>', () => {
   });
 
   it('updates class for child <UISref>', () => {
-    const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
-    return router.stateService.go('parent.child1').then(() => {
-      const activeLink = wrapper.find('a.active');
-      expect(activeLink.length).toBe(1);
-      expect(activeLink.props().href.includes('/child1')).toBe(true);
-      return router.stateService.go('parent.child2');
-    }).then(() => {
-      const activeLink = wrapper.find('a.active');
-      expect(activeLink.length).toBe(1);
-      expect(activeLink.props().href.includes('/child2')).toBe(true);
-    });
+    const wrapper = mount(
+      <UIRouter router={router}>
+        <UIView />
+      </UIRouter>,
+    );
+    return router.stateService
+      .go('parent.child1')
+      .then(() => {
+        const activeLink = wrapper.find('a.active');
+        expect(activeLink.length).toBe(1);
+        expect(activeLink.props().href.includes('/child1')).toBe(true);
+        return router.stateService.go('parent.child2');
+      })
+      .then(() => {
+        const activeLink = wrapper.find('a.active');
+        expect(activeLink.length).toBe(1);
+        expect(activeLink.props().href.includes('/child2')).toBe(true);
+      });
   });
 
   it('throws if state name is not a string', () => {
     let spy = sinon.spy();
-    router.stateService.defaultErrorHandler((err)=>{
-      if(err.detail instanceof Error) spy();
+    router.stateService.defaultErrorHandler(err => {
+      if (err.detail instanceof Error) spy();
     });
-    const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
+    const wrapper = mount(
+      <UIRouter router={router}>
+        <UIView />
+      </UIRouter>,
+    );
     return router.stateService.go('throw').then(() => {
       expect(spy.called).toBe(true);
     });
   });
 
   it('deregisters transition hook for active class when unmounted', () => {
-    const wrapper = mount(<UIRouter router={router}><UIView/></UIRouter>);
+    const wrapper = mount(
+      <UIRouter router={router}>
+        <UIView />
+      </UIRouter>,
+    );
     let spy, node;
-    return router.stateService.go('simple').then(() => {
-      node = wrapper.find(UISrefActive).get(0);
-      spy = sinon.spy(node, 'deregister');
-      return router.stateService.go('simple2');
-    }).then(() => {
-      expect(spy.called).toBe(true);
-    });
+    return router.stateService
+      .go('simple')
+      .then(() => {
+        node = wrapper.find(UISrefActive).get(0);
+        spy = sinon.spy(node, 'deregister');
+        return router.stateService.go('simple2');
+      })
+      .then(() => {
+        expect(spy.called).toBe(true);
+      });
   });
 
   it('works with state parameters', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <div>
-          <UISrefActive class="active"><UISref to="withParams" params={{param:5}}><a>child1</a></UISref></UISrefActive>
-          <UIView/>
+          <UISrefActive class="active">
+            <UISref to="withParams" params={{param: 5}}>
+              <a>child1</a>
+            </UISref>
+          </UISrefActive>
+          <UIView />
         </div>
-      </UIRouter>
+      </UIRouter>,
     );
-    return router.stateService.go('withParams', { param: 5 }).then(() => {
-      const activeLink = wrapper.find('a.active');
-      expect(activeLink.length).toBe(1);
-      return router.stateService.go('withParams', { param: 3 });
-    }).then(() => {
-      const activeLink = wrapper.find('a.active');
-      expect(activeLink.length).toBe(0);
-    });
+    return router.stateService
+      .go('withParams', {param: 5})
+      .then(() => {
+        const activeLink = wrapper.find('a.active');
+        expect(activeLink.length).toBe(1);
+        return router.stateService.go('withParams', {param: 3});
+      })
+      .then(() => {
+        const activeLink = wrapper.find('a.active');
+        expect(activeLink.length).toBe(0);
+      });
   });
 
   it('uses rootContext for <UISref> state when not nested in a <UIView>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
-        <UISrefActive class="active"><UISref to="parent.child1"><a>child1</a></UISref></UISrefActive>
-      </UIRouter>
+        <UISrefActive class="active">
+          <UISref to="parent.child1">
+            <a>child1</a>
+          </UISref>
+        </UISrefActive>
+      </UIRouter>,
     );
     let node = wrapper.find(UISrefActive).node;
     expect(node.context.parentUIViewAddress).toBeUndefined();
@@ -145,30 +214,39 @@ describe('<UISrefActive>', () => {
       <UIRouter router={router}>
         <UISrefActive class="active">
           <div>
-            <UISref to="parent.child1"><a>child1</a></UISref>
-            <UISref to="parent.child2"><a>child2</a></UISref>
-            <UISref to="parent.child3"><a>child3</a></UISref>
+            <UISref to="parent.child1">
+              <a>child1</a>
+            </UISref>
+            <UISref to="parent.child2">
+              <a>child2</a>
+            </UISref>
+            <UISref to="parent.child3">
+              <a>child3</a>
+            </UISref>
           </div>
         </UISrefActive>
-      </UIRouter>
+      </UIRouter>,
     );
     let node = wrapper.find(UISrefActive).node;
     expect(node.context.parentUIViewAddress).toBeUndefined();
     expect(node.states.length).toBe(3);
   });
 
-  it('removes active state of UISref when it\'s unmounted', () => {
-    const Comp = props => (
+  it("removes active state of UISref when it's unmounted", () => {
+    const Comp = props =>
       <UIRouter router={router}>
         <UISrefActive class="active">
-          {props.show ? <UISref to="parent.child1"><a>child1</a></UISref> : <div/>}
+          {props.show
+            ? <UISref to="parent.child1">
+                <a>child1</a>
+              </UISref>
+            : <div />}
         </UISrefActive>
-      </UIRouter>
-    );
-    const wrapper = mount(<Comp show={true}/>);
+      </UIRouter>;
+    const wrapper = mount(<Comp show={true} />);
     const node = wrapper.find(UISrefActive).get(0);
     expect(node.states.length).toBe(1);
-    wrapper.setProps({show:false});
+    wrapper.setProps({show: false});
     expect(node.states.length).toBe(0);
   });
 
@@ -176,20 +254,36 @@ describe('<UISrefActive>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <div>
-          <UISrefActive class="active"><UISref to="_parent"><a>parent</a></UISref></UISrefActive>
-          <UISrefActive class="active" exact={true}><UISref to="_parent"><a>parent</a></UISref></UISrefActive>
-          <UIView/>
+          <UISrefActive class="active">
+            <UISref to="_parent">
+              <a>parent</a>
+            </UISref>
+          </UISrefActive>
+          <UISrefActive class="active" exact={true}>
+            <UISref to="_parent">
+              <a>parent</a>
+            </UISref>
+          </UISrefActive>
+          <UIView />
         </div>
-      </UIRouter>
+      </UIRouter>,
     );
-    router.stateRegistry.register({ name: '_parent', component: () => <UIView/> });
-    router.stateRegistry.register({ name: '_parent._child', component: () => <span>child1</span> });
-    return router.stateService.go('_parent._child').then(() => {
-      expect(wrapper.find('a.active').length).toBe(1);
-      return router.stateService.go('_parent');
-    }).then(() => {
-      expect(wrapper.find('a.active').length).toBe(2);
+    router.stateRegistry.register({
+      name: '_parent',
+      component: () => <UIView />,
     });
-  })
-
+    router.stateRegistry.register({
+      name: '_parent._child',
+      component: () => <span>child1</span>,
+    });
+    return router.stateService
+      .go('_parent._child')
+      .then(() => {
+        expect(wrapper.find('a.active').length).toBe(1);
+        return router.stateService.go('_parent');
+      })
+      .then(() => {
+        expect(wrapper.find('a.active').length).toBe(2);
+      });
+  });
 });
