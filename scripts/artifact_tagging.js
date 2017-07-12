@@ -77,9 +77,9 @@ pkg.dependencies['@uirouter/core'] = widenedDep;
 pkg.version += pkgver;
 
 fs.writeFileSync("package.json", JSON.stringify(pkg, undefined, 2));
-_exec('git commit -m "Widening @uirouter/core dependency range to ' + widenedDep + '" package.json');
+_exec(`git commit -m "Widening @uirouter/core dependency range to ${widenedDep}" package.json`);
 
-_exec('npm run package');
+_exec(`npm run package`);
 
 if (npm) {
   let output = _exec(`npm dist-tag ls ${pkg.name}`).stdout;
@@ -91,8 +91,8 @@ if (npm) {
     throw new Error(`Could not determine value of "latest" dist-tag for ${pkg.name}`);
   }
   
-  _exec('npm publish');
-  _exec('npm dist-tag add ${pkg.name}@${latest} latest');
+  _exec(`npm publish`);
+  _exec(`npm dist-tag add ${pkg.name}@${latest} latest`);
 }
 
 if (githubtag) {
