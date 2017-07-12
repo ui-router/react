@@ -82,7 +82,17 @@ _exec('git commit -m "Widening @uirouter/core dependency range to ' + widenedDep
 _exec('npm run package');
 
 if (npm) {
+  let output = _exec(`npm dist-tag ls ${pkg.name}`).stdout;
+  let latest = output.split(/[\r\n]/)
+    .map(line => line.split(": "))
+    .filter(linedata => linedata[0] === 'latest')[0];
+
+  if (!latest) {
+    throw new Error(`Could not determine value of "latest" dist-tag for ${pkg.name}`);
+  }
+  
   _exec('npm publish');
+  _exec('npm dist-tag add ${pkg.name}@${latest} latest');
 }
 
 if (githubtag) {
