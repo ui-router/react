@@ -10,12 +10,14 @@
     "test:ci": "NODE_ENV=production jest  --silent",
     "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config ./examples/typescript/webpack.config.js --history-api-fallback --content-base examples/typescript",
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && cross-env NODE_ENV=production webpack && npm run fixmaps",
-    "fixmaps": "node scripts/modify_sourcemap_paths.js",
+    "release": "release",
+    "fixmaps": "modify_sourcemap_paths",
     "clean": "shx rm -rf _bundles lib lib-esm build",
     "docs": "./scripts/docs.js",
     "package": "npm run build",
     "install": "node migrate/migratewarn.js",
-    "artifacts": "./scripts/artifact_tagging.js",
+    "artifacts": "artifact_tagging",
+    "changelog": "update_changelog",
     "prettier": "node ./scripts/prettier.js write-changed",
     "prettier-all": "node ./scripts/prettier.js write"
   },
@@ -37,7 +39,7 @@
     "url": "https://github.com/ui-router/react.git"
   },
   "dependencies": {
-    "@uirouter/core": "=5.0.5",
+    "@uirouter/core": "=5.0.6",
     "classnames": "^2.2.5"
   },
   "peerDependencies": {
@@ -50,6 +52,7 @@
     "@types/prop-types": "^15.5.1",
     "@types/react": "^16.0.5",
     "@types/react-dom": "^15.5.4",
+    "@uirouter/publish-scripts": "^1.0.3",
     "awesome-typescript-loader": "^3.2.3",
     "babel-jest": "^15.0.0",
     "babel-polyfill": "^6.13.0",
