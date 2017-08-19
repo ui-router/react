@@ -3,12 +3,12 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import {Component, cloneElement, ValidationMap} from 'react';
+import { Component, cloneElement, ValidationMap } from 'react';
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
-import {UIRouterReact, UISref} from '../index';
-import {UIViewAddress} from './UIView';
+import { UIRouterReact, UISref } from '../index';
+import { UIViewAddress } from './UIView';
 
 let classNames = _classNames;
 
@@ -19,7 +19,7 @@ export interface UISrefActiveProps {
 }
 
 export interface UISrefActiveState {
-  state: {name: string; [key: string]: any};
+  state: { name: string; [key: string]: any };
   params: Object;
   hash: string;
 }
@@ -27,7 +27,7 @@ export interface UISrefActiveState {
 export class UISrefActive extends Component<UISrefActiveProps, any> {
   // keep track of states to watch and their activeClasses
   states: Array<UISrefActiveState> = [];
-  activeClasses: {[key: string]: string} = {};
+  activeClasses: { [key: string]: string } = {};
 
   // deregister the callback for state changed when unmounted
   deregister: Function;
@@ -46,6 +46,10 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
     parentUiSrefActiveAddStateInfo: PropTypes.func,
   };
 
+  state = {
+    activeClasses: '',
+  };
+
   getChildContext() {
     return {
       parentUiSrefActiveAddStateInfo: this.addStateInfo,
@@ -62,7 +66,7 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
     // register callback for state change
     this.deregister = this.context[
       'router'
-    ].transitionService.onSuccess({}, () => this.forceUpdate());
+    ].transitionService.onSuccess({}, () => this.updateActiveClasses());
   }
 
   componentWillUnmount() {
@@ -72,19 +76,19 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
   addStateInfo = (stateName, stateParams) => {
     const activeClass = this.props.class;
     let deregister = this.addState(stateName, stateParams, activeClass);
-    this.forceUpdate();
+    this.updateActiveClasses();
     return deregister;
   };
 
   addState = (stateName, stateParams, activeClass) => {
-    const {stateService} = this.context['router'];
+    const { stateService } = this.context['router'];
     let parent = this.context['parentUIViewAddress'];
     let stateContext =
       (parent && parent.context) || this.context['router'].stateRegistry.root();
     let state = stateService.get(stateName, stateContext);
     let stateHash = this.createStateHash(stateName, stateParams);
     let stateInfo = {
-      state: state || {name: stateName},
+      state: state || { name: stateName },
       params: stateParams,
       hash: stateHash,
     };
@@ -105,22 +109,32 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
       : state;
   };
 
-  getActiveClasses = () => {
+  getActiveClasses = (): string => {
     let activeClasses = [];
-    let {stateService} = this.context['router'];
-    let {exact} = this.props;
+    let { stateService } = this.context['router'];
+    let { exact } = this.props;
     this.states.forEach(s => {
-      let {state, params, hash} = s;
+      let { state, params, hash } = s;
       if (!exact && stateService.includes(state.name, params))
         activeClasses.push(this.activeClasses[hash]);
       if (exact && stateService.is(state.name, params))
         activeClasses.push(this.activeClasses[hash]);
     });
-    return activeClasses;
+    return classNames(activeClasses);
+  };
+
+  updateActiveClasses = (): void => {
+    const { activeClasses } = this.state;
+    const newActiveClasses = this.getActiveClasses();
+    if (activeClasses !== newActiveClasses) {
+      this.setState({
+        activeClasses: this.getActiveClasses(),
+      });
+    }
   };
 
   render() {
-    let activeClasses = this.getActiveClasses();
+    const { activeClasses } = this.state;
     return activeClasses.length > 0
       ? cloneElement(
           this.props.children,
