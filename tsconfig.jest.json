@@ -1,0 +1,7 @@
+{
+  "compilerOption": {
+    "jsx": "react",
+    "module": "commonjs",
+    "target": "es6"
+  }
+}

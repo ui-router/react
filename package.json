@@ -7,8 +7,8 @@
   "jsnext:main": "lib-esm/index.js",
   "scripts": {
     "test": "jest --watch",
-    "test:ci": "NODE_ENV=production jest",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config webpack.example.js --history-api-fallback --content-base example",
+    "test:ci": "NODE_ENV=production jest  --silent",
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && cross-env NODE_ENV=production webpack",
     "clean": "shx rm -rf _bundles lib lib-esm build",
     "docs": "./scripts/docs.js",
@@ -41,15 +41,15 @@
   },
   "peerDependencies": {
     "prop-types": "^15.5.8",
-    "react": "^15.0.0 || ^16.0.0-alpha"
+    "react": "^15.0.0 || ^16.0.0-alpha || 16.0.0-rc.2"
   },
   "devDependencies": {
     "@types/classnames": "0.0.31",
     "@types/lodash": "^4.14.64",
     "@types/prop-types": "^15.5.1",
-    "@types/react": "^0.14.43",
+    "@types/react": "^16.0.5",
     "@types/react-dom": "^0.14.18",
-    "awesome-typescript-loader": "^3.1.3",
+    "awesome-typescript-loader": "^3.2.3",
     "babel-jest": "^15.0.0",
     "babel-polyfill": "^6.13.0",
     "babel-preset-es2015": "^6.14.0",
@@ -62,9 +62,8 @@
     "jest": "^20.0.3",
     "prettier": "^1.5.2",
     "prop-types": "^15.5.10",
-    "react": "^15.0.2",
-    "react-addons-test-utils": "^15.3.1",
-    "react-dom": "^15.0.2",
+    "react": "15.6.1",
+    "react-dom": "15.6.1",
     "react-test-renderer": "^15.3.1",
     "readline-sync": "^1.4.7",
     "replace-in-file": "^2.0.3",
@@ -76,7 +75,7 @@
     "typedoc-plugin-external-module-name": "^1.0.8",
     "typedoc-plugin-internal-external": "^1.0.8",
     "typedoc-plugin-ui-router": "^1.0.6",
-    "typescript": "~2.4.1",
+    "typescript": "2.4.2",
     "ui-router-typedoc-themes": "^1.0.2",
     "webpack": "^2.3.1",
     "webpack-dev-server": "^2.4.2"
@@ -86,19 +85,12 @@
     "transform": {
       ".(ts|tsx)": "<rootDir>/../node_modules/ts-jest/preprocessor.js"
     },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "json"],
     "testURL": "http://localhost:4000",
     "testRegex": "/__tests__/.*\\.(ts|tsx|js)$",
     "globals": {
-      "__TS_CONFIG__": {
-        "jsx": "react",
-        "module": "commonjs",
-        "target": "es6"
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.jest.json"
       }
     }
   }
