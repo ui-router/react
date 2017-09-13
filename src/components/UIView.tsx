@@ -4,7 +4,7 @@
  */ /** */
 import * as React from 'react';
 import {
-  Component,
+  PureComponent,
   ValidationMap,
   createElement,
   cloneElement,
@@ -107,7 +107,7 @@ export interface UIViewState {
   props?: any;
 }
 
-export class UIView extends Component<UIViewProps, UIViewState> {
+export class UIView extends PureComponent<UIViewProps, UIViewState> {
   // This object contains all the metadata for this UIView
   uiViewData: ActiveUIView;
 
