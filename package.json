@@ -7,8 +7,8 @@
   "jsnext:main": "lib-esm/index.js",
   "scripts": {
     "test": "jest --watch",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config webpack.example.js --history-api-fallback --content-base example",
     "test:ci": "NODE_ENV=production jest  --silent",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config ./examples/typescript/webpack.config.js --history-api-fallback --content-base examples/typescript",
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && cross-env NODE_ENV=production webpack",
     "clean": "shx rm -rf _bundles lib lib-esm build",
     "docs": "./scripts/docs.js",

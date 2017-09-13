@@ -3,17 +3,21 @@
     "moduleResolution": "node",
     "module": "commonjs",
     "target": "es5",
-    "lib": [ "es2015", "dom" ],
+    "lib": ["es2015", "dom"],
     "allowSyntheticDefaultImports": true,
     "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "declaration": false,
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "react": ["../../node_modules/react"],
+      "react-dom": ["../../node_modules/react-dom"],
+      "@uirouter/react": ["../../src/index.ts"]
+    }
   },
-  "files": [
-    "./index.tsx"
-  ],
+  "files": ["./index.tsx"],
   "compileOnSave": false,
   "buildOnSave": false
 }
