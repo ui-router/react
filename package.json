@@ -48,7 +48,7 @@
     "@types/lodash": "^4.14.64",
     "@types/prop-types": "^15.5.1",
     "@types/react": "^16.0.5",
-    "@types/react-dom": "^0.14.18",
+    "@types/react-dom": "^15.5.4",
     "awesome-typescript-loader": "^3.2.3",
     "babel-jest": "^15.0.0",
     "babel-polyfill": "^6.13.0",
@@ -71,21 +71,26 @@
     "shx": "^0.1.4",
     "sinon": "^2.3.1",
     "ts-jest": "^20.0.4",
-    "typedoc": "0.5.3",
+    "typedoc": "^0.8.0",
     "typedoc-plugin-external-module-name": "^1.0.8",
     "typedoc-plugin-internal-external": "^1.0.8",
     "typedoc-plugin-ui-router": "^1.0.6",
-    "typescript": "2.4.2",
+    "typescript": "^2.5.2",
     "ui-router-typedoc-themes": "^1.0.2",
-    "webpack": "^2.3.1",
-    "webpack-dev-server": "^2.4.2"
+    "webpack": "^3.5.6",
+    "webpack-dev-server": "^2.8.1"
   },
   "jest": {
     "rootDir": "src",
     "transform": {
       ".(ts|tsx)": "<rootDir>/../node_modules/ts-jest/preprocessor.js"
     },
-    "moduleFileExtensions": ["ts", "tsx", "js", "json"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
     "testURL": "http://localhost:4000",
     "testRegex": "/__tests__/.*\\.(ts|tsx|js)$",
     "globals": {
