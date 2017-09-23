@@ -68,9 +68,20 @@
     "@types/glob" "*"
     "@types/node" "*"
 
-"@uirouter/core@=5.0.5":
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.5.tgz#4fafae8b89e1bee321b0ed32e69ab66547c055c6"
+"@uirouter/core@=5.0.7":
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.7.tgz#547ed169a8200cb95eaecb593aa6f7674f300933"
+
+"@uirouter/publish-scripts@^1.0.3":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-1.0.7.tgz#99ffd6aeced41e96b92ccb007342eee5d14b0a9a"
+  dependencies:
+    conventional-changelog "^1.1.4"
+    conventional-changelog-ui-router-core "^1.4.2"
+    find-parent-dir "^0.3.0"
+    git-semver-tags "^1.2.1"
+    readline-sync "^1.4.7"
+    shelljs "^0.7.8"
 
 JSONStream@^1.0.4:
   version "1.3.1"
@@ -1404,6 +1415,14 @@ conventional-changelog-jshint@^0.2.0:
     compare-func "^1.3.1"
     q "^1.4.1"
 
+conventional-changelog-ui-router-core@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-ui-router-core/-/conventional-changelog-ui-router-core-1.4.2.tgz#56d5787163f883e25d3e1f573aef563f85411df7"
+  dependencies:
+    compare-func "^1.3.1"
+    github-url-from-git "^1.4.0"
+    q "^1.4.1"
+
 conventional-changelog-writer@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/conventional-changelog-writer/-/conventional-changelog-writer-2.0.1.tgz#47c10d0faba526b78d194389d1e931d09ee62372"
@@ -1419,7 +1438,7 @@ conventional-changelog-writer@^2.0.1:
     split "^1.0.0"
     through2 "^2.0.0"
 
-conventional-changelog@^1.1.0:
+conventional-changelog@^1.1.0, conventional-changelog@^1.1.4:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/conventional-changelog/-/conventional-changelog-1.1.5.tgz#4c46fb64b2986cab19888d8c4b87ca7c0e431bfd"
   dependencies:
@@ -2218,6 +2237,10 @@ finalhandler@~1.0.4:
     statuses "~1.3.1"
     unpipe "~1.0.0"
 
+find-parent-dir@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/find-parent-dir/-/find-parent-dir-0.3.0.tgz#33c44b429ab2b2f0646299c5f9f718f376ff8d54"
+
 find-up@^1.0.0, find-up@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-1.1.2.tgz#6b2e9822b1a2ce0a60ab64d610eccad53cb24d0f"
@@ -2405,6 +2428,10 @@ gitconfiglocal@^1.0.0:
   resolved "https://registry.yarnpkg.com/gitconfiglocal/-/gitconfiglocal-1.0.0.tgz#41d045f3851a5ea88f03f24ca1c6178114464b9b"
   dependencies:
     ini "^1.3.2"
+
+github-url-from-git@^1.4.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/github-url-from-git/-/github-url-from-git-1.5.0.tgz#f985fedcc0a9aa579dc88d7aff068d55cc6251a0"
 
 glob-base@^0.3.0:
   version "0.3.0"
@@ -4340,7 +4367,7 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@^15.6.1:
+react-dom@15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.1.tgz#2cb0ed4191038e53c209eb3a79a23e2a4cf99470"
   dependencies:
@@ -4721,7 +4748,7 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
 
-shelljs@^0.7.0, shelljs@^0.7.7:
+shelljs@^0.7.0, shelljs@^0.7.7, shelljs@^0.7.8:
   version "0.7.8"
   resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.7.8.tgz#decbcf874b0d1e5fb72e14b164a9683048e9acb3"
   dependencies:

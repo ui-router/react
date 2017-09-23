@@ -1,3 +1,30 @@
+## `@uirouter/react` 0.5.2 (2017-09-23)
+[Compare `@uirouter/react` versions 0.5.1 and 0.5.2](https://github.com/ui-router/react/compare/0.5.1...0.5.2)
+
+### Bug Fixes
+
+* **sourcemaps:** Embed sources in sourcemaps ([62d84ea](https://github.com/ui-router/react/commit/62d84ea))
+
+
+Changes to `@uirouter/core`:
+[Compare `@uirouter/core` versions 5.0.5 and 5.0.7](https://github.com/ui-router/core/compare/5.0.5...5.0.7)
+
+### Bug Fixes
+
+* **globals:** Use shallow copy to update the globals.params / $state.params object ([e883afc](https://github.com/ui-router/core/commit/e883afc))
+* **Injector:** When getting tokens from native injector, only throw on undefined (not on falsey values) ([ada9ca2](https://github.com/ui-router/core/commit/ada9ca2))
+* **sourceMaps:** Embed typescript sources in sourcemaps ([10558a3](https://github.com/ui-router/core/commit/10558a3))
+* **trace:** Fall back to console.log if .table is unavailable (IE) ([c8110fc](https://github.com/ui-router/core/commit/c8110fc))
+* **trace:** Support tracing of object-parameters with circular references ([2f1ae9a](https://github.com/ui-router/core/commit/2f1ae9a))
+* **typescript:** Fix strictNullCheck type error ([0ae585e](https://github.com/ui-router/core/commit/0ae585e))
+* **url:** Add CustomEvent polyfill for IE ([a50db21](https://github.com/ui-router/core/commit/a50db21))
+* **urlRouter:** Fix absolute 'href' generation by using location.hostname (not location.host) ([a28b68a](https://github.com/ui-router/core/commit/a28b68a))
+* **urlService:** Fix priority sorting of URL rules ([73a1fe0](https://github.com/ui-router/core/commit/73a1fe0))
+* **vanilla:** fix base path handling for vanilla push state ([ad61d74](https://github.com/ui-router/core/commit/ad61d74))
+* **vanilla:** Use `self` instead of `window` for webworker compat ([a4629ee](https://github.com/ui-router/core/commit/a4629ee))
+
+
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/ui-router/react/compare/0.5.0...v0.5.1) (2017-07-03)
 
