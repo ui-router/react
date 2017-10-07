@@ -15,7 +15,7 @@
     "clean": "shx rm -rf _bundles lib lib-esm build",
     "docs": "./scripts/docs.js",
     "package": "npm run build",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "artifacts": "artifact_tagging",
     "changelog": "update_changelog --include-core",
     "prettier": "node ./scripts/prettier.js write-changed",
