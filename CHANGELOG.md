@@ -1,3 +1,26 @@
+## 0.5.3 (2017-10-07)
+[Compare `@uirouter/react` versions 0.5.2 and 0.5.3](https://github.com/ui-router/react/compare/0.5.2...0.5.3)
+
+
+## Updates `@uirouter/core` from 5.0.7 to 5.0.10 (2017-10-07)
+[Compare `@uirouter/core` versions 5.0.7 and 5.0.10](https://github.com/ui-router/core/compare/5.0.7...5.0.10)
+
+### Bug Fixes
+
+* **angular/cli:** Use package.json fields: 'typings', 'main', 'jsnext:main' ([74143d9](https://github.com/ui-router/core/commit/74143d9))
+* **bundle:** Rollup: Do not warn on THIS_IS_UNDEFINED ([a4581b1](https://github.com/ui-router/core/commit/a4581b1))
+* **isomorphic:** Remove use of CustomEvent. Detect root scope (global/window/self) for nodejs, browser, or web-worker. ([2d206ba](https://github.com/ui-router/core/commit/2d206ba))
+* **redirectTo:** Fix typings for redirectTo. Allow a function that returns a target state or a promise for one. ([3904487](https://github.com/ui-router/core/commit/3904487))
+* **typings:** Use StateObject for parameter to hook criteria functions ([5b58566](https://github.com/ui-router/core/commit/5b58566))
+
+
+### Features
+
+* **TargetState:** Add builder methods .withState, .withParams, and .withOptions ([6b93142](https://github.com/ui-router/core/commit/6b93142))
+* **TransitionHook:** Add hook registration option `invokeLimit` to limit the number of times a hook is invoked before being auto-deregistered. ([2cb17ef](https://github.com/ui-router/core/commit/2cb17ef))
+
+
+
 ## `@uirouter/react` 0.5.2 (2017-09-23)
 [Compare `@uirouter/react` versions 0.5.1 and 0.5.2](https://github.com/ui-router/react/compare/0.5.1...0.5.2)
 
