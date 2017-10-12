@@ -9,6 +9,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
+    "inlineSources": true,
     "declaration": true,
     "jsx": "react",
     "typeRoots": ["./node_modules/@types"],
