@@ -1,3 +1,14 @@
+## 0.5.4 (2017-10-17)
+[Compare `@uirouter/react` versions 0.5.3 and 0.5.4](https://github.com/ui-router/react/compare/0.5.3...0.5.4)
+
+
+### Updated `@uirouter/core` from 5.0.10 to 5.0.11
+[Compare `@uirouter/core` versions 5.0.10 and 5.0.11](https://github.com/ui-router/core/compare/5.0.10...5.0.11)
+
+### Bug Fixes
+
+* **ie9:** make console.bind work in ie9 ([#85](https://github.com/ui-router/core/issues/85)) ([318214b](https://github.com/ui-router/core/commit/318214b))
+
 ## 0.5.3 (2017-10-07)
 [Compare `@uirouter/react` versions 0.5.2 and 0.5.3](https://github.com/ui-router/react/compare/0.5.2...0.5.3)
 
