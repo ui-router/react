@@ -16,7 +16,7 @@ routing framework for [React](https://facebook.github.io/react/).
 
 **[View on Github](http://github.com/ui-router/react) |**
 **[View ui-router-core on Github](http://github.com/ui-router/core) |**
-**[Tutorials](https://ui-router.github.io/react/tutorials/) |**
+**[Tutorials](https://ui-router.github.io/react/tutorial/) |**
 **[Guides](https://ui-router.github.io/guide) |**
 **[Sample App](http://ui-router.github.io/resources/sampleapp/)**
   
