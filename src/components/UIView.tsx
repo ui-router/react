@@ -154,10 +154,16 @@ export class UIView extends Component<UIViewProps, UIViewState> {
       this.uiViewAddress &&
       this.uiViewAddress.context &&
       this.uiViewAddress.context.name;
-    props.ref = c => {
-      this.componentInstance = c;
-      this.registerUiCanExitHook(stateName);
-    };
+
+    // only class components can implement the
+    // uiCanExit hook and ref doesn't work on
+    // stateless function components
+    if(typeof component !== 'string' && !!component.prototype.render) {
+      props.ref = c => {
+        this.componentInstance = c;
+        this.registerUiCanExitHook(stateName);
+      };
+    }
 
     let child =
       !loaded && isValidElement(children)
