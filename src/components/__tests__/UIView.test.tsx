@@ -128,6 +128,7 @@ describe('<UIView>', () => {
         </UIRouter>,
       );
       return router.stateService.go('__state').then(() => {
+        wrapper.update();
         expect(wrapper.find(Comp).props().resolves).not.toBeUndefined();
         expect(wrapper.find(Comp).props().transition).not.toBeUndefined();
       });
@@ -147,6 +148,7 @@ describe('<UIView>', () => {
         </UIRouter>,
       );
       return router.stateService.go('__state').then(() => {
+        wrapper.update();
         expect(wrapper.find(Comp).props().resolves.foo).toBe('bar');
       });
     });
@@ -256,7 +258,7 @@ describe('<UIView>', () => {
           {props.show ? <UIView /> : <div />}
         </UIRouter>;
       const wrapper = mount(<Component show={true} />);
-      let stub = sinon.stub(wrapper.find(UIView).get(0), 'deregister');
+      let stub = sinon.stub(wrapper.find(UIView).at(0).instance(), 'deregister');
       wrapper.setProps({show: false});
       expect(stub.calledOnce).toBe(true);
     });

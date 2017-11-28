@@ -107,6 +107,7 @@ describe('<UISrefActive>', () => {
       </UIRouter>,
     );
     return router.stateService.go('simple').then(() => {
+      wrapper.update();
       const props = wrapper.find('a').props();
       expect(typeof props.onClick).toBe('function');
       expect(props.href.includes('/child1')).toBe(true);
@@ -122,12 +123,14 @@ describe('<UISrefActive>', () => {
     return router.stateService
       .go('parent.child1')
       .then(() => {
+        wrapper.update();
         const activeLink = wrapper.find('a.active');
         expect(activeLink.length).toBe(1);
         expect(activeLink.props().href.includes('/child1')).toBe(true);
         return router.stateService.go('parent.child2');
       })
       .then(() => {
+        wrapper.update();
         const activeLink = wrapper.find('a.active');
         expect(activeLink.length).toBe(1);
         expect(activeLink.props().href.includes('/child2')).toBe(true);
@@ -145,6 +148,7 @@ describe('<UISrefActive>', () => {
       </UIRouter>,
     );
     return router.stateService.go('throw').then(() => {
+      wrapper.update();
       expect(spy.called).toBe(true);
     });
   });
@@ -159,11 +163,13 @@ describe('<UISrefActive>', () => {
     return router.stateService
       .go('simple')
       .then(() => {
-        node = wrapper.find(UISrefActive).get(0);
-        spy = sinon.spy(node, 'deregister');
+        wrapper.update();
+        node = wrapper.find(UISrefActive).at(0);
+        spy = sinon.spy(node.instance(), 'deregister');
         return router.stateService.go('simple2');
       })
       .then(() => {
+        wrapper.update();
         expect(spy.called).toBe(true);
       });
   });
@@ -184,11 +190,13 @@ describe('<UISrefActive>', () => {
     return router.stateService
       .go('withParams', {param: 5})
       .then(() => {
+        wrapper.update();
         const activeLink = wrapper.find('a.active');
         expect(activeLink.length).toBe(1);
         return router.stateService.go('withParams', {param: 3});
       })
       .then(() => {
+        wrapper.update();
         const activeLink = wrapper.find('a.active');
         expect(activeLink.length).toBe(0);
       });
@@ -204,9 +212,9 @@ describe('<UISrefActive>', () => {
         </UISrefActive>
       </UIRouter>,
     );
-    let node = wrapper.find(UISrefActive).node;
-    expect(node.context.parentUIViewAddress).toBeUndefined();
-    expect(node.states[0].state.name).toBe('parent.child1');
+    let node = wrapper.find(UISrefActive).at(0);
+    expect(node.instance().context.parentUIViewAddress).toBeUndefined();
+    expect(node.instance().states[0].state.name).toBe('parent.child1');
   });
 
   it('works with multiple <UISref> children', () => {
@@ -227,9 +235,9 @@ describe('<UISrefActive>', () => {
         </UISrefActive>
       </UIRouter>,
     );
-    let node = wrapper.find(UISrefActive).node;
-    expect(node.context.parentUIViewAddress).toBeUndefined();
-    expect(node.states.length).toBe(3);
+    const node = wrapper.find(UISrefActive).at(0);
+    expect(node.instance().context.parentUIViewAddress).toBeUndefined();
+    expect(node.instance().states.length).toBe(3);
   });
 
   it("removes active state of UISref when it's unmounted", () => {
@@ -244,10 +252,10 @@ describe('<UISrefActive>', () => {
         </UISrefActive>
       </UIRouter>;
     const wrapper = mount(<Comp show={true} />);
-    const node = wrapper.find(UISrefActive).get(0);
-    expect(node.states.length).toBe(1);
+    const node = wrapper.find(UISrefActive).at(0);
+    expect(node.instance().states.length).toBe(1);
     wrapper.setProps({show: false});
-    expect(node.states.length).toBe(0);
+    expect(node.instance().states.length).toBe(0);
   });
 
   it('checks for exact state match when exact prop is provided', () => {
@@ -279,10 +287,12 @@ describe('<UISrefActive>', () => {
     return router.stateService
       .go('_parent._child')
       .then(() => {
+        wrapper.update();
         expect(wrapper.find('a.active').length).toBe(1);
         return router.stateService.go('_parent');
       })
       .then(() => {
+        wrapper.update();
         expect(wrapper.find('a.active').length).toBe(2);
       });
   });

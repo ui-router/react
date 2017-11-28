@@ -47,6 +47,7 @@ describe('<UISref>', () => {
       </UIRouter>,
     );
     return router.stateService.go('state').then(() => {
+      wrapper.update();
       const props = wrapper.find('a').props();
       expect(typeof props.onClick).toBe('function');
       expect(props.href.includes('/state2')).toBe(true);
@@ -63,12 +64,14 @@ describe('<UISref>', () => {
     return router.stateService
       .go('state')
       .then(() => {
-        const uiSref = wrapper.find(UISref).nodes[0];
+        wrapper.update();
+        const uiSref = wrapper.find(UISref).at(0);
         expect(wrapper.html()).toBe('<a href="/state2" class="">state2</a>');
-        spy = sinon.spy(uiSref, 'deregister');
+        spy = sinon.spy(uiSref.instance(), 'deregister');
         return router.stateService.go('state2');
       })
       .then(() => {
+        wrapper.update();
         expect(spy.calledOnce).toBe(true);
       });
   });
@@ -86,6 +89,7 @@ describe('<UISref>', () => {
       </UIRouter>,
     );
     return router.stateService.go('state').then(() => {
+      wrapper.update();
       const link = wrapper.find('a');
       const props = link.props();
       expect(typeof props.onClick).toBe('function');
@@ -103,7 +107,8 @@ describe('<UISref>', () => {
       </UIRouter>,
     );
     return router.stateService.go('state').then(() => {
-      let stub = sinon.stub(wrapper.node.router.stateService, 'go');
+      wrapper.update();
+      let stub = sinon.stub(wrapper.instance().router.stateService, 'go');
       const link = wrapper.find('a');
       link.simulate('click');
       link.simulate('click', {button: 1});
@@ -122,8 +127,8 @@ describe('<UISref>', () => {
       </UIRouter>,
     );
     expect(
-      wrapper.find(UISref).node.context.parentUIViewAddress,
+      wrapper.find(UISref).instance().context.parentUIViewAddress,
     ).toBeUndefined();
-    expect(wrapper.find(UISref).node.getOptions().relative.name).toBe('');
+    expect(wrapper.find(UISref).instance().getOptions().relative.name).toBe('');
   });
 });

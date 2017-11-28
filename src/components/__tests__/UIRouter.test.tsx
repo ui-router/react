@@ -38,7 +38,7 @@ describe('<UIRouter>', () => {
         <Child />
       </UIRouter>,
     );
-    expect(wrapper.find(Child).node.context.router).toBeDefined();
+    expect(wrapper.find(Child).instance().context.router).toBeDefined();
   });
 
   it('accepts an instance via prop', () => {
@@ -50,6 +50,6 @@ describe('<UIRouter>', () => {
         <Child />
       </UIRouter>,
     );
-    expect(wrapper.find(Child).node.context.router.__TEST__).toBe(true);
+    expect(wrapper.find(Child).instance().context.router.__TEST__).toBe(true);
   });
 });

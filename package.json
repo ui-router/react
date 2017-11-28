@@ -45,7 +45,7 @@
   },
   "peerDependencies": {
     "prop-types": "^15.5.8",
-    "react": "^15.0.0 || ^16.0.0-alpha || 16.0.0-rc.2"
+    "react": "^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
     "@types/classnames": "0.0.31",
@@ -62,13 +62,14 @@
     "chalk": "^2.0.1",
     "conventional-changelog-cli": "1.1.1",
     "cross-env": "^4.0.0",
-    "enzyme": "^2.8.2",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
     "glob": "^7.1.2",
     "jest": "^20.0.3",
     "prettier": "^1.5.2",
     "prop-types": "^15.5.10",
-    "react": "15.6.1",
-    "react-dom": "15.6.1",
+    "react": "16.1.1",
+    "react-dom": "16.1.1",
     "react-test-renderer": "^15.3.1",
     "readline-sync": "^1.4.7",
     "replace-in-file": "^2.0.3",
@@ -86,6 +87,7 @@
     "webpack-dev-server": "^2.8.1"
   },
   "jest": {
+    "setupFiles": ["../jest.setup.js"],
     "rootDir": "src",
     "transform": {
       ".(ts|tsx)": "<rootDir>/../node_modules/ts-jest/preprocessor.js"
