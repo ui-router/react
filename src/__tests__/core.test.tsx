@@ -27,4 +27,11 @@ describe('UIRouterReact class', () => {
     expect(stub1.calledOnce).toBe(true);
     expect(stub2.calledOnce).toBe(true);
   });
+
+  it('should throw if \`start\` is called more than once', () => {
+    expect(() => {
+      router.start();
+      router.start();
+    }).toThrow();
+  });
 });

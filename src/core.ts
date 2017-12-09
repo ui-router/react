@@ -22,6 +22,13 @@ import {ReactViewConfig, reactViewsBuilder} from './reactViews';
 let viewConfigFactory = (node: [PathNode], config: ReactViewDeclaration) =>
   new ReactViewConfig(node, config);
 
+/** @hidden */
+const StartMethodCalledMoreThanOnceError = new Error(`
+  The Router.start() method has been called more than once.
+
+  The <UIRouter> component calls start() as final step of the initialization and you shouldn't need to call it manually.
+`);
+
 /**
  * The main UIRouter object
  *
@@ -31,6 +38,7 @@ let viewConfigFactory = (node: [PathNode], config: ReactViewDeclaration) =>
  * This class has references to all the other UIRouter services.
  */
 export class UIRouterReact extends UIRouter {
+  started = false;
   /**
    * Creates a new UIRouter instance
    *
@@ -56,8 +64,14 @@ export class UIRouterReact extends UIRouter {
    * It also performs the initial state synchronization from the URL.
    */
   start(): void {
-    this.urlMatcherFactory.$get();
-    this.urlRouter.listen();
-    this.urlRouter.sync();
+    // Throw error if user calls `start` more than once
+    if (this.started) {
+      throw StartMethodCalledMoreThanOnceError;
+    } else {
+      this.urlMatcherFactory.$get();
+      this.urlRouter.listen();
+      this.urlRouter.sync();
+      this.started = true;
+    }
   }
 }
