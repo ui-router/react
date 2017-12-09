@@ -6,8 +6,7 @@
   "typings": "lib/index.d.ts",
   "jsnext:main": "lib-esm/index.js",
   "scripts": {
-    "test": "jest --watch",
-    "test:ci": "NODE_ENV=production jest  --silent",
+    "test": "NODE_ENV=production jest --silent",
     "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config ./examples/typescript/webpack.config.js --history-api-fallback --content-base examples/typescript",
     "clean": "shx rm -rf _bundles lib lib-esm build",
     "compile": "npm run clean && tsc && tsc -m es6 --outDir lib-esm",

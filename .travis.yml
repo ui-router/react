@@ -2,11 +2,8 @@ language: node_js
 node_js:
   - "6.10"
 
-before_script:
-  - npm install -g jest-cli
-
 script:
-  - npm run test:ci
+  - yarn test
 
 git:
   depth: 10
