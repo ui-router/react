@@ -15,10 +15,15 @@ var config = {
   },
   devtool: 'inline-source-map',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
+        use: [
+          {
+            loader: 'awesome-typescript-loader',
+            query: { configFileName: configFilePath },
+          },
+        ],
         exclude: /(node_modules|__tests__)/,
       },
     ],
