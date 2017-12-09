@@ -1,6 +1,6 @@
 {
   "name": "@uirouter/react",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "State based routing for React",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -86,7 +86,9 @@
     "webpack-dev-server": "^2.8.1"
   },
   "jest": {
-    "setupFiles": ["../jest.setup.js"],
+    "setupFiles": [
+      "../jest.setup.js"
+    ],
     "rootDir": "src",
     "transform": {
       ".(ts|tsx)": "<rootDir>/../node_modules/ts-jest/preprocessor.js"

@@ -1,3 +1,16 @@
+## 0.5.5 (2017-12-09)
+[Compare `@uirouter/react` versions 0.5.4 and 0.5.5](https://github.com/ui-router/react/compare/0.5.4...0.5.5)
+
+### Bug Fixes
+
+* **UIView:** apply exit hook only on class components ([660e317](https://github.com/ui-router/react/commit/660e317)), closes [#71](https://github.com/ui-router/react/issues/71)
+
+
+### Features
+
+* move prop-types from peerDependencies to dependecies ([5c6b2dd](https://github.com/ui-router/react/commit/5c6b2dd)), closes [#70](https://github.com/ui-router/react/issues/70)
+* **UIRouterReact:** throw if `start` is called more than once ([d48c9fb](https://github.com/ui-router/react/commit/d48c9fb)), closes [#65](https://github.com/ui-router/react/issues/65)
+
 ## 0.5.4 (2017-10-17)
 [Compare `@uirouter/react` versions 0.5.3 and 0.5.4](https://github.com/ui-router/react/compare/0.5.3...0.5.4)
 
