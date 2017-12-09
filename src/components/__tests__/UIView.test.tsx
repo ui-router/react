@@ -58,7 +58,6 @@ describe('<UIView>', () => {
     beforeEach(() => {
       router = new UIRouterReact();
       router.plugin(memoryLocationPlugin);
-      router.start();
     });
 
     it('renders an empty <div>', () => {
@@ -102,7 +101,6 @@ describe('<UIView>', () => {
       router.plugin(servicesPlugin);
       router.plugin(memoryLocationPlugin);
       states.forEach(state => router.stateRegistry.register(state));
-      router.start();
     });
 
     it('renders its State Component', () => {
@@ -121,7 +119,6 @@ describe('<UIView>', () => {
     it('injects the right props', () => {
       const Comp = () => <span>component</span>;
       router.stateRegistry.register({name: '__state', component: Comp});
-      router.start();
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
@@ -141,7 +138,6 @@ describe('<UIView>', () => {
         component: Comp,
         resolve: [{token: 'foo', resolveFn: () => 'bar'}],
       });
-      router.start();
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
@@ -234,7 +230,6 @@ describe('<UIView>', () => {
       router.stateRegistry.register(
         {name: 'exit', component: Exit} as ReactStateDeclaration,
       );
-      router.start();
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />

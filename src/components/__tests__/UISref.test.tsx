@@ -37,7 +37,6 @@ describe('<UISref>', () => {
     router.plugin(servicesPlugin);
     router.plugin(pushStateLocationPlugin);
     states.forEach(state => router.stateRegistry.register(state));
-    router.start();
   });
 
   it('renders its child with injected props', () => {

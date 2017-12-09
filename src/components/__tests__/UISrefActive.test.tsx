@@ -97,7 +97,6 @@ describe('<UISrefActive>', () => {
     router.plugin(pushStateLocationPlugin);
     router.stateService.defaultErrorHandler(() => {});
     states.forEach(state => router.stateRegistry.register(state));
-    router.start();
   });
 
   it('renders its child', () => {
