@@ -246,7 +246,7 @@ export class UIView extends Component<UIViewProps, UIViewState> {
     }
 
     this.uiViewData.config = newConfig;
-    let props = { resolves, transition: trans };
+    let props = { ...resolves, transition: trans };
 
     // attach any style or className to the rendered component
     // specified on the UIView itself
