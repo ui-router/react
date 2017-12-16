@@ -1,7 +1,7 @@
 declare var jest, describe, it, expect, beforeEach;
 
 import * as React from 'react';
-import {shallow, mount, render} from 'enzyme';
+import { shallow, mount, render } from 'enzyme';
 import * as sinon from 'sinon';
 
 import {
@@ -16,11 +16,12 @@ import {
 const states = [
   {
     name: 'parent',
-    component: () =>
+    component: () => (
       <div>
         <span>parent</span>
         <UIView />
-      </div>,
+      </div>
+    ),
   },
   {
     name: 'parent.child',
@@ -28,27 +29,29 @@ const states = [
   },
   {
     name: 'namedParent',
-    component: () =>
+    component: () => (
       <div>
         <span>namedParent</span>
         <UIView name="child1" />
         <UIView name="child2" />
-      </div>,
+      </div>
+    ),
   },
   {
     name: 'namedParent.namedChild',
     views: {
       child1: () => <span>child1</span>,
-      child2: {component: () => <span>child2</span>},
+      child2: { component: () => <span>child2</span> },
     },
   },
   {
     name: 'withrenderprop',
-    component: ({foo}) =>
+    component: ({ foo }) => (
       <div>
         <span>withrenderprop</span>
         {foo}
-      </div>,
+      </div>
+    ),
   },
 ];
 
@@ -85,11 +88,11 @@ describe('<UIView>', () => {
       expect(
         mount(
           <UIRouter router={router}>
-            <UIView className="myClass" style={{margin: 5}}>
+            <UIView className="myClass" style={{ margin: 5 }}>
               <span />
             </UIView>
           </UIRouter>,
-        ).contains(<span className="myClass" style={{margin: 5}} />),
+        ).contains(<span className="myClass" style={{ margin: 5 }} />),
       ).toBe(true);
     });
   });
@@ -118,7 +121,7 @@ describe('<UIView>', () => {
 
     it('injects the right props', () => {
       const Comp = () => <span>component</span>;
-      router.stateRegistry.register({name: '__state', component: Comp});
+      router.stateRegistry.register({ name: '__state', component: Comp });
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
@@ -136,7 +139,7 @@ describe('<UIView>', () => {
       router.stateRegistry.register({
         name: '__state',
         component: Comp,
-        resolve: [{token: 'foo', resolveFn: () => 'bar'}],
+        resolve: [{ token: 'foo', resolveFn: () => 'bar' }],
       });
       const wrapper = mount(
         <UIRouter router={router}>
@@ -224,12 +227,14 @@ describe('<UIView>', () => {
       router = new UIRouterReact();
       router.plugin(servicesPlugin);
       router.plugin(memoryLocationPlugin);
-      router.stateRegistry.register(
-        {name: '__state', component: Comp} as ReactStateDeclaration,
-      );
-      router.stateRegistry.register(
-        {name: 'exit', component: Exit} as ReactStateDeclaration,
-      );
+      router.stateRegistry.register({
+        name: '__state',
+        component: Comp,
+      } as ReactStateDeclaration);
+      router.stateRegistry.register({
+        name: 'exit',
+        component: Exit,
+      } as ReactStateDeclaration);
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
@@ -248,13 +253,18 @@ describe('<UIView>', () => {
     });
 
     it('deregisters the UIView when unmounted', () => {
-      const Component = props =>
-        <UIRouter router={router}>
-          {props.show ? <UIView /> : <div />}
-        </UIRouter>;
+      const Component = props => (
+        <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>
+      );
       const wrapper = mount(<Component show={true} />);
-      let stub = sinon.stub(wrapper.find(UIView).at(0).instance(), 'deregister');
-      wrapper.setProps({show: false});
+      let stub = sinon.stub(
+        wrapper
+          .find(UIView)
+          .at(0)
+          .instance(),
+        'deregister',
+      );
+      wrapper.setProps({ show: false });
       expect(stub.calledOnce).toBe(true);
     });
 

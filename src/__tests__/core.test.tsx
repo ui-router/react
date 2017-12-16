@@ -1,11 +1,11 @@
 declare var jest, describe, it, expect, beforeEach, afterEach;
 
 import * as React from 'react';
-import {shallow, mount, render} from 'enzyme';
+import { shallow, mount, render } from 'enzyme';
 import * as sinon from 'sinon';
 
-import {UIRouterReact, UIView, UISref, ReactStateDeclaration} from '../index';
-import {services, UrlMatcher} from 'ui-router-core';
+import { UIRouterReact, UIView, UISref, ReactStateDeclaration } from '../index';
+import { services, UrlMatcher } from 'ui-router-core';
 
 describe('UIRouterReact class', () => {
   let router;
@@ -28,7 +28,7 @@ describe('UIRouterReact class', () => {
     expect(stub2.calledOnce).toBe(true);
   });
 
-  it('should throw if \`start\` is called more than once', () => {
+  it('should throw if `start` is called more than once', () => {
     expect(() => {
       router.start();
       router.start();

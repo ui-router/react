@@ -3,12 +3,12 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import {Component, Children} from 'react';
+import { Component, Children } from 'react';
 import * as PropTypes from 'prop-types';
 
-import {UIRouterPlugin, servicesPlugin} from '@uirouter/core';
+import { UIRouterPlugin, servicesPlugin } from '@uirouter/core';
 
-import {UIRouterReact, ReactStateDeclaration} from '../index';
+import { UIRouterReact, ReactStateDeclaration } from '../index';
 
 export interface UIRouterProps {
   plugins?: any[]; // should fix type
@@ -67,8 +67,9 @@ export class UIRouter extends Component<UIRouterProps, UIRouterState> {
       this.router.plugin(servicesPlugin);
       props.plugins.forEach(plugin => this.router.plugin(plugin));
       if (props.config) props.config(this.router);
-      (props.states || [])
-        .forEach(state => this.router.stateRegistry.register(state));
+      (props.states || []).forEach(state =>
+        this.router.stateRegistry.register(state),
+      );
     } else {
       throw InstanceOrPluginsMissingError;
     }
@@ -76,7 +77,7 @@ export class UIRouter extends Component<UIRouterProps, UIRouterState> {
   }
 
   getChildContext() {
-    return {router: this.router};
+    return { router: this.router };
   }
 
   render() {

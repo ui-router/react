@@ -1,7 +1,7 @@
 declare var jest, describe, it, expect, beforeEach;
 
 import * as React from 'react';
-import {shallow, mount, render} from 'enzyme';
+import { shallow, mount, render } from 'enzyme';
 import * as sinon from 'sinon';
 
 import {
@@ -18,10 +18,11 @@ const states = [
   {
     name: 'state',
     url: '',
-    component: () =>
+    component: () => (
       <UISref to="state2">
         <a>state2</a>
-      </UISref>,
+      </UISref>
+    ),
   },
   {
     name: 'state2',
@@ -78,7 +79,7 @@ describe('<UISref>', () => {
   it('triggers a transition to target state', () => {
     const mock = jest.fn();
     router.stateService.defaultErrorHandler(() => {});
-    router.transitionService.onBefore({to: 'state2'}, () => {
+    router.transitionService.onBefore({ to: 'state2' }, () => {
       mock(true);
       return true;
     });
@@ -110,9 +111,9 @@ describe('<UISref>', () => {
       let stub = sinon.stub(wrapper.instance().router.stateService, 'go');
       const link = wrapper.find('a');
       link.simulate('click');
-      link.simulate('click', {button: 1});
-      link.simulate('click', {metaKey: true});
-      link.simulate('click', {ctrlKey: true});
+      link.simulate('click', { button: 1 });
+      link.simulate('click', { metaKey: true });
+      link.simulate('click', { ctrlKey: true });
       expect(stub.calledOnce).toBe(true);
     });
   });
@@ -128,6 +129,11 @@ describe('<UISref>', () => {
     expect(
       wrapper.find(UISref).instance().context.parentUIViewAddress,
     ).toBeUndefined();
-    expect(wrapper.find(UISref).instance().getOptions().relative.name).toBe('');
+    expect(
+      wrapper
+        .find(UISref)
+        .instance()
+        .getOptions().relative.name,
+    ).toBe('');
   });
 });

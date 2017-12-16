@@ -13,17 +13,17 @@ import {
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
-import {extend, TransitionOptions} from '@uirouter/core';
+import { extend, TransitionOptions } from '@uirouter/core';
 
-import {UIRouterReact} from '../index';
-import {UIViewAddress} from './UIView';
+import { UIRouterReact } from '../index';
+import { UIViewAddress } from './UIView';
 
 let classNames = _classNames;
 
 export interface UISrefProps {
   children?: any;
   to: string;
-  params?: {[key: string]: any};
+  params?: { [key: string]: any };
   options?: TransitionOptions;
   className?: string;
 }
@@ -67,7 +67,7 @@ export class UISref extends Component<UISrefProps, any> {
     let parent: UIViewAddress = this.context['parentUIViewAddress'];
     let parentContext =
       (parent && parent.context) || this.context['router'].stateRegistry.root();
-    let defOpts = {relative: parentContext, inherit: true};
+    let defOpts = { relative: parentContext, inherit: true };
     return extend(defOpts, this.props.options || {});
   };
 

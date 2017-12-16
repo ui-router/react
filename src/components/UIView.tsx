@@ -29,8 +29,8 @@ import {
   extend,
 } from '@uirouter/core';
 
-import {UIRouterReact} from '../index';
-import {ReactViewConfig} from '../reactViews';
+import { UIRouterReact } from '../index';
+import { ReactViewConfig } from '../reactViews';
 
 /** @internalapi */
 let id = 0;
@@ -146,8 +146,8 @@ export class UIView extends Component<UIViewProps, UIViewState> {
   };
 
   render() {
-    let {children, render} = this.props;
-    let {component, props, loaded} = this.state;
+    let { children, render } = this.props;
+    let { component, props, loaded } = this.state;
     // register reference of child component
     // register new hook right after component has been rendered
     let stateName: string =
@@ -158,7 +158,7 @@ export class UIView extends Component<UIViewProps, UIViewState> {
     // only class components can implement the
     // uiCanExit hook and ref doesn't work on
     // stateless function components
-    if(typeof component !== 'string' && !!component.prototype.render) {
+    if (typeof component !== 'string' && !!component.prototype.render) {
       props.ref = c => {
         this.componentInstance = c;
         this.registerUiCanExitHook(stateName);
@@ -194,7 +194,7 @@ export class UIView extends Component<UIViewProps, UIViewState> {
     // Check the context for the parent UIView's fqn and State
     let parent: UIViewAddress = this.context['parentUIViewAddress'];
     // Not found in context, this is a root UIView
-    parent = parent || {fqn: '', context: router.stateRegistry.root()};
+    parent = parent || { fqn: '', context: router.stateRegistry.root() };
 
     let name = this.props.name || '$default';
 
@@ -208,11 +208,11 @@ export class UIView extends Component<UIViewProps, UIViewState> {
       config: undefined,
     } as ActiveUIView;
 
-    this.uiViewAddress = {fqn: this.uiViewData.fqn, context: undefined};
+    this.uiViewAddress = { fqn: this.uiViewData.fqn, context: undefined };
 
     this.deregister = router.viewService.registerUIView(this.uiViewData);
 
-    this.setState({id: this.uiViewData.id});
+    this.setState({ id: this.uiViewData.id });
   }
 
   componentWillUnmount() {
@@ -233,7 +233,7 @@ export class UIView extends Component<UIViewProps, UIViewState> {
     if (newConfig) {
       let context: ViewContext =
         newConfig.viewDecl && newConfig.viewDecl.$context;
-      this.uiViewAddress = {fqn: this.uiViewAddress.fqn, context};
+      this.uiViewAddress = { fqn: this.uiViewAddress.fqn, context };
 
       let ctx = new ResolveContext(newConfig.path);
       trans = ctx.getResolvable(Transition).data;
@@ -246,7 +246,7 @@ export class UIView extends Component<UIViewProps, UIViewState> {
     }
 
     this.uiViewData.config = newConfig;
-    let props = {resolves, transition: trans};
+    let props = { resolves, transition: trans };
 
     // attach any style or className to the rendered component
     // specified on the UIView itself
@@ -266,7 +266,7 @@ export class UIView extends Component<UIViewProps, UIViewState> {
 
   registerUiCanExitHook(stateName: string) {
     typeof this.removeHook === 'function' && this.removeHook();
-    let criteria = {exiting: stateName};
+    let criteria = { exiting: stateName };
     let callback =
       this.componentInstance &&
       typeof this.componentInstance.uiCanExit === 'function' &&

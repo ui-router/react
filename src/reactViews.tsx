@@ -13,7 +13,7 @@ import {
   StateObject,
 } from '@uirouter/core';
 
-import {ReactViewDeclaration} from './interface';
+import { ReactViewDeclaration } from './interface';
 
 /**
  * This is a [[StateBuilder.builder]] function for react `views`.
@@ -30,11 +30,11 @@ export function reactViewsBuilder(state: StateObject) {
   let views = {},
     viewsDefinitionObject;
   if (!state.views) {
-    viewsDefinitionObject = {$default: pick(state, ['component'])};
+    viewsDefinitionObject = { $default: pick(state, ['component']) };
   } else {
     viewsDefinitionObject = map(state.views, (val: any, key) => {
       if (val.component) return val;
-      return {component: val};
+      return { component: val };
     });
   }
 

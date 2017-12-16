@@ -64,9 +64,10 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
       );
     }
     // register callback for state change
-    this.deregister = this.context[
-      'router'
-    ].transitionService.onSuccess({}, () => this.updateActiveClasses());
+    this.deregister = this.context['router'].transitionService.onSuccess(
+      {},
+      () => this.updateActiveClasses(),
+    );
   }
 
   componentWillUnmount() {

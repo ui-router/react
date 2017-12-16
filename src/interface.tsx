@@ -143,7 +143,7 @@ export interface ReactStateDeclaration
    * if _any view_ for a state is declared in the `views` object, then _all of the state's views_ must be defined in
    * the `views` object.
    */
-  views?: {[key: string]: ReactViewDeclaration};
+  views?: { [key: string]: ReactViewDeclaration };
 }
 
 /**
@@ -157,7 +157,7 @@ export interface ReactViewDeclaration extends _ViewDeclaration {
    *
    * The React Component which will be used for this view.
    *
-   * Resolve data can be provided to the component using props. 
+   * Resolve data can be provided to the component using props.
    *
    * TODO: document react shorthand, like ng1's shorthand: inside a "views:" block, a bare string `"foo"` is shorthand for `{ component: "foo" }`
    *

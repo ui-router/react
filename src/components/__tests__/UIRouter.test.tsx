@@ -2,7 +2,7 @@ declare var jest, describe, it, expect, beforeEach;
 
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import {shallow, mount, render} from 'enzyme';
+import { shallow, mount, render } from 'enzyme';
 import * as sinon from 'sinon';
 
 import {

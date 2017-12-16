@@ -1,7 +1,7 @@
 declare var jest, describe, it, expect, beforeEach;
 
 import * as React from 'react';
-import {shallow, mount, render} from 'enzyme';
+import { shallow, mount, render } from 'enzyme';
 import * as sinon from 'sinon';
 
 import {
@@ -19,14 +19,15 @@ var states = [
   {
     name: 'simple',
     url: '',
-    component: () =>
+    component: () => (
       <div>
         <UISrefActive class="active">
           <UISref to="parent.child1">
             <a>child1</a>
           </UISref>
         </UISrefActive>
-      </div>,
+      </div>
+    ),
   },
   {
     name: 'simple2',
@@ -36,7 +37,7 @@ var states = [
   {
     name: 'parent',
     url: '',
-    component: () =>
+    component: () => (
       <div>
         <UISrefActive class="active">
           <UISref to="parent.child1">
@@ -49,7 +50,8 @@ var states = [
           </UISref>
         </UISrefActive>
         <UIView />
-      </div>,
+      </div>
+    ),
   },
   {
     name: 'parent.child1',
@@ -75,12 +77,13 @@ var states = [
   {
     name: 'throw',
     url: '/throw',
-    component: () =>
+    component: () => (
       <UISrefActive class="active">
         <UISref to={5 as any}>
           <a>child1</a>
         </UISref>
-      </UISrefActive>,
+      </UISrefActive>
+    ),
   },
   {
     name: 'withParams',
@@ -178,7 +181,7 @@ describe('<UISrefActive>', () => {
       <UIRouter router={router}>
         <div>
           <UISrefActive class="active">
-            <UISref to="withParams" params={{param: 5}}>
+            <UISref to="withParams" params={{ param: 5 }}>
               <a>child1</a>
             </UISref>
           </UISrefActive>
@@ -187,12 +190,12 @@ describe('<UISrefActive>', () => {
       </UIRouter>,
     );
     return router.stateService
-      .go('withParams', {param: 5})
+      .go('withParams', { param: 5 })
       .then(() => {
         wrapper.update();
         const activeLink = wrapper.find('a.active');
         expect(activeLink.length).toBe(1);
-        return router.stateService.go('withParams', {param: 3});
+        return router.stateService.go('withParams', { param: 3 });
       })
       .then(() => {
         wrapper.update();
@@ -240,20 +243,23 @@ describe('<UISrefActive>', () => {
   });
 
   it("removes active state of UISref when it's unmounted", () => {
-    const Comp = props =>
+    const Comp = props => (
       <UIRouter router={router}>
         <UISrefActive class="active">
-          {props.show
-            ? <UISref to="parent.child1">
-                <a>child1</a>
-              </UISref>
-            : <div />}
+          {props.show ? (
+            <UISref to="parent.child1">
+              <a>child1</a>
+            </UISref>
+          ) : (
+            <div />
+          )}
         </UISrefActive>
-      </UIRouter>;
+      </UIRouter>
+    );
     const wrapper = mount(<Comp show={true} />);
     const node = wrapper.find(UISrefActive).at(0);
     expect(node.instance().states.length).toBe(1);
-    wrapper.setProps({show: false});
+    wrapper.setProps({ show: false });
     expect(node.instance().states.length).toBe(0);
   });
 
