@@ -11,6 +11,7 @@ import {
   ReactStateDeclaration,
   memoryLocationPlugin,
   servicesPlugin,
+  TransitionPropCollisionError,
 } from '../../index';
 
 const states = [
@@ -154,6 +155,25 @@ describe('<UIView>', () => {
         wrapper.update();
         expect(wrapper.find(Comp).props().foo).toBe('bar');
       });
+    });
+
+    it('throws if a resolve uses the token `transition`', async () => {
+      const Comp = () => <span>component</span>;
+      router.stateRegistry.register({
+        name: '__state',
+        component: Comp,
+        resolve: [{ token: 'transition', resolveFn: () => null }],
+      });
+
+      await router.stateService.go('__state');
+
+      expect(() => {
+        const wrapper = mount(
+          <UIRouter router={router}>
+            <UIView />
+          </UIRouter>,
+        );
+      }).toThrow(TransitionPropCollisionError);
     });
 
     it('renders nested State Components', () => {
