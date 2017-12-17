@@ -15,5 +15,5 @@ export * from './interface';
 export * from './reactViews';
 export * from './components/components';
 
-export { UIRouterReact } from './core';
+export { UIRouterReact, StartMethodCalledMoreThanOnceError } from './core';
 export { UIRouter } from './components/components';

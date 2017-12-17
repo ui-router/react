@@ -23,7 +23,7 @@ let viewConfigFactory = (node: [PathNode], config: ReactViewDeclaration) =>
   new ReactViewConfig(node, config);
 
 /** @hidden */
-const StartMethodCalledMoreThanOnceError = new Error(`
+export const StartMethodCalledMoreThanOnceError = new Error(`
   The Router.start() method has been called more than once.
 
   The <UIRouter> component calls start() as final step of the initialization and you shouldn't need to call it manually.
