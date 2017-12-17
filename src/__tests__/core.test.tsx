@@ -4,8 +4,18 @@ import * as React from 'react';
 import { shallow, mount, render } from 'enzyme';
 import * as sinon from 'sinon';
 
-import { UIRouterReact, UIView, UISref, ReactStateDeclaration } from '../index';
-import { services, UrlMatcher } from 'ui-router-core';
+import {
+  UIRouterReact,
+  UIView,
+  UISref,
+  ReactStateDeclaration,
+  StartMethodCalledMoreThanOnceError,
+} from '../index';
+import {
+  servicesPlugin,
+  memoryLocationPlugin,
+  UrlMatcher,
+} from '@uirouter/core';
 
 describe('UIRouterReact class', () => {
   let router;
@@ -13,6 +23,8 @@ describe('UIRouterReact class', () => {
 
   beforeEach(() => {
     router = new UIRouterReact();
+    router.plugin(servicesPlugin);
+    router.plugin(memoryLocationPlugin);
     sandbox = sinon.sandbox.create();
   });
 
@@ -32,6 +44,6 @@ describe('UIRouterReact class', () => {
     expect(() => {
       router.start();
       router.start();
-    }).toThrow();
+    }).toThrow(StartMethodCalledMoreThanOnceError);
   });
 });

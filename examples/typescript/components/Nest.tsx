@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { UIViewInjectedProps } from '@uirouter/react';
 
-export class Nest extends React.Component<UIViewInjectedProps, any> {
+interface NextInjectedProps extends UIViewInjectedProps {
+  foo: string;
+}
+
+export class Nest extends React.Component<NextInjectedProps, any> {
   uiCanExit = () => {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -11,7 +15,7 @@ export class Nest extends React.Component<UIViewInjectedProps, any> {
   };
 
   render() {
-    const { foo } = this.props.resolves;
+    const { foo } = this.props;
     return (
       <div>
         <h2>Nested</h2>

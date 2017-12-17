@@ -107,6 +107,11 @@ export interface UIViewState {
   props?: any;
 }
 
+export const TransitionPropCollisionError = new Error(
+  '`transition` cannot be used as resolve token. ' +
+    'Please rename your resolve to avoid conflicts with the router transition.',
+);
+
 export class UIView extends Component<UIViewProps, UIViewState> {
   // This object contains all the metadata for this UIView
   uiViewData: ActiveUIView;
@@ -237,16 +242,20 @@ export class UIView extends Component<UIViewProps, UIViewState> {
 
       let ctx = new ResolveContext(newConfig.path);
       trans = ctx.getResolvable(Transition).data;
-      let stringTokens = trans
+      let stringTokens: string[] = trans
         .getResolveTokens()
         .filter(x => typeof x === 'string');
       resolves = stringTokens
         .map(token => [token, trans.injector().get(token)])
         .reduce(applyPairs, {});
+
+      if (stringTokens.indexOf('transition') !== -1) {
+        throw TransitionPropCollisionError;
+      }
     }
 
     this.uiViewData.config = newConfig;
-    let props = { resolves, transition: trans };
+    let props = { ...resolves, transition: trans };
 
     // attach any style or className to the rendered component
     // specified on the UIView itself

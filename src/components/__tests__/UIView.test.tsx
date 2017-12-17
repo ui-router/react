@@ -11,6 +11,7 @@ import {
   ReactStateDeclaration,
   memoryLocationPlugin,
   servicesPlugin,
+  TransitionPropCollisionError,
 } from '../../index';
 
 const states = [
@@ -121,7 +122,11 @@ describe('<UIView>', () => {
 
     it('injects the right props', () => {
       const Comp = () => <span>component</span>;
-      router.stateRegistry.register({ name: '__state', component: Comp });
+      router.stateRegistry.register({
+        name: '__state',
+        component: Comp,
+        resolve: [{ resolveFn: () => true, token: 'myresolve' }],
+      });
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
@@ -129,7 +134,7 @@ describe('<UIView>', () => {
       );
       return router.stateService.go('__state').then(() => {
         wrapper.update();
-        expect(wrapper.find(Comp).props().resolves).not.toBeUndefined();
+        expect(wrapper.find(Comp).props().myresolve).not.toBeUndefined();
         expect(wrapper.find(Comp).props().transition).not.toBeUndefined();
       });
     });
@@ -148,8 +153,27 @@ describe('<UIView>', () => {
       );
       return router.stateService.go('__state').then(() => {
         wrapper.update();
-        expect(wrapper.find(Comp).props().resolves.foo).toBe('bar');
+        expect(wrapper.find(Comp).props().foo).toBe('bar');
       });
+    });
+
+    it('throws if a resolve uses the token `transition`', async () => {
+      const Comp = () => <span>component</span>;
+      router.stateRegistry.register({
+        name: '__state',
+        component: Comp,
+        resolve: [{ token: 'transition', resolveFn: () => null }],
+      });
+
+      await router.stateService.go('__state');
+
+      expect(() => {
+        const wrapper = mount(
+          <UIRouter router={router}>
+            <UIView />
+          </UIRouter>,
+        );
+      }).toThrow(TransitionPropCollisionError);
     });
 
     it('renders nested State Components', () => {
