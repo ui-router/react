@@ -1,21 +1,8 @@
 declare var jest, describe, it, expect, beforeEach, afterEach;
 
-import * as React from 'react';
-import { shallow, mount, render } from 'enzyme';
-import * as sinon from 'sinon';
+import { servicesPlugin, memoryLocationPlugin } from '@uirouter/core';
 
-import {
-  UIRouterReact,
-  UIView,
-  UISref,
-  ReactStateDeclaration,
-  StartMethodCalledMoreThanOnceError,
-} from '../index';
-import {
-  servicesPlugin,
-  memoryLocationPlugin,
-  UrlMatcher,
-} from '@uirouter/core';
+import { UIRouterReact, StartMethodCalledMoreThanOnceError } from '../index';
 
 describe('UIRouterReact class', () => {
   let router;
@@ -25,19 +12,14 @@ describe('UIRouterReact class', () => {
     router = new UIRouterReact();
     router.plugin(servicesPlugin);
     router.plugin(memoryLocationPlugin);
-    sandbox = sinon.sandbox.create();
-  });
-
-  afterEach(() => {
-    sandbox.restore();
   });
 
   it('starts the router with start() method', () => {
-    let stub1 = sandbox.stub(router.urlRouter, 'listen');
-    let stub2 = sandbox.stub(router.urlRouter, 'sync');
+    let urlRouterListenSpy = jest.spyOn(router.urlRouter, 'listen');
+    let urlRouterSyncSpy = jest.spyOn(router.urlRouter, 'sync');
     router.start();
-    expect(stub1.calledOnce).toBe(true);
-    expect(stub2.calledOnce).toBe(true);
+    expect(urlRouterListenSpy).toHaveBeenCalled();
+    expect(urlRouterSyncSpy).toHaveBeenCalled();
   });
 
   it('should throw if `start` is called more than once', () => {

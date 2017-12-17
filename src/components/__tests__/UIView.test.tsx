@@ -1,8 +1,7 @@
 declare var jest, describe, it, expect, beforeEach;
 
 import * as React from 'react';
-import { shallow, mount, render } from 'enzyme';
-import * as sinon from 'sinon';
+import { mount } from 'enzyme';
 
 import {
   UIRouterReact,
@@ -120,7 +119,7 @@ describe('<UIView>', () => {
       });
     });
 
-    it('injects the right props', () => {
+    it('injects the right props', async () => {
       const Comp = () => <span>component</span>;
       router.stateRegistry.register({
         name: '__state',
@@ -132,14 +131,13 @@ describe('<UIView>', () => {
           <UIView />
         </UIRouter>,
       );
-      return router.stateService.go('__state').then(() => {
-        wrapper.update();
-        expect(wrapper.find(Comp).props().myresolve).not.toBeUndefined();
-        expect(wrapper.find(Comp).props().transition).not.toBeUndefined();
-      });
+      await router.stateService.go('__state');
+      wrapper.update();
+      expect(wrapper.find(Comp).props().myresolve).not.toBeUndefined();
+      expect(wrapper.find(Comp).props().transition).not.toBeUndefined();
     });
 
-    it('injects custom resolves', () => {
+    it('injects custom resolves', async () => {
       const Comp = () => <span>component</span>;
       router.stateRegistry.register({
         name: '__state',
@@ -151,10 +149,9 @@ describe('<UIView>', () => {
           <UIView />
         </UIRouter>,
       );
-      return router.stateService.go('__state').then(() => {
-        wrapper.update();
-        expect(wrapper.find(Comp).props().foo).toBe('bar');
-      });
+      await router.stateService.go('__state');
+      wrapper.update();
+      expect(wrapper.find(Comp).props().foo).toBe('bar');
     });
 
     it('throws if a resolve uses the token `transition`', async () => {
@@ -176,73 +173,62 @@ describe('<UIView>', () => {
       }).toThrow(TransitionPropCollisionError);
     });
 
-    it('renders nested State Components', () => {
-      return router.stateService.go('parent.child').then(() => {
-        const wrapper = mount(
-          <UIRouter router={router}>
-            <UIView />
-          </UIRouter>,
-        );
-        expect(wrapper.html()).toEqual(
-          `<div><span>parent</span><span>child</span></div>`,
-        );
-      });
-    });
-
-    it('renders multiple nested unmounted <UIView>', () => {
-      return router.stateService.go('namedParent').then(() => {
-        const wrapper = mount(
-          <UIRouter router={router}>
-            <UIView />
-          </UIRouter>,
-        );
-        expect(wrapper.html()).toEqual(
-          `<div><span>namedParent</span><div></div><div></div></div>`,
-        );
-      });
-    });
-
-    it('renders multiple nested mounted <UIView>', () => {
-      return router.stateService.go('namedParent.namedChild').then(() => {
-        const wrapper = mount(
-          <UIRouter router={router}>
-            <UIView />
-          </UIRouter>,
-        );
-        expect(wrapper.html()).toEqual(
-          `<div><span>namedParent</span><span>child1</span><span>child2</span></div>`,
-        );
-      });
-    });
-
-    it('unmounts State Component when changing state', () => {
+    it('renders nested State Components', async () => {
+      await router.stateService.go('parent.child');
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
         </UIRouter>,
       );
-      return router.stateService
-        .go('parent.child')
-        .then(() => {
-          expect(wrapper.html()).toEqual(
-            `<div><span>parent</span><span>child</span></div>`,
-          );
-          return router.stateService.go('parent');
-        })
-        .then(() => {
-          expect(wrapper.html()).toEqual(
-            `<div><span>parent</span><div></div></div>`,
-          );
-        });
+      expect(wrapper.html()).toEqual(
+        `<div><span>parent</span><span>child</span></div>`,
+      );
     });
 
-    it('calls uiCanExit function of its State Component when unmounting', () => {
-      let mock = jest.fn();
+    it('renders multiple nested unmounted <UIView>', async () => {
+      await router.stateService.go('namedParent');
+      const wrapper = mount(
+        <UIRouter router={router}>
+          <UIView />
+        </UIRouter>,
+      );
+      expect(wrapper.html()).toEqual(
+        `<div><span>namedParent</span><div></div><div></div></div>`,
+      );
+    });
+
+    it('renders multiple nested mounted <UIView>', async () => {
+      await router.stateService.go('namedParent.namedChild');
+      const wrapper = mount(
+        <UIRouter router={router}>
+          <UIView />
+        </UIRouter>,
+      );
+      expect(wrapper.html()).toEqual(
+        `<div><span>namedParent</span><span>child1</span><span>child2</span></div>`,
+      );
+    });
+
+    it('unmounts State Component when changing state', async () => {
+      const wrapper = mount(
+        <UIRouter router={router}>
+          <UIView />
+        </UIRouter>,
+      );
+      await router.stateService.go('parent.child');
+      expect(wrapper.html()).toEqual(
+        `<div><span>parent</span><span>child</span></div>`,
+      );
+      await router.stateService.go('parent');
+      expect(wrapper.html()).toEqual(
+        `<div><span>parent</span><div></div></div>`,
+      );
+    });
+
+    it('calls uiCanExit function of its State Component when unmounting', async () => {
+      let uiCanExitSpy = jest.fn();
       class Comp extends React.Component<any, any> {
-        uiCanExit = () => {
-          mock(true);
-          return true;
-        };
+        uiCanExit = uiCanExitSpy;
         render() {
           return <span>UiCanExitHookComponent</span>;
         }
@@ -264,16 +250,11 @@ describe('<UIView>', () => {
           <UIView />
         </UIRouter>,
       );
-      return router.stateService
-        .go('__state')
-        .then(() => {
-          expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
-          return router.stateService.go('exit');
-        })
-        .then(() => {
-          expect(wrapper.html()).toEqual('<span>exit</span>');
-          expect(mock).toBeCalled();
-        });
+      await router.stateService.go('__state');
+      expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
+      await router.stateService.go('exit');
+      expect(wrapper.html()).toEqual('<span>exit</span>');
+      expect(uiCanExitSpy).toBeCalled();
     });
 
     it('deregisters the UIView when unmounted', () => {
@@ -281,18 +262,16 @@ describe('<UIView>', () => {
         <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>
       );
       const wrapper = mount(<Component show={true} />);
-      let stub = sinon.stub(
-        wrapper
-          .find(UIView)
-          .at(0)
-          .instance(),
-        'deregister',
-      );
+      let UIViewInstance = wrapper
+        .find(UIView)
+        .at(0)
+        .instance();
+      const deregisterSpy = jest.spyOn(UIViewInstance, 'deregister');
       wrapper.setProps({ show: false });
-      expect(stub.calledOnce).toBe(true);
+      expect(deregisterSpy).toHaveBeenCalled();
     });
 
-    it('renders the component using the render prop', () => {
+    it('renders the component using the render prop', async () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView
@@ -300,11 +279,10 @@ describe('<UIView>', () => {
           />
         </UIRouter>,
       );
-      return router.stateService.go('withrenderprop').then(() => {
-        expect(wrapper.html()).toEqual(
-          `<div><span>withrenderprop</span><span>bar</span></div>`,
-        );
-      });
+      await router.stateService.go('withrenderprop');
+      expect(wrapper.html()).toEqual(
+        `<div><span>withrenderprop</span><span>bar</span></div>`,
+      );
     });
   });
 });

@@ -25,7 +25,7 @@ export interface UIRouterState {
 }
 
 /** @hidden */
-const InstanceOrPluginsMissingError = new Error(`Router instance or plugins missing.
+export const InstanceOrPluginsMissingError = new Error(`Router instance or plugins missing.
 You must either provide a location plugin via the plugins prop:
 
 <UIRouter plugins={[pushStateLocationPlugin]} states={[···]}>
@@ -41,6 +41,11 @@ router.plugin(pushStateLocationPlugin);
   <UIView />
 </UIRouter>
 `);
+
+/** @hidden */
+export const UIRouterInstanceUndefinedError = new Error(
+  `UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`,
+);
 
 export class UIRouter extends Component<UIRouterProps, UIRouterState> {
   static propTypes = {

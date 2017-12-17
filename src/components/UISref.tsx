@@ -17,6 +17,7 @@ import { extend, TransitionOptions } from '@uirouter/core';
 
 import { UIRouterReact } from '../index';
 import { UIViewAddress } from './UIView';
+import { UIRouterInstanceUndefinedError } from './UIRouter';
 
 let classNames = _classNames;
 
@@ -53,9 +54,7 @@ export class UISref extends Component<UISrefProps, any> {
         : () => {};
     let router = this.context['router'];
     if (typeof router === 'undefined') {
-      throw new Error(
-        `UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`,
-      );
+      throw UIRouterInstanceUndefinedError;
     }
   }
 

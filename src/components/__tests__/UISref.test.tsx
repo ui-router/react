@@ -1,15 +1,13 @@
 declare var jest, describe, it, expect, beforeEach;
 
 import * as React from 'react';
-import { shallow, mount, render } from 'enzyme';
-import * as sinon from 'sinon';
+import { mount } from 'enzyme';
 
 import {
   UIRouterReact,
   UIRouter,
   UIView,
   UISref,
-  ReactStateDeclaration,
   pushStateLocationPlugin,
   servicesPlugin,
 } from '../../index';
@@ -40,82 +38,72 @@ describe('<UISref>', () => {
     states.forEach(state => router.stateRegistry.register(state));
   });
 
-  it('renders its child with injected props', () => {
+  it('renders its child with injected props', async () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
       </UIRouter>,
     );
-    return router.stateService.go('state').then(() => {
-      wrapper.update();
-      const props = wrapper.find('a').props();
-      expect(typeof props.onClick).toBe('function');
-      expect(props.href.includes('/state2')).toBe(true);
-    });
+    await router.stateService.go('state');
+    wrapper.update();
+    const props = wrapper.find('a').props();
+    expect(typeof props.onClick).toBe('function');
+    expect(props.href.includes('/state2')).toBe(true);
   });
 
-  it('calls deregister active state checking when unmounting', () => {
+  it('calls deregister active state checking when unmounting', async () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
       </UIRouter>,
     );
-    let spy;
-    return router.stateService
-      .go('state')
-      .then(() => {
-        wrapper.update();
-        const uiSref = wrapper.find(UISref).at(0);
-        expect(wrapper.html()).toBe('<a href="/state2" class="">state2</a>');
-        spy = sinon.spy(uiSref.instance(), 'deregister');
-        return router.stateService.go('state2');
-      })
-      .then(() => {
-        wrapper.update();
-        expect(spy.calledOnce).toBe(true);
-      });
+    await router.stateService.go('state');
+    wrapper.update();
+    expect(wrapper.html()).toBe('<a href="/state2" class="">state2</a>');
+    const uiSref = wrapper.find(UISref).at(0);
+    const deregisterSpy = jest.spyOn(uiSref.instance(), 'deregister');
+    await router.stateService.go('state2');
+    expect(deregisterSpy).toHaveBeenCalled();
   });
 
-  it('triggers a transition to target state', () => {
-    const mock = jest.fn();
+  it('triggers a transition to target state', async () => {
+    const hookSpy = jest.fn();
     router.stateService.defaultErrorHandler(() => {});
-    router.transitionService.onBefore({ to: 'state2' }, () => {
-      mock(true);
-      return true;
-    });
+    router.transitionService.onBefore({ to: 'state2' }, hookSpy);
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
       </UIRouter>,
     );
-    return router.stateService.go('state').then(() => {
-      wrapper.update();
-      const link = wrapper.find('a');
-      const props = link.props();
-      expect(typeof props.onClick).toBe('function');
-      expect(props.href.includes('/state2')).toBe(true);
-      link.simulate('click');
-      expect(mock).toBeCalled();
-    });
+    await router.stateService.go('state');
+    wrapper.update();
+    const link = wrapper.find('a');
+    const props = link.props();
+    expect(typeof props.onClick).toBe('function');
+    expect(props.href.includes('/state2')).toBe(true);
+    link.simulate('click');
+    expect(hookSpy).toHaveBeenCalled();
   });
 
-  it("doesn't trigger a transition when middle-clicked/ctrl+clicked", () => {
+  it("doesn't trigger a transition when middle-clicked/ctrl+clicked", async () => {
     router.stateService.defaultErrorHandler(() => {});
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
       </UIRouter>,
     );
-    return router.stateService.go('state').then(() => {
-      wrapper.update();
-      let stub = sinon.stub(wrapper.instance().router.stateService, 'go');
-      const link = wrapper.find('a');
-      link.simulate('click');
-      link.simulate('click', { button: 1 });
-      link.simulate('click', { metaKey: true });
-      link.simulate('click', { ctrlKey: true });
-      expect(stub.calledOnce).toBe(true);
-    });
+    await router.stateService.go('state');
+    wrapper.update();
+    const stateServiceGoSpy = jest.spyOn(
+      wrapper.instance().router.stateService,
+      'go',
+    );
+    const link = wrapper.find('a');
+    link.simulate('click');
+    link.simulate('click', { button: 1 });
+    link.simulate('click', { metaKey: true });
+    link.simulate('click', { ctrlKey: true });
+    expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
   });
 
   it('uses rootContext for options when not nested in a <UIView>', () => {

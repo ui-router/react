@@ -9,6 +9,7 @@ import * as _classNames from 'classnames';
 
 import { UIRouterReact, UISref } from '../index';
 import { UIViewAddress } from './UIView';
+import { UIRouterInstanceUndefinedError } from './UIRouter';
 
 let classNames = _classNames;
 
@@ -23,6 +24,10 @@ export interface UISrefActiveState {
   params: Object;
   hash: string;
 }
+
+export const StateNameMustBeAStringError = new Error(
+  'State name provided to <UISref {to}> must be a string.',
+);
 
 export class UISrefActive extends Component<UISrefActiveProps, any> {
   // keep track of states to watch and their activeClasses
@@ -59,9 +64,7 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
   componentWillMount() {
     let router = this.context['router'];
     if (typeof router === 'undefined') {
-      throw new Error(
-        `UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`,
-      );
+      throw UIRouterInstanceUndefinedError;
     }
     // register callback for state change
     this.deregister = this.context['router'].transitionService.onSuccess(
@@ -103,7 +106,7 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
 
   createStateHash = (state: string, params: Object) => {
     if (typeof state !== 'string') {
-      throw new Error('state should be a string');
+      throw StateNameMustBeAStringError;
     }
     return params && typeof params === 'object'
       ? state + JSON.stringify(params)

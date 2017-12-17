@@ -31,6 +31,7 @@ import {
 
 import { UIRouterReact } from '../index';
 import { ReactViewConfig } from '../reactViews';
+import { UIRouterInstanceUndefinedError } from './UIRouter';
 
 /** @internalapi */
 let id = 0;
@@ -191,9 +192,7 @@ export class UIView extends Component<UIViewProps, UIViewState> {
   componentWillMount() {
     let router = this.context['router'];
     if (typeof router === 'undefined') {
-      throw new Error(
-        `UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`,
-      );
+      throw UIRouterInstanceUndefinedError;
     }
 
     // Check the context for the parent UIView's fqn and State

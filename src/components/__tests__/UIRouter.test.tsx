@@ -2,15 +2,9 @@ declare var jest, describe, it, expect, beforeEach;
 
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { shallow, mount, render } from 'enzyme';
-import * as sinon from 'sinon';
+import { mount } from 'enzyme';
 
-import {
-  UIRouter,
-  UIRouterReact,
-  ReactStateDeclaration,
-  memoryLocationPlugin,
-} from '../../index';
+import { UIRouter, UIRouterReact, memoryLocationPlugin } from '../../index';
 
 class Child extends React.Component<any, any> {
   static contextTypes: React.ValidationMap<any> = {

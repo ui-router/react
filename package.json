@@ -74,7 +74,6 @@
     "replace-in-file": "^2.0.3",
     "shelljs": "^0.7.7",
     "shx": "^0.1.4",
-    "sinon": "^2.3.1",
     "ts-jest": "^20.0.4",
     "typedoc": "^0.8.0",
     "typedoc-plugin-external-module-name": "^1.0.8",
