@@ -1,12 +1,13 @@
 language: node_js
 node_js:
-  - "6.10"
+- '6.10'
 
 script:
-  - yarn test
+- yarn test
 
 git:
   depth: 10
 
 notifications:
-  slack: angularbuddies:b6leQM9gkBCW0S7MNDsELpqU
+  slack:
+    secure: nW+OwrkgbT2hxtz3Xp3yJsjsjBBhWYCgg2BNIaSmM6FkHJ4BQACPL6aHbRGbbdbAhRF7aHsYMhy1vCu5SvjlSgmrqsLXIiC3NmOoXoerbUAjRhmpU4BdwV8qEHFTCxzkjLzOM/Lub81g2GQ4eYvKfK8H9L7Am/Hg6XyApGy75o6tmqM4OdZsl0PSH0P3LPaSovPxC+l9i6a0vnw+pVd3T1rSBpQ1tL3AI+2/J+K2lMqR1lQXuzeXE6IZ3FH9yqBT27d9KeM3SQE4nowSlsnfkCOVsq4K/FMcwXVSksK+b2qB/77nDh3m7A4mM3htc/1GIMoJLsNFQU0BY5wHAS2ZDB3nNcQ7Yta35HPQhka70ZSCzaRiIxsYg0bw6AluxqMFk2K89HGmBS0fUlTe0eNXXLZAG3WwH9bqqFLtUMPY31Vrp96UpfqvtjDhwjTuyuFIbYug1VeLkY9o2CRI55thLeWqyXH0k/MRT9GwbNcQIgLbMJdQel0/odgegsDqv4XhmI6IgnPT9DpnZvh4Qcfzx5lOkbcaoC81telxTN0fZB1PQ4mQWIx5IQiRPI0gO2dRGed97wQ42aV42sSoBcFv8cubxhq6QGB9Lelu9tkCZcTj460Fvh8BZTWAW+dOX7ifJ62agyhz32wNFdRsPnihszU1jP3PwVJuvSJXW/Qnx1Q=
