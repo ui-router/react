@@ -17,6 +17,8 @@ UI-Router applications are modeled as a hierarchical tree of states. UI-Router p
 
 ## Docs & Resources
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ui-router/react.svg)](https://greenkeeper.io/)
+
 - [Tutorials and Docs](/docs)
 - [Examples](/examples)
 - [UI-Router website](https://ui-router.github.io/)
