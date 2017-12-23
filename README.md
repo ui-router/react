@@ -7,6 +7,9 @@
   <a href="https://www.npmjs.org/package/@uirouter/react">
     <img src="https://img.shields.io/npm/v/@uirouter/react.svg?style=flat-square">
   </a>
+  <a href="https://greenkeeper.io/">
+    <img src="https://badges.greenkeeper.io/ui-router/react.svg?style=flat-square" alt="Greenkeeper badge">
+  </a>
 </div>
 
 UI-Router provides extremely flexible, state based routing to the [React](https://facebook.github.io/react/) ecosystem.
@@ -16,8 +19,6 @@ Routing frameworks for SPAs update the browser's URL as the user navigates throu
 UI-Router applications are modeled as a hierarchical tree of states. UI-Router provides a [*state machine*](https://en.wikipedia.org/wiki/Finite-state_machine) to manage the transitions between those application states in a transaction-like manner.
 
 ## Docs & Resources
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/ui-router/react.svg)](https://greenkeeper.io/)
 
 - [Tutorials and Docs](/docs)
 - [Examples](/examples)
