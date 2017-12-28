@@ -11,4 +11,5 @@ lib/
 lib-esm/
 _bundles/
 node_modules/
+downstream_projects
 _doc
