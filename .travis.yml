@@ -26,6 +26,11 @@ env:
   - DOWNSTREAM_PKGS=
   - DOWNSTREAM_PKGS=sample-app-react
 
+matrix:
+  fast_finish: true
+  allow_failures:
+  - env: DOWNSTREAM_PKGS=sample-app-react
+
 sudo: false
 
 git:
