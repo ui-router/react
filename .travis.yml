@@ -1,16 +1,14 @@
 language: node_js
-node_js: '8.9.1'
-
+node_js: 8.9.1
 before_install: yarn global add greenkeeper-lockfile@1 yalc
 install: yarn --check-files
-
 before_script: greenkeeper-lockfile-update && greenkeeper-lockfile-upload
 script:
-# When CORE_BRANCH env variable is set, it will fetch, build, and test using that branch of @uirouter/core
-- if [ "x${CORE_BRANCH}x" != "xx" ] ; then ./node_modules/.bin/publish_yalc_package .downstream_cache/core https://github.com/ui-router/core.git && yalc add @uirouter/core ; fi
-# If DOWNSTREAM or DOWNSTREAM_PKGS is set, run downstream packages' tests instead
-- if [ "x${DOWNSTREAM_PKGS}${DOWNSTREAM}x" != "xx" ] ; then yarn test:downstream ; else tsc && yarn test; fi
-
+- if [ "x${CORE_BRANCH}x" != "xx" ] ; then ./node_modules/.bin/publish_yalc_package
+  .downstream_cache/core https://github.com/ui-router/core.git && yalc add @uirouter/core
+  ; fi
+- if [ "x${DOWNSTREAM_PKGS}${DOWNSTREAM}x" != "xx" ] ; then yarn test:downstream ;
+  else tsc && yarn test; fi
 env:
   global:
     secure: ULNlEMoHRgle5QW7bWUwPFtWFAj0ZlRolybzmc1k0bUaXQp1+e+xjbONHUcAZeSHyYbw0nq4VY2fHOqiH9EVhxJSwExUA6NXoEIhn+lZwyDZ2kCV0xMrdZ/TuORFO6QNXWJ9Bi5IFs0V0cQk8hnkqDUxF/fY6AlB+zojUcYyFeGtSToIppTF+RmJ1HMi9XXT34JGNmkUfuACEm6d9+WaFSACwzKuS1ZCiaGMyOQz3AgCn92YwNs65o89ekZgmngrRiOSH7Cd6dUM1hqKpZzwUB/Cu7grrNyFQ2fDAbYCmS4ZcNZyo5gCC0Urqn9I3aOCT1bhg04eVo9FH6qjEIrg3zdOOM4Qqvq8jPo45cH9W55AMSUgnPmds1YOI1E74f0FS6b04AwDmdgaG4UmC6dRA6pXJS6+v8+2MH4/zptJZFbxycq+cMH4o7cqrz8QUR6WfpzsEPaZkp82lp2B3OXOgJBtfbq8BmpKbG+91vde9ayLBZABzRN/L1Cdh31mbEnbSgCl5jiNTznv6kD8WU9tyVkEKjzqVnCvSQxZ4WeCFTN3+70cLvOQZBFpFqUA16X+iJEetcrjeTgVl80arK02LfCDeA1qYiAV+M+KmWnx32lflA1vNIhfajAWu8XoAYkilTL6hNKZuU0BfRJCxOS7T+QCyRbewuuzXYzyCqD9LUc=
@@ -19,23 +17,20 @@ env:
   - CORE_BRANCH=master
   - CORE_BRANCH=master UPSTREAM_PKGS=@uirouter/core DOWNSTREAM=true
   - DOWNSTREAM=true
-
 matrix:
   fast_finish: true
   allow_failures:
   - env: CORE_BRANCH=
   - env: DOWNSTREAM=true
   - env: CORE_BRANCH=master UPSTREAM_PKGS=@uirouter/core DOWNSTREAM=true
-
 notifications:
   slack:
     on_success: change
-    secure: nW+OwrkgbT2hxtz3Xp3yJsjsjBBhWYCgg2BNIaSmM6FkHJ4BQACPL6aHbRGbbdbAhRF7aHsYMhy1vCu5SvjlSgmrqsLXIiC3NmOoXoerbUAjRhmpU4BdwV8qEHFTCxzkjLzOM/Lub81g2GQ4eYvKfK8H9L7Am/Hg6XyApGy75o6tmqM4OdZsl0PSH0P3LPaSovPxC+l9i6a0vnw+pVd3T1rSBpQ1tL3AI+2/J+K2lMqR1lQXuzeXE6IZ3FH9yqBT27d9KeM3SQE4nowSlsnfkCOVsq4K/FMcwXVSksK+b2qB/77nDh3m7A4mM3htc/1GIMoJLsNFQU0BY5wHAS2ZDB3nNcQ7Yta35HPQhka70ZSCzaRiIxsYg0bw6AluxqMFk2K89HGmBS0fUlTe0eNXXLZAG3WwH9bqqFLtUMPY31Vrp96UpfqvtjDhwjTuyuFIbYug1VeLkY9o2CRI55thLeWqyXH0k/MRT9GwbNcQIgLbMJdQel0/odgegsDqv4XhmI6IgnPT9DpnZvh4Qcfzx5lOkbcaoC81telxTN0fZB1PQ4mQWIx5IQiRPI0gO2dRGed97wQ42aV42sSoBcFv8cubxhq6QGB9Lelu9tkCZcTj460Fvh8BZTWAW+dOX7ifJ62agyhz32wNFdRsPnihszU1jP3PwVJuvSJXW/Qnx1Q=
-
+    rooms:
+      secure: ipkeI7zWVq0mr3f5fPFybWlQKsWvNnYmFTSd6xkB03OE7yLA3leTTjI2DOKUp1rJFEYtcA3WAabSExjeDCJKyn6s7ZU52fB5/SOSnFq6tBZFbgb2rJTb+YQTdSO8vTHaH/bYgXXBPelr8eUls8Z63rZzps+/G3ZNCtObz7E/FODHjG3yLIYyUjk+hgbTUZKVS6ImEavjnZ4gZ4gO52avOaoOJk2Noamt//p4rPBivm1rrVamhZS3puBc830gUOFRqe0jZJumPQPnanGErS71ds/N6LAzKlUvJHQ9k4FE8Kg4Islkl/dARY2iKumi1x21cZWAKBD3YUOuB0BBqEwdsincq11EU4vDyVpD0UtBvLeabp1b/DcZGU6ITaWqFpOq0vHGNlSFxoIpDXumLFaK86mGqqxFtPUA0efF+k16i0P2rZ8y/r6Q7VJOia4dQ7KGlcaR75Pc7Q87OaDrQEc1ARWHhzYC3FanfQI4OHsMgSihvn6BUi6dI99mL7faUhlWaSEy3lVkROOyaoTELFOzHts/K6JH8I2T4X9d5lV9ay86rJUoSMy9a+/C5yJrKNoco3AtPBVRjWecROpqweePOyQT7k2v/X2hfliv1dKZ3SmtS3QsaJxwaO1Zqd5avTh0Xko/XwJLdd61lGl5ZC+QaO1kVzs3RBi52VWyDkTzy5A=
 sudo: false
-
 cache:
   yarn: true
   directories:
   - node_modules
-  - .downstream_cache
+  - ".downstream_cache"
