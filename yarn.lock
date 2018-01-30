@@ -73,9 +73,9 @@
   version "5.0.15"
   resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.15.tgz#09f5f76368f76274e64af3ab8080a77f1c0ca304"
 
-"@uirouter/publish-scripts@2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.2.3.tgz#b9ed800edc864923e5f2415c7504dc67599842be"
+"@uirouter/publish-scripts@2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.2.5.tgz#c9b5ba1a5f749393cab81b253ac011ac68a4bf83"
   dependencies:
     conventional-changelog "^1.1.4"
     conventional-changelog-ui-router-core "^1.4.2"
@@ -85,6 +85,7 @@
     readline-sync "^1.4.7"
     shelljs "^0.7.8"
     shx "^0.2.2"
+    tmp "^0.0.33"
     tweak-sourcemap-paths "0.0.3"
     yargs "^9.0.1"
 
@@ -4375,7 +4376,7 @@ os-locale@^2.0.0:
     lcid "^1.0.0"
     mem "^1.1.0"
 
-os-tmpdir@^1.0.0, os-tmpdir@^1.0.1:
+os-tmpdir@^1.0.0, os-tmpdir@^1.0.1, os-tmpdir@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
 
@@ -5656,6 +5657,12 @@ timers-browserify@^2.0.4:
   resolved "https://registry.yarnpkg.com/timers-browserify/-/timers-browserify-2.0.4.tgz#96ca53f4b794a5e7c0e1bd7cc88a372298fa01e6"
   dependencies:
     setimmediate "^1.0.4"
+
+tmp@^0.0.33:
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
+  dependencies:
+    os-tmpdir "~1.0.2"
 
 tmpl@1.0.x:
   version "1.0.4"
