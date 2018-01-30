@@ -1,3 +1,63 @@
+# 0.6.0 (2018-01-30)
+[Compare `@uirouter/react` versions 0.5.5 and 0.6.0](https://github.com/ui-router/react/compare/0.5.5...0.6.0)
+
+### Bug Fixes
+
+* **package:** update [@uirouter](https://github.com/uirouter)/core to version 5.0.14 ([ee5e672](https://github.com/ui-router/react/commit/ee5e672))
+* **package:** update [@uirouter](https://github.com/uirouter)/core to version 5.0.15 ([ef2b171](https://github.com/ui-router/react/commit/ef2b171))
+* **reactViews:** use new map function signature ([6b2aa53](https://github.com/ui-router/react/commit/6b2aa53))
+
+
+### Features
+
+* **UIView:** `resolve`s are now injected as root props ([ff67239](https://github.com/ui-router/react/commit/ff67239))
+* **UIView:** warn user when using `transition` as resolve token ([10b247b](https://github.com/ui-router/react/commit/10b247b))
+
+
+### BREAKING CHANGES
+
+* **UIView:** Previously `resolve`s were accessible as properties of a `resolves` props injected in the routed component. They are now each injected as a prop. This way components don't need to be aware of the router and can be more reusable.
+
+before:
+```jsx
+render () {
+  const { foo } = this.props.resolves;
+  return <div>{foo}</div>;
+}
+```
+
+after:
+```jsx
+render () {
+  const { foo } = this.props;
+  return <div>{foo}</div>
+}
+```
+
+
+### Updated `@uirouter/core` from 5.0.11 to 5.0.15
+[Compare `@uirouter/core` versions 5.0.11 and 5.0.15](https://github.com/ui-router/core/compare/5.0.11...5.0.15)
+
+### Bug Fixes
+
+* **browserLocation:** Use location.pathname (not href) or '/' when no base tag found ([db461d6](https://github.com/ui-router/core/commit/db461d6))
+* **browserLocationConfig:** If no base href found, use location.href (not empty string) ([0251424](https://github.com/ui-router/core/commit/0251424))
+* **core:** Fix memory leak of resolve data from ALL transitions ever ([7f2aed1](https://github.com/ui-router/core/commit/7f2aed1))
+* **pathNode:** add backwards compat for PathNode.clone(). Add retainedWithToParams to treeChanges interface. ([4833a32](https://github.com/ui-router/core/commit/4833a32))
+* **pushStateLocation:** Fix URLs: add slash between base and path when necessary ([bfa5755](https://github.com/ui-router/core/commit/bfa5755))
+* **pushStateLocation:** When url is "" or "/", use baseHref for pushState ([042a950](https://github.com/ui-router/core/commit/042a950))
+* **resolve:** Add onFinish hook to resolve any dynamicly added resolvables ([7d1ca54](https://github.com/ui-router/core/commit/7d1ca54))
+* **trace:** Fix null reference in uiview name sort function ([59cb067](https://github.com/ui-router/core/commit/59cb067))
+* **treeChanges:** apply toParams to 'retained' path ([#72](https://github.com/ui-router/core/issues/72)) ([cf63d11](https://github.com/ui-router/core/commit/cf63d11))
+* **urlRouter:** Update query params when resetting url via .update() ([7664cd0](https://github.com/ui-router/core/commit/7664cd0))
+
+
+### Features
+
+* **common:** Add map-in-place support to map() ([12bc7d8](https://github.com/ui-router/core/commit/12bc7d8))
+* **common:** Add onEvict() callback registry for queues with max length ([c19d007](https://github.com/ui-router/core/commit/c19d007))
+* **view:** Add onSync callback API to plugin API ([9544ae5](https://github.com/ui-router/core/commit/9544ae5))
+
 ## 0.5.5 (2017-12-09)
 [Compare `@uirouter/react` versions 0.5.4 and 0.5.5](https://github.com/ui-router/react/compare/0.5.4...0.5.5)
 
