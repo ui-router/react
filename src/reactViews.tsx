@@ -32,14 +32,10 @@ export function reactViewsBuilder(state: StateObject) {
   if (!state.views) {
     viewsDefinitionObject = { $default: pick(state, ['component']) };
   } else {
-    viewsDefinitionObject = map(
-      state.views,
-      (val: any, key) => {
-        if (val.component) return val;
-        return { component: val };
-      },
-      viewsDefinitionObject,
-    );
+    viewsDefinitionObject = map(state.views, (val: any, key) => {
+      if (val.component) return val;
+      return { component: val };
+    });
   }
 
   forEach(viewsDefinitionObject, function(config, name) {
