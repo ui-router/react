@@ -1,3 +1,14 @@
+## 0.6.1 (2018-01-31)
+[Compare `@uirouter/react` versions 0.6.0 and 0.6.1](https://github.com/ui-router/react/compare/0.6.0...0.6.1)
+
+
+### Updated `@uirouter/core` from 5.0.15 to 5.0.16
+[Compare `@uirouter/core` versions 5.0.15 and 5.0.16](https://github.com/ui-router/core/compare/5.0.15...5.0.16)
+
+### Bug Fixes
+
+* **common:** Fix signature of  for objects (make target optional) ([61d0afc](https://github.com/ui-router/core/commit/61d0afc))
+
 # 0.6.0 (2018-01-30)
 [Compare `@uirouter/react` versions 0.5.5 and 0.6.0](https://github.com/ui-router/react/compare/0.5.5...0.6.0)
 
