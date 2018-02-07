@@ -5107,7 +5107,11 @@ readdirp@^2.0.0:
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
 
-readline-sync@1.4.7, readline-sync@^1.4.7:
+readline-sync@1.4.8:
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/readline-sync/-/readline-sync-1.4.8.tgz#2e3b296fa64a35b2b011a754e46a235d46985de8"
+
+readline-sync@^1.4.7:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/readline-sync/-/readline-sync-1.4.7.tgz#001bfdd4c06110c3c084c63bf7c6a56022213f30"
 
