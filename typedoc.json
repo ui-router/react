@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "es5",
+    "lib": [ "es2015", "dom" ],
+    "outDir": "lib",
+    "allowSyntheticDefaultImports": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": false,
+    "sourceMap": false,
+    "jsx": "react"
+  },
+  "typedoc": {
+    "publishDir": "_react_docs",
+    "include": [
+      {
+        "package": "@uirouter/core",
+        "repo": "https://github.com/ui-router/core.git",
+        "entry": "src/index.ts"
+      }
+    ],
+    "generateOptions": {
+      "tsconfig": "typedoc.json",
+      "readme": "DOCS.md",
+      "name": "@uirouter/react",
+      "theme": "node_modules/ui-router-typedoc-themes/bin/default",
+      "out": "_doc",
+      "internal-aliases": "internal,coreapi,reactapi",
+      "external-aliases": "internalapi,external",
+      "navigation-label-globals": "@uirouter/react"
+    }
+  },
+  "files": [
+    "src/index.ts",
+    ".downstream_cache/@uirouter/core/src/index.ts",
+    "node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts"
+  ]
+}
