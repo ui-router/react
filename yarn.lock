@@ -40,11 +40,7 @@
   version "9.12.2"
   resolved "https://registry.yarnpkg.com/@types/highlight.js/-/highlight.js-9.12.2.tgz#6ee7cd395effe5ec80b515d3ff1699068cd0cd1d"
 
-"@types/lodash@4.14.102":
-  version "4.14.102"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.102.tgz#586a3e22385fc79b07cef9c5a1c8a5387986fbc8"
-
-"@types/lodash@^4.14.37":
+"@types/lodash@4.14.102", "@types/lodash@^4.14.37":
   version "4.14.102"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.102.tgz#586a3e22385fc79b07cef9c5a1c8a5387986fbc8"
 
@@ -542,9 +538,9 @@ babel-helpers@^6.24.1:
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
 
-babel-jest@22.2.0:
-  version "22.2.0"
-  resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-22.2.0.tgz#2d04087f5d149585e14f641d529551963fc9b4f8"
+babel-jest@22.2.2:
+  version "22.2.2"
+  resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-22.2.2.tgz#eda38dca284e32cc5257f96a9b51351975de4e04"
   dependencies:
     babel-plugin-istanbul "^4.1.5"
     babel-preset-jest "^22.2.0"
