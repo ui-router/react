@@ -241,33 +241,32 @@ export class UIView extends Component<UIViewProps, UIViewState> {
       return;
     }
 
-    let newComponent =
-      newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
-    let trans: Transition = undefined,
-      resolves = {};
+    let trans: Transition;
+    let resolves = {};
 
     if (newConfig) {
-      let context: ViewContext =
-        newConfig.viewDecl && newConfig.viewDecl.$context;
-      this.uiViewAddress = { fqn: this.uiViewAddress.fqn, context };
+      let viewContext: ViewContext = newConfig.viewDecl && newConfig.viewDecl.$context;
+      this.uiViewAddress = { fqn: this.uiViewAddress.fqn, context: viewContext };
 
-      let ctx = new ResolveContext(newConfig.path);
-      trans = ctx.getResolvable(Transition).data;
-      let stringTokens: string[] = trans
-        .getResolveTokens()
-        .filter(x => typeof x === 'string');
-      resolves = stringTokens
-        .map(token => [token, trans.injector().get(token)])
-        .reduce(applyPairs, {});
+      let resolveContext = new ResolveContext(newConfig.path);
+      let injector = resolveContext.injector();
 
+      let stringTokens: string[] = resolveContext.getTokens()
+          .filter(x => typeof x === 'string');
       if (stringTokens.indexOf('transition') !== -1) {
         throw TransitionPropCollisionError;
       }
+
+      trans = injector.get(Transition);
+      resolves = stringTokens
+        .map(token => [token, injector.get(token)])
+        .reduce(applyPairs, {});
     }
 
     this.uiViewData.config = newConfig;
     let props = { ...resolves, transition: trans };
 
+    let newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
     this.setState({
       component: newComponent || 'div',
       props: newComponent ? props : {},
