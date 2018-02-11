@@ -72,7 +72,7 @@
     "react-test-renderer": "16.2.0",
     "shelljs": "0.8.1",
     "shx": "0.2.2",
-    "ts-jest": "22.0.3",
+    "ts-jest": "22.0.4",
     "typescript": "2.6.2",
     "webpack": "3.11.0",
     "webpack-dev-server": "2.11.1"
