@@ -171,15 +171,21 @@ export class UIView extends Component<UIViewProps, UIViewState> {
       };
     }
 
+    // attach any style or className to the rendered component
+    // specified on the UIView itself
+    const { className, style } = this.props;
+    const styleProps = { className, style };
+    const childProps = { ...props, ...styleProps };
+
     let child =
       !loaded && isValidElement(children)
-        ? cloneElement(children, props)
-        : createElement(component, props);
+        ? cloneElement(children, childProps)
+        : createElement(component, childProps);
 
     // if a render function is passed use that,
     // otherwise render the component normally
     return typeof render !== 'undefined' && loaded
-      ? render(component, props)
+      ? render(component, childProps)
       : child;
   }
 
@@ -262,19 +268,10 @@ export class UIView extends Component<UIViewProps, UIViewState> {
     this.uiViewData.config = newConfig;
     let props = { ...resolves, transition: trans };
 
-    // attach any style or className to the rendered component
-    // specified on the UIView itself
-    let styleProps: {
-      className?: string;
-      style?: Object;
-    } = {};
-    if (this.props.className) styleProps.className = this.props.className;
-    if (this.props.className) styleProps.style = this.props.style;
-
     this.setState({
       component: newComponent || 'div',
-      props: newComponent ? extend(props, styleProps) : styleProps,
-      loaded: newComponent ? true : false,
+      props: newComponent ? props : {},
+      loaded: !!newComponent,
     });
   }
 
