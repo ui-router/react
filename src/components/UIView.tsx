@@ -226,9 +226,15 @@ export class UIView extends Component<UIViewProps, UIViewState> {
   /**
    * View config updated callback
    *
-   * This is called by UI-Router when a state was activated, and one of its views targets this `UIView`
+   * This is called by UI-Router during ViewService.sync().
+   * The `newConfig` parameter will contain view configuration (component, etc) when a
+   * state is activated and one of its views targets this `UIView`.
    */
   viewConfigUpdated(newConfig: ReactViewConfig) {
+    if (newConfig === this.uiViewData.config) {
+      return;
+    }
+
     let newComponent =
       newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
     let trans: Transition = undefined,
