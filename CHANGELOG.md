@@ -1,3 +1,21 @@
+## 0.6.2 (2018-02-12)
+[Compare `@uirouter/react` versions 0.6.1 and 0.6.2](https://github.com/ui-router/react/compare/0.6.1...0.6.2)
+
+### Bug Fixes
+
+* **package:** update [@uirouter](https://github.com/uirouter)/core to version 5.0.17 ([b0109ee](https://github.com/ui-router/react/commit/b0109ee))
+* **UIView:** Do not reload view if the new viewConfig is identical to the old one ([07a03bf](https://github.com/ui-router/react/commit/07a03bf))
+* **UIView:** Pass style prop through even if no className is specified ([cc3d80d](https://github.com/ui-router/react/commit/cc3d80d))
+* **UIView:** Provide only resolve props that should be accessible to each view ([a4ee9e9](https://github.com/ui-router/react/commit/a4ee9e9))
+
+
+### Updated `@uirouter/core` from 5.0.16 to 5.0.17
+[Compare `@uirouter/core` versions 5.0.16 and 5.0.17](https://github.com/ui-router/core/compare/5.0.16...5.0.17)
+
+### Bug Fixes
+
+* **core:** Fix leak of old transitions by mutating pathnode*.resolvables*.data ([0a1f518](https://github.com/ui-router/core/commit/0a1f518))
+
 ## 0.6.1 (2018-01-31)
 [Compare `@uirouter/react` versions 0.6.0 and 0.6.1](https://github.com/ui-router/react/compare/0.6.0...0.6.1)
 
