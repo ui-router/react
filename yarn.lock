@@ -40,7 +40,11 @@
   version "9.12.2"
   resolved "https://registry.yarnpkg.com/@types/highlight.js/-/highlight.js-9.12.2.tgz#6ee7cd395effe5ec80b515d3ff1699068cd0cd1d"
 
-"@types/lodash@4.14.102", "@types/lodash@^4.14.37":
+"@types/lodash@4.14.103":
+  version "4.14.103"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.103.tgz#56ac640f029f67655f0721f479f1faa982bd8122"
+
+"@types/lodash@^4.14.37":
   version "4.14.102"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.102.tgz#586a3e22385fc79b07cef9c5a1c8a5387986fbc8"
 
