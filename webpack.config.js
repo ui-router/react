@@ -1,7 +1,11 @@
-var path = require("path");
-var webpack = require("webpack");
+const path = require("path");
+const webpack = require("webpack");
 
-var config = {
+const isdev = (process.env.NODE_ENV || 'development') === 'development';
+const config = {
+  mode: isdev ? 'development' : 'production',
+  watch:  process.env.WATCH === 'true',
+  devtool: 'source-map',
   entry: {
     "ui-router-react": ["./src/index.ts"],
     "ui-router-react.min": ["./src/index.ts"]
@@ -16,14 +20,6 @@ var config = {
   resolve: {
     extensions: [".ts", ".tsx", ".js"]
   },
-  watch:  process.env.WATCH === 'true',
-  devtool: 'source-map',
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      include: /\.min\.js$/,
-    })
-  ],
   module: {
     rules: [
       {
