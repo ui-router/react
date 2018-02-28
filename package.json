@@ -64,7 +64,7 @@
     "enzyme-adapter-react-16": "1.1.1",
     "glob": "7.1.2",
     "jest": "22.1.4",
-    "prettier": "1.11.0",
+    "prettier": "1.11.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-test-renderer": "16.2.0",
