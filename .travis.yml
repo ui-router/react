@@ -25,7 +25,7 @@ matrix:
   - env: CORE_BRANCH=master UPSTREAM_PKGS=@uirouter/core DOWNSTREAM=true
 notifications:
   slack:
-    on_success: change
+    on_success: never
     rooms:
       secure: ipkeI7zWVq0mr3f5fPFybWlQKsWvNnYmFTSd6xkB03OE7yLA3leTTjI2DOKUp1rJFEYtcA3WAabSExjeDCJKyn6s7ZU52fB5/SOSnFq6tBZFbgb2rJTb+YQTdSO8vTHaH/bYgXXBPelr8eUls8Z63rZzps+/G3ZNCtObz7E/FODHjG3yLIYyUjk+hgbTUZKVS6ImEavjnZ4gZ4gO52avOaoOJk2Noamt//p4rPBivm1rrVamhZS3puBc830gUOFRqe0jZJumPQPnanGErS71ds/N6LAzKlUvJHQ9k4FE8Kg4Islkl/dARY2iKumi1x21cZWAKBD3YUOuB0BBqEwdsincq11EU4vDyVpD0UtBvLeabp1b/DcZGU6ITaWqFpOq0vHGNlSFxoIpDXumLFaK86mGqqxFtPUA0efF+k16i0P2rZ8y/r6Q7VJOia4dQ7KGlcaR75Pc7Q87OaDrQEc1ARWHhzYC3FanfQI4OHsMgSihvn6BUi6dI99mL7faUhlWaSEy3lVkROOyaoTELFOzHts/K6JH8I2T4X9d5lV9ay86rJUoSMy9a+/C5yJrKNoco3AtPBVRjWecROpqweePOyQT7k2v/X2hfliv1dKZ3SmtS3QsaJxwaO1Zqd5avTh0Xko/XwJLdd61lGl5ZC+QaO1kVzs3RBi52VWyDkTzy5A=
 sudo: false
