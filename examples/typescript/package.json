@@ -11,9 +11,9 @@
     "react-dom": "16.1.1"
   },
   "devDependencies": {
-    "awesome-typescript-loader": "^3.2.1",
     "cross-env": "^5.0.1",
     "prop-types": "^15.5.10",
+    "ts-loader": "^4.1.0",
     "typescript": "2.3.3",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.0"
