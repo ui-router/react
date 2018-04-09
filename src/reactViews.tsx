@@ -2,16 +2,7 @@
  * @reactapi
  * @module react
  */ /** */
-import {
-  services,
-  forEach,
-  map,
-  pick,
-  PathNode,
-  ViewConfig,
-  ViewService,
-  StateObject,
-} from '@uirouter/core';
+import { services, forEach, map, pick, PathNode, ViewConfig, ViewService, StateObject } from '@uirouter/core';
 
 import { ReactViewDeclaration } from './interface';
 
@@ -46,10 +37,7 @@ export function reactViewsBuilder(state: StateObject) {
     config.$context = state;
     config.$name = name;
 
-    let normalized = ViewService.normalizeUIViewTarget(
-      config.$context,
-      config.$name,
-    );
+    let normalized = ViewService.normalizeUIViewTarget(config.$context, config.$name);
     config.$uiViewName = normalized.uiViewName;
     config.$uiViewContextAnchor = normalized.uiViewContextAnchor;
 

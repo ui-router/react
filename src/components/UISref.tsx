@@ -3,13 +3,7 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import {
-  Component,
-  createElement,
-  cloneElement,
-  isValidElement,
-  ValidationMap,
-} from 'react';
+import { Component, createElement, cloneElement, isValidElement, ValidationMap } from 'react';
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
@@ -48,10 +42,7 @@ export class UISref extends Component<UISrefProps, any> {
 
   componentWillMount() {
     const addStateInfo = this.context['parentUiSrefActiveAddStateInfo'];
-    this.deregister =
-      typeof addStateInfo === 'function'
-        ? addStateInfo(this.props.to, this.props.params)
-        : () => {};
+    this.deregister = typeof addStateInfo === 'function' ? addStateInfo(this.props.to, this.props.params) : () => {};
     let router = this.context['router'];
     if (typeof router === 'undefined') {
       throw UIRouterInstanceUndefinedError;
@@ -64,8 +55,7 @@ export class UISref extends Component<UISrefProps, any> {
 
   getOptions = () => {
     let parent: UIViewAddress = this.context['parentUIViewAddress'];
-    let parentContext =
-      (parent && parent.context) || this.context['router'].stateRegistry.root();
+    let parentContext = (parent && parent.context) || this.context['router'].stateRegistry.root();
     let defOpts = { relative: parentContext, inherit: true };
     return extend(defOpts, this.props.options || {});
   };

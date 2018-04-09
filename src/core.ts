@@ -19,8 +19,7 @@ import { ReactViewConfig, reactViewsBuilder } from './reactViews';
  *
  * @internalapi
  */
-let viewConfigFactory = (node: [PathNode], config: ReactViewDeclaration) =>
-  new ReactViewConfig(node, config);
+let viewConfigFactory = (node: [PathNode], config: ReactViewDeclaration) => new ReactViewConfig(node, config);
 
 /** @hidden */
 export const StartMethodCalledMoreThanOnceError = new Error(`

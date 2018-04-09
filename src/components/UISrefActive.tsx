@@ -25,9 +25,7 @@ export interface UISrefActiveState {
   hash: string;
 }
 
-export const StateNameMustBeAStringError = new Error(
-  'State name provided to <UISref {to}> must be a string.',
-);
+export const StateNameMustBeAStringError = new Error('State name provided to <UISref {to}> must be a string.');
 
 export class UISrefActive extends Component<UISrefActiveProps, any> {
   // keep track of states to watch and their activeClasses
@@ -67,10 +65,7 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
       throw UIRouterInstanceUndefinedError;
     }
     // register callback for state change
-    this.deregister = this.context['router'].transitionService.onSuccess(
-      {},
-      () => this.updateActiveClasses(),
-    );
+    this.deregister = this.context['router'].transitionService.onSuccess({}, () => this.updateActiveClasses());
   }
 
   componentWillUnmount() {
@@ -87,8 +82,7 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
   addState = (stateName, stateParams, activeClass) => {
     const { stateService } = this.context['router'];
     let parent = this.context['parentUIViewAddress'];
-    let stateContext =
-      (parent && parent.context) || this.context['router'].stateRegistry.root();
+    let stateContext = (parent && parent.context) || this.context['router'].stateRegistry.root();
     let state = stateService.get(stateName, stateContext);
     let stateHash = this.createStateHash(stateName, stateParams);
     let stateInfo = {
@@ -108,9 +102,7 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
     if (typeof state !== 'string') {
       throw StateNameMustBeAStringError;
     }
-    return params && typeof params === 'object'
-      ? state + JSON.stringify(params)
-      : state;
+    return params && typeof params === 'object' ? state + JSON.stringify(params) : state;
   };
 
   getActiveClasses = (): string => {
@@ -119,10 +111,8 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
     let { exact } = this.props;
     this.states.forEach(s => {
       let { state, params, hash } = s;
-      if (!exact && stateService.includes(state.name, params))
-        activeClasses.push(this.activeClasses[hash]);
-      if (exact && stateService.is(state.name, params))
-        activeClasses.push(this.activeClasses[hash]);
+      if (!exact && stateService.includes(state.name, params)) activeClasses.push(this.activeClasses[hash]);
+      if (exact && stateService.is(state.name, params)) activeClasses.push(this.activeClasses[hash]);
     });
     return classNames(activeClasses);
   };
@@ -143,10 +133,7 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
       ? cloneElement(
           this.props.children,
           Object.assign({}, this.props.children.props, {
-            className: classNames(
-              this.props.children.props.className,
-              activeClasses,
-            ),
+            className: classNames(this.props.children.props.className, activeClasses),
           }),
         )
       : this.props.children;

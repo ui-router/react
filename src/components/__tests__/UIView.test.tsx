@@ -113,9 +113,7 @@ describe('<UIView>', () => {
         </UIRouter>,
       );
       return router.stateService.go('parent').then(() => {
-        expect(wrapper.html()).toEqual(
-          `<div><span>parent</span><div></div></div>`,
-        );
+        expect(wrapper.html()).toEqual(`<div><span>parent</span><div></div></div>`);
       });
     });
 
@@ -180,9 +178,7 @@ describe('<UIView>', () => {
           <UIView />
         </UIRouter>,
       );
-      expect(wrapper.html()).toEqual(
-        `<div><span>parent</span><span>child</span></div>`,
-      );
+      expect(wrapper.html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
     });
 
     it('renders multiple nested unmounted <UIView>', async () => {
@@ -192,9 +188,7 @@ describe('<UIView>', () => {
           <UIView />
         </UIRouter>,
       );
-      expect(wrapper.html()).toEqual(
-        `<div><span>namedParent</span><div></div><div></div></div>`,
-      );
+      expect(wrapper.html()).toEqual(`<div><span>namedParent</span><div></div><div></div></div>`);
     });
 
     it('renders multiple nested mounted <UIView>', async () => {
@@ -204,9 +198,7 @@ describe('<UIView>', () => {
           <UIView />
         </UIRouter>,
       );
-      expect(wrapper.html()).toEqual(
-        `<div><span>namedParent</span><span>child1</span><span>child2</span></div>`,
-      );
+      expect(wrapper.html()).toEqual(`<div><span>namedParent</span><span>child1</span><span>child2</span></div>`);
     });
 
     it('unmounts State Component when changing state', async () => {
@@ -216,13 +208,9 @@ describe('<UIView>', () => {
         </UIRouter>,
       );
       await router.stateService.go('parent.child');
-      expect(wrapper.html()).toEqual(
-        `<div><span>parent</span><span>child</span></div>`,
-      );
+      expect(wrapper.html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
       await router.stateService.go('parent');
-      expect(wrapper.html()).toEqual(
-        `<div><span>parent</span><div></div></div>`,
-      );
+      expect(wrapper.html()).toEqual(`<div><span>parent</span><div></div></div>`);
     });
 
     it('calls uiCanExit function of its State Component when unmounting', async () => {
@@ -258,9 +246,7 @@ describe('<UIView>', () => {
     });
 
     it('deregisters the UIView when unmounted', () => {
-      const Component = props => (
-        <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>
-      );
+      const Component = props => <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>;
       const wrapper = mount(<Component show={true} />);
       let UIViewInstance = wrapper
         .find(UIView)
@@ -274,15 +260,11 @@ describe('<UIView>', () => {
     it('renders the component using the render prop', async () => {
       const wrapper = mount(
         <UIRouter router={router}>
-          <UIView
-            render={(Comp, props) => <Comp {...props} foo={<span>bar</span>} />}
-          />
+          <UIView render={(Comp, props) => <Comp {...props} foo={<span>bar</span>} />} />
         </UIRouter>,
       );
       await router.stateService.go('withrenderprop');
-      expect(wrapper.html()).toEqual(
-        `<div><span>withrenderprop</span><span>bar</span></div>`,
-      );
+      expect(wrapper.html()).toEqual(`<div><span>withrenderprop</span><span>bar</span></div>`);
     });
   });
 });

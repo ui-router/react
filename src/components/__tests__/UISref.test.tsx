@@ -3,14 +3,7 @@ declare var jest, describe, it, expect, beforeEach;
 import * as React from 'react';
 import { mount } from 'enzyme';
 
-import {
-  UIRouterReact,
-  UIRouter,
-  UIView,
-  UISref,
-  pushStateLocationPlugin,
-  servicesPlugin,
-} from '../../index';
+import { UIRouterReact, UIRouter, UIView, UISref, pushStateLocationPlugin, servicesPlugin } from '../../index';
 
 const states = [
   {
@@ -94,10 +87,7 @@ describe('<UISref>', () => {
     );
     await router.stateService.go('state');
     wrapper.update();
-    const stateServiceGoSpy = jest.spyOn(
-      wrapper.instance().router.stateService,
-      'go',
-    );
+    const stateServiceGoSpy = jest.spyOn(wrapper.instance().router.stateService, 'go');
     const link = wrapper.find('a');
     link.simulate('click');
     link.simulate('click', { button: 1 });
@@ -114,9 +104,7 @@ describe('<UISref>', () => {
         </UISref>
       </UIRouter>,
     );
-    expect(
-      wrapper.find(UISref).instance().context.parentUIViewAddress,
-    ).toBeUndefined();
+    expect(wrapper.find(UISref).instance().context.parentUIViewAddress).toBeUndefined();
     expect(
       wrapper
         .find(UISref)

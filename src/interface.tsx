@@ -2,21 +2,9 @@
  * @reactapi
  * @module react
  */ /** */
-import {
-  Component,
-  ReactElement,
-  StatelessComponent,
-  ComponentClass,
-  ClassicComponentClass,
-} from 'react';
+import { Component, ReactElement, StatelessComponent, ComponentClass, ClassicComponentClass } from 'react';
 
-import {
-  StateDeclaration,
-  _ViewDeclaration,
-  ParamDeclaration,
-  IInjectable,
-  Transition,
-} from '@uirouter/core';
+import { StateDeclaration, _ViewDeclaration, ParamDeclaration, IInjectable, Transition } from '@uirouter/core';
 
 /**
  * The StateDeclaration object is used to define a state or nested state.
@@ -39,9 +27,7 @@ import {
  * }
  * ```
  */
-export interface ReactStateDeclaration
-  extends StateDeclaration,
-    ReactViewDeclaration {
+export interface ReactStateDeclaration extends StateDeclaration, ReactViewDeclaration {
   /**
    * An optional object used to define multiple named views.
    *
@@ -188,10 +174,7 @@ export interface ReactViewDeclaration extends _ViewDeclaration {
    * }
    * ```
    */
-  component?:
-    | StatelessComponent<any>
-    | ComponentClass<any>
-    | ClassicComponentClass<any>;
+  component?: StatelessComponent<any> | ComponentClass<any> | ClassicComponentClass<any>;
 
   /**
    * @hidden
