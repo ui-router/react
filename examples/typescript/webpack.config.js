@@ -1,4 +1,5 @@
 var path = require('path');
+var TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 var configFilePath = path.resolve(__dirname, 'tsconfig.json');
 
@@ -11,6 +12,7 @@ var config = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    plugins: [new TsconfigPathsPlugin({ configFile: configFilePath })],
   },
   devtool: 'inline-source-map',
   module: {

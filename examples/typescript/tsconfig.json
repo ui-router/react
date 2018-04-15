@@ -14,7 +14,8 @@
     "paths": {
       "react": ["../../node_modules/react"],
       "react-dom": ["../../node_modules/react-dom"],
-      "@uirouter/react": ["../../src/index.ts"]
+      "@uirouter/react": ["../../src/index.ts"],
+      "@uirouter/core": ["../../node_modules/@uirouter/core"]
     }
   },
   "files": ["./index.tsx"],
