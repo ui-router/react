@@ -4,10 +4,15 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 
-import { UIRouter, UIRouterReact, memoryLocationPlugin } from '../../index';
+import {
+  UIRouter,
+  UIRouterConsumer,
+  UIRouterReact,
+  memoryLocationPlugin,
+} from '../../index';
 
 class Child extends React.Component<any, any> {
-  static contextTypes: React.ValidationMap<any> = {
+  static propTypes: React.ValidationMap<any> = {
     router: PropTypes.object,
   };
   render() {
@@ -29,10 +34,12 @@ describe('<UIRouter>', () => {
   it('creates a router instance', () => {
     const wrapper = mount(
       <UIRouter plugins={[memoryLocationPlugin]} states={[]}>
-        <Child />
+        <UIRouterConsumer>
+          {router => <Child router={router} />}
+        </UIRouterConsumer>
       </UIRouter>,
     );
-    expect(wrapper.find(Child).instance().context.router).toBeDefined();
+    expect(wrapper.find(Child).props().router).toBeDefined();
   });
 
   it('accepts an instance via prop', () => {
@@ -41,9 +48,11 @@ describe('<UIRouter>', () => {
     (router as any).__TEST__ = true;
     const wrapper = mount(
       <UIRouter router={router}>
-        <Child />
+        <UIRouterConsumer>
+          {router => <Child router={router} />}
+        </UIRouterConsumer>
       </UIRouter>,
     );
-    expect(wrapper.find(Child).instance().context.router.__TEST__).toBe(true);
+    expect(wrapper.find(Child).props().router.__TEST__).toBe(true);
   });
 });

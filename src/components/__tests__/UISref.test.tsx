@@ -53,7 +53,11 @@ describe('<UISref>', () => {
     await router.stateService.go('state');
     wrapper.update();
     expect(wrapper.html()).toBe('<a href="/state2" class="">state2</a>');
-    const uiSref = wrapper.find(UISref).at(0);
+    const uiSref = wrapper
+      .find(UISref)
+      .at(0)
+      .find('Sref')
+      .at(0);
     const deregisterSpy = jest.spyOn(uiSref.instance(), 'deregister');
     await router.stateService.go('state2');
     expect(deregisterSpy).toHaveBeenCalled();
@@ -104,12 +108,12 @@ describe('<UISref>', () => {
         </UISref>
       </UIRouter>,
     );
-    expect(wrapper.find(UISref).instance().context.parentUIViewAddress).toBeUndefined();
-    expect(
-      wrapper
-        .find(UISref)
-        .instance()
-        .getOptions().relative.name,
-    ).toBe('');
+    const uiSref = wrapper
+      .find(UISref)
+      .at(0)
+      .find('Sref')
+      .at(0);
+    expect(uiSref.instance().context.parentUIViewAddress).toBeUndefined();
+    expect(uiSref.instance().getOptions().relative.name).toBe('');
   });
 });
