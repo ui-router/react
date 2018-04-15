@@ -29,14 +29,14 @@ import {
   extend,
 } from '@uirouter/core';
 
-import { UIRouterReact } from '../index';
+import { UIRouterReact, UIRouterConsumer } from '../index';
 import { ReactViewConfig } from '../reactViews';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
 
 /** @internalapi */
 let id = 0;
 
-/** @internalpi */
+/** @internalapi */
 export interface UIViewAddress {
   context: ViewContext;
   fqn: string;
@@ -87,6 +87,8 @@ export interface UIViewInjectedProps {
 
 /** Component Props for `UIView` */
 export interface UIViewProps {
+  router: UIRouterReact;
+  parentUIView: UIViewAddress;
   name?: string;
   className?: string;
   style?: Object;
@@ -106,7 +108,10 @@ export const TransitionPropCollisionError = new Error(
     'Please rename your resolve to avoid conflicts with the router transition.',
 );
 
-export class UIView extends Component<UIViewProps, UIViewState> {
+/** @internalapi */
+export const { Provider: UIViewProvider, Consumer: UIViewConsumer } = React.createContext();
+
+class View extends Component<UIViewProps, UIViewState> {
   // This object contains all the metadata for this UIView
   uiViewData: ActiveUIView;
 
@@ -129,19 +134,12 @@ export class UIView extends Component<UIViewProps, UIViewState> {
   };
 
   static propTypes: ValidationMap<UIViewProps> = {
+    router: PropTypes.object.isRequired,
+    parentUIView: PropTypes.object,
     name: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
     render: PropTypes.func,
-  };
-
-  static childContextTypes: ValidationMap<any> = {
-    parentUIViewAddress: PropTypes.object,
-  };
-
-  static contextTypes: ValidationMap<any> = {
-    router: PropTypes.object,
-    parentUIViewAddress: PropTypes.object,
   };
 
   render() {
@@ -172,23 +170,18 @@ export class UIView extends Component<UIViewProps, UIViewState> {
 
     // if a render function is passed use that,
     // otherwise render the component normally
-    return typeof render !== 'undefined' && loaded ? render(component, childProps) : child;
-  }
-
-  getChildContext() {
-    return {
-      parentUIViewAddress: this.uiViewAddress,
-    };
+    const ChildOrRenderFunction = typeof render !== 'undefined' && loaded ? render(component, childProps) : child;
+    return <UIViewProvider value={this.uiViewAddress}>{ChildOrRenderFunction}</UIViewProvider>;
   }
 
   componentWillMount() {
-    let router = this.context['router'];
+    const router = this.props.router;
     if (typeof router === 'undefined') {
       throw UIRouterInstanceUndefinedError;
     }
 
     // Check the context for the parent UIView's fqn and State
-    let parent: UIViewAddress = this.context['parentUIViewAddress'];
+    let parent: UIViewAddress = this.props.parentUIView;
     // Not found in context, this is a root UIView
     parent = parent || { fqn: '', context: router.stateRegistry.root() };
 
@@ -232,7 +225,10 @@ export class UIView extends Component<UIViewProps, UIViewState> {
 
     if (newConfig) {
       let viewContext: ViewContext = newConfig.viewDecl && newConfig.viewDecl.$context;
-      this.uiViewAddress = { fqn: this.uiViewAddress.fqn, context: viewContext };
+      this.uiViewAddress = {
+        fqn: this.uiViewAddress.fqn,
+        context: viewContext,
+      };
 
       let resolveContext = new ResolveContext(newConfig.path);
       let injector = resolveContext.injector();
@@ -265,8 +261,18 @@ export class UIView extends Component<UIViewProps, UIViewState> {
       typeof this.componentInstance.uiCanExit === 'function' &&
       this.componentInstance.uiCanExit;
     if (stateName && callback) {
-      let transitions = this.context['router'].transitionService;
+      let transitions = this.props.router.transitionService;
       this.removeHook = transitions.onBefore(criteria, callback, {});
     }
   }
 }
+
+export const UIView = props => (
+  <UIRouterConsumer>
+    {router => (
+      <UIViewConsumer>{parentUIView => <View {...props} router={router} parentUIView={parentUIView} />}</UIViewConsumer>
+    )}
+  </UIRouterConsumer>
+);
+
+(UIView as any).displayName = 'UIView';

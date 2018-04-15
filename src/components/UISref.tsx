@@ -9,13 +9,17 @@ import * as _classNames from 'classnames';
 
 import { extend, TransitionOptions } from '@uirouter/core';
 
-import { UIRouterReact } from '../index';
-import { UIViewAddress } from './UIView';
+import { UIRouterReact, UIRouterConsumer } from '../index';
+import { UIViewAddress, UIViewConsumer } from './UIView';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
+import { UISrefActive, UISrefActiveConsumer } from './UISrefActive';
 
 let classNames = _classNames;
 
 export interface UISrefProps {
+  router: UIRouterReact;
+  addStateInfoToParentActive: Function;
+  parentUIView: UIViewAddress;
   children?: any;
   to: string;
   params?: { [key: string]: any };
@@ -23,10 +27,13 @@ export interface UISrefProps {
   className?: string;
 }
 
-export class UISref extends Component<UISrefProps, any> {
+class Sref extends Component<UISrefProps, any> {
   // deregister function for parent UISrefActive
   deregister: Function;
   static propTypes = {
+    router: PropTypes.object.isRequired,
+    parentUIView: PropTypes.object.isRequired,
+    addStateInfoToParentActive: PropTypes.func.isRequired,
     children: PropTypes.element.isRequired,
     to: PropTypes.string.isRequired,
     params: PropTypes.object,
@@ -34,16 +41,10 @@ export class UISref extends Component<UISrefProps, any> {
     className: PropTypes.string,
   };
 
-  static contextTypes: ValidationMap<any> = {
-    router: PropTypes.object,
-    parentUIViewAddress: PropTypes.object,
-    parentUiSrefActiveAddStateInfo: PropTypes.func,
-  };
-
   componentWillMount() {
-    const addStateInfo = this.context['parentUiSrefActiveAddStateInfo'];
+    const addStateInfo = this.props.addStateInfoToParentActive;
     this.deregister = typeof addStateInfo === 'function' ? addStateInfo(this.props.to, this.props.params) : () => {};
-    let router = this.context['router'];
+    const router = this.props.router;
     if (typeof router === 'undefined') {
       throw UIRouterInstanceUndefinedError;
     }
@@ -54,8 +55,8 @@ export class UISref extends Component<UISrefProps, any> {
   }
 
   getOptions = () => {
-    let parent: UIViewAddress = this.context['parentUIViewAddress'];
-    let parentContext = (parent && parent.context) || this.context['router'].stateRegistry.root();
+    let parent = this.props.parentUIView;
+    let parentContext = (parent && parent.context) || this.props.router.stateRegistry.root();
     let defOpts = { relative: parentContext, inherit: true };
     return extend(defOpts, this.props.options || {});
   };
@@ -66,7 +67,7 @@ export class UISref extends Component<UISrefProps, any> {
       let params = this.props.params || {};
       let to = this.props.to;
       let options = this.getOptions();
-      this.context['router'].stateService.go(to, params, options);
+      this.props.router.stateService.go(to, params, options);
     }
   };
 
@@ -77,9 +78,27 @@ export class UISref extends Component<UISrefProps, any> {
     let childrenProps = this.props.children.props;
     let props = Object.assign({}, childrenProps, {
       onClick: this.handleClick,
-      href: this.context['router'].stateService.href(to, params, options),
+      href: this.props.router.stateService.href(to, params, options),
       className: classNames(this.props.className, childrenProps.className),
     });
     return cloneElement(this.props.children, props);
   }
 }
+
+export const UISref = props => (
+  <UIRouterConsumer>
+    {router => (
+      <UIViewConsumer>
+        {parentUIView => (
+          <UISrefActiveConsumer>
+            {addStateInfo => (
+              <Sref {...props} router={router} parentUIView={parentUIView} addStateInfoToParentActive={addStateInfo} />
+            )}
+          </UISrefActiveConsumer>
+        )}
+      </UIViewConsumer>
+    )}
+  </UIRouterConsumer>
+);
+
+(UISref as any).displayName = 'UISref';
