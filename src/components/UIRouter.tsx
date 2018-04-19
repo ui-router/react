@@ -94,10 +94,6 @@ export class UIRouter extends Component<UIRouterProps, UIRouterState> {
   }
 
   render() {
-    return (
-      <UIRouterProvider value={this.router}>
-        {this.props.children}
-      </UIRouterProvider>
-    );
+    return <UIRouterProvider value={this.router}>{this.props.children}</UIRouterProvider>;
   }
 }
