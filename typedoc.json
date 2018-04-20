@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "target": "es5",
-    "lib": [ "es2015", "dom" ],
-    "outDir": "lib",
     "allowSyntheticDefaultImports": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "forceConsistentCasingInFileNames": true,
     "declaration": false,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "lib": ["es2015", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "lib",
     "sourceMap": false,
-    "jsx": "react"
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5"
   },
   "typedoc": {
     "publishDir": "_react_docs",
@@ -31,10 +31,5 @@
       "external-aliases": "internalapi,external",
       "navigation-label-globals": "@uirouter/react"
     }
-  },
-  "files": [
-    "src/index.ts",
-    ".downstream_cache/@uirouter/core/src/index.ts",
-    "node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts"
-  ]
+  }
 }
