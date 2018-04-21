@@ -5,16 +5,12 @@ before_install:
 - export PATH=$HOME/.yarn/bin:$PATH
 - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.5.1
 script:
-- if [ "x${CORE_BRANCH}x" != "xx" ] ; then ./node_modules/.bin/publish_yalc_package
-  .downstream_cache/core https://github.com/ui-router/core.git && yalc add @uirouter/core
-  ; fi
-- tsc
-- yarn test
-- yarn docs
-- yarn test:downstream
+- if [ "x${CORE_BRANCH}x" != "xx" ] ; then ./node_modules/.bin/publish_yalc_package .downstream_cache/core https://github.com/ui-router/core.git && yalc add @uirouter/core ; fi
+- tsc &&
+  yarn test &&
+  yarn docs &&
+  yarn test:downstream
 env:
-  global:
-    secure: ULNlEMoHRgle5QW7bWUwPFtWFAj0ZlRolybzmc1k0bUaXQp1+e+xjbONHUcAZeSHyYbw0nq4VY2fHOqiH9EVhxJSwExUA6NXoEIhn+lZwyDZ2kCV0xMrdZ/TuORFO6QNXWJ9Bi5IFs0V0cQk8hnkqDUxF/fY6AlB+zojUcYyFeGtSToIppTF+RmJ1HMi9XXT34JGNmkUfuACEm6d9+WaFSACwzKuS1ZCiaGMyOQz3AgCn92YwNs65o89ekZgmngrRiOSH7Cd6dUM1hqKpZzwUB/Cu7grrNyFQ2fDAbYCmS4ZcNZyo5gCC0Urqn9I3aOCT1bhg04eVo9FH6qjEIrg3zdOOM4Qqvq8jPo45cH9W55AMSUgnPmds1YOI1E74f0FS6b04AwDmdgaG4UmC6dRA6pXJS6+v8+2MH4/zptJZFbxycq+cMH4o7cqrz8QUR6WfpzsEPaZkp82lp2B3OXOgJBtfbq8BmpKbG+91vde9ayLBZABzRN/L1Cdh31mbEnbSgCl5jiNTznv6kD8WU9tyVkEKjzqVnCvSQxZ4WeCFTN3+70cLvOQZBFpFqUA16X+iJEetcrjeTgVl80arK02LfCDeA1qYiAV+M+KmWnx32lflA1vNIhfajAWu8XoAYkilTL6hNKZuU0BfRJCxOS7T+QCyRbewuuzXYzyCqD9LUc=
   matrix:
   - CORE_BRANCH=
   - CORE_BRANCH=master UPSTREAM_PKGS=@uirouter/core
@@ -24,8 +20,9 @@ notifications:
     rooms:
       secure: ipkeI7zWVq0mr3f5fPFybWlQKsWvNnYmFTSd6xkB03OE7yLA3leTTjI2DOKUp1rJFEYtcA3WAabSExjeDCJKyn6s7ZU52fB5/SOSnFq6tBZFbgb2rJTb+YQTdSO8vTHaH/bYgXXBPelr8eUls8Z63rZzps+/G3ZNCtObz7E/FODHjG3yLIYyUjk+hgbTUZKVS6ImEavjnZ4gZ4gO52avOaoOJk2Noamt//p4rPBivm1rrVamhZS3puBc830gUOFRqe0jZJumPQPnanGErS71ds/N6LAzKlUvJHQ9k4FE8Kg4Islkl/dARY2iKumi1x21cZWAKBD3YUOuB0BBqEwdsincq11EU4vDyVpD0UtBvLeabp1b/DcZGU6ITaWqFpOq0vHGNlSFxoIpDXumLFaK86mGqqxFtPUA0efF+k16i0P2rZ8y/r6Q7VJOia4dQ7KGlcaR75Pc7Q87OaDrQEc1ARWHhzYC3FanfQI4OHsMgSihvn6BUi6dI99mL7faUhlWaSEy3lVkROOyaoTELFOzHts/K6JH8I2T4X9d5lV9ay86rJUoSMy9a+/C5yJrKNoco3AtPBVRjWecROpqweePOyQT7k2v/X2hfliv1dKZ3SmtS3QsaJxwaO1Zqd5avTh0Xko/XwJLdd61lGl5ZC+QaO1kVzs3RBi52VWyDkTzy5A=
 sudo: false
+git:
+  depth: 3
 cache:
-  yarn: true
   directories:
   - node_modules
   - ".downstream_cache"
