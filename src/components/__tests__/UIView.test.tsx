@@ -248,8 +248,10 @@ describe('<UIView>', () => {
     it('deregisters the UIView when unmounted', () => {
       const Component = props => <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>;
       const wrapper = mount(<Component show={true} />);
-      let UIViewInstance = wrapper
+      const UIViewInstance = wrapper
         .find(UIView)
+        .at(0)
+        .find('View')
         .at(0)
         .instance();
       const deregisterSpy = jest.spyOn(UIViewInstance, 'deregister');

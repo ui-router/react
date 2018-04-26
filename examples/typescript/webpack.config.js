@@ -1,9 +1,10 @@
 var path = require('path');
-const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
+var TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 var configFilePath = path.resolve(__dirname, 'tsconfig.json');
 
 var config = {
+  mode: 'development',
   entry: [path.resolve(__dirname, './index.tsx')],
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -11,7 +12,7 @@ var config = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
-    plugins: [new TsConfigPathsPlugin({ configFileName: configFilePath })],
+    plugins: [new TsconfigPathsPlugin({ configFile: configFilePath })],
   },
   devtool: 'inline-source-map',
   module: {
@@ -20,8 +21,8 @@ var config = {
         test: /\.tsx?$/,
         use: [
           {
-            loader: 'awesome-typescript-loader',
-            query: { configFileName: configFilePath },
+            loader: 'ts-loader',
+            options: { configFile: configFilePath },
           },
         ],
         exclude: /(node_modules|__tests__)/,

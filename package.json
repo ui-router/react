@@ -22,7 +22,8 @@
     "artifacts": "artifact_tagging",
     "prettier": "node ./scripts/prettier.js write-changed",
     "prettier-all": "node ./scripts/prettier.js write",
-    "precommit": "pretty-quick --staged"
+    "precommit": "pretty-quick --staged",
+    "postinstall": "patch-package"
   },
   "homepage": "https://ui-router.github.io/react",
   "contributors": [
@@ -47,14 +48,14 @@
     "prop-types": "^15.6.1"
   },
   "peerDependencies": {
-    "react": "^15.0.0 || ^16.0.0"
+    "react": "^16.3.0"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.3",
     "@types/lodash": "^4.14.107",
     "@types/prop-types": "^15.5.2",
-    "@types/react": "=16.0.38",
-    "@types/react-dom": "^16.0.4",
+    "@types/react": "^16.3.11",
+    "@types/react-dom": "^16.0.5",
     "@uirouter/publish-scripts": "^2.3.4",
     "babel-jest": "^22.4.3",
     "babel-polyfill": "^6.26.0",
@@ -66,7 +67,9 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "glob": "^7.1.2",
     "husky": "^0.14.3",
-    "jest": "^22.4.3",
+    "jest": "22.4.3",
+    "patch-package": "^5.1.1",
+    "postinstall-postinstall": "^1.0.0",
     "prettier": "^1.12.1",
     "pretty-quick": "^1.4.1",
     "react": "^16.3.2",

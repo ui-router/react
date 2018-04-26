@@ -10,6 +10,24 @@ import { UIRouterPlugin, servicesPlugin } from '@uirouter/core';
 
 import { UIRouterReact, ReactStateDeclaration } from '../index';
 
+export const {
+  /** @internalapi */
+  Provider: UIRouterProvider,
+  /**
+   * <UIRouterConsumer> component lets you access the UIRouter instance
+   * anywhere in the component tree, by simply wrapping your component and
+   * using the function-as-child pattern to pass the instance via props.
+   *
+   * #### Example:
+   * ```jsx
+   * <UIRouterConsumer>
+   *  {router => <MyComponent router={router} />}
+   * </UIRouterConsumer>
+   * ```
+   */
+  Consumer: UIRouterConsumer,
+} = React.createContext();
+
 export interface UIRouterProps {
   plugins?: any[]; // should fix type
   states?: ReactStateDeclaration[];
@@ -56,10 +74,6 @@ export class UIRouter extends Component<UIRouterProps, UIRouterState> {
     router: PropTypes.object,
   };
 
-  static childContextTypes = {
-    router: PropTypes.object.isRequired,
-  };
-
   router: UIRouterReact;
 
   constructor(props, context) {
@@ -79,11 +93,7 @@ export class UIRouter extends Component<UIRouterProps, UIRouterState> {
     this.router.start();
   }
 
-  getChildContext() {
-    return { router: this.router };
-  }
-
   render() {
-    return Children.only(this.props.children);
+    return <UIRouterProvider value={this.router}>{this.props.children}</UIRouterProvider>;
   }
 }

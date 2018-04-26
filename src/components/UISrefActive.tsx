@@ -7,27 +7,34 @@ import { Component, cloneElement, ValidationMap } from 'react';
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
-import { UIRouterReact, UISref } from '../index';
+import { UIRouterReact, UISref, UIRouterConsumer } from '../index';
 import { UIViewAddress } from './UIView';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
+
+import { UIViewConsumer } from './UIView';
 
 let classNames = _classNames;
 
 export interface UISrefActiveProps {
+  parentUIView: UIViewAddress;
+  router: UIRouterReact;
   class?: string;
   exact?: Boolean;
   children?: any;
 }
 
 export interface UISrefActiveState {
-  state: { name: string; [key: string]: any };
+  state: { name?: string; [key: string]: any };
   params: Object;
   hash: string;
 }
 
 export const StateNameMustBeAStringError = new Error('State name provided to <UISref {to}> must be a string.');
 
-export class UISrefActive extends Component<UISrefActiveProps, any> {
+/** @internalapi */
+export const { Provider: UISrefActiveProvider, Consumer: UISrefActiveConsumer } = React.createContext();
+
+class SrefActive extends Component<UISrefActiveProps, any> {
   // keep track of states to watch and their activeClasses
   states: Array<UISrefActiveState> = [];
   activeClasses: { [key: string]: string } = {};
@@ -36,36 +43,23 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
   deregister: Function;
 
   static propTypes = {
+    parentUIView: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
     class: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
-  };
-
-  static contextTypes: ValidationMap<any> = {
-    router: PropTypes.object,
-    parentUIViewAddress: PropTypes.object,
-  };
-
-  static childContextTypes: ValidationMap<any> = {
-    parentUiSrefActiveAddStateInfo: PropTypes.func,
   };
 
   state = {
     activeClasses: '',
   };
 
-  getChildContext() {
-    return {
-      parentUiSrefActiveAddStateInfo: this.addStateInfo,
-    };
-  }
-
   componentWillMount() {
-    let router = this.context['router'];
+    const router = this.props.router;
     if (typeof router === 'undefined') {
       throw UIRouterInstanceUndefinedError;
     }
     // register callback for state change
-    this.deregister = this.context['router'].transitionService.onSuccess({}, () => this.updateActiveClasses());
+    this.deregister = router.transitionService.onSuccess({}, () => this.updateActiveClasses());
   }
 
   componentWillUnmount() {
@@ -80,9 +74,9 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
   };
 
   addState = (stateName, stateParams, activeClass) => {
-    const { stateService } = this.context['router'];
-    let parent = this.context['parentUIViewAddress'];
-    let stateContext = (parent && parent.context) || this.context['router'].stateRegistry.root();
+    const { stateService } = this.props.router;
+    let parent = this.props.parentUIView;
+    let stateContext = (parent && parent.context) || this.props.router.stateRegistry.root();
     let state = stateService.get(stateName, stateContext);
     let stateHash = this.createStateHash(stateName, stateParams);
     let stateInfo = {
@@ -107,7 +101,7 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
 
   getActiveClasses = (): string => {
     let activeClasses = [];
-    let { stateService } = this.context['router'];
+    let { stateService } = this.props.router;
     let { exact } = this.props;
     this.states.forEach(s => {
       let { state, params, hash } = s;
@@ -129,13 +123,27 @@ export class UISrefActive extends Component<UISrefActiveProps, any> {
 
   render() {
     const { activeClasses } = this.state;
-    return activeClasses.length > 0
-      ? cloneElement(
-          this.props.children,
-          Object.assign({}, this.props.children.props, {
-            className: classNames(this.props.children.props.className, activeClasses),
-          }),
-        )
-      : this.props.children;
+    const children =
+      activeClasses.length > 0
+        ? cloneElement(
+            this.props.children,
+            Object.assign({}, this.props.children.props, {
+              className: classNames(this.props.children.props.className, activeClasses),
+            }),
+          )
+        : this.props.children;
+    return <UISrefActiveProvider value={this.addStateInfo}>{children}</UISrefActiveProvider>;
   }
 }
+
+export const UISrefActive = props => (
+  <UIRouterConsumer>
+    {router => (
+      <UIViewConsumer>
+        {parentUIView => <SrefActive {...props} router={router} parentUIView={parentUIView} />}
+      </UIViewConsumer>
+    )}
+  </UIRouterConsumer>
+);
+
+(UISrefActive as any).displayName = 'UISrefActive';

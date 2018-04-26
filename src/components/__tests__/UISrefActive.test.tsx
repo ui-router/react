@@ -155,6 +155,8 @@ describe('<UISrefActive>', () => {
     const instance = wrapper
       .find(UISrefActive)
       .at(0)
+      .find('SrefActive')
+      .at(0)
       .instance();
     const deregisterSpy = jest.spyOn(instance, 'deregister');
     await router.stateService.go('simple2');
@@ -195,8 +197,14 @@ describe('<UISrefActive>', () => {
       </UIRouter>,
     );
     let node = wrapper.find(UISrefActive).at(0);
-    expect(node.instance().context.parentUIViewAddress).toBeUndefined();
-    expect(node.instance().states[0].state.name).toBe('parent.child1');
+    const instance = wrapper
+      .find(UISrefActive)
+      .at(0)
+      .find('SrefActive')
+      .at(0)
+      .instance();
+    expect(instance.context.parentUIViewAddress).toBeUndefined();
+    expect(instance.states[0].state.name).toBe('parent.child1');
   });
 
   it('works with multiple <UISref> children', () => {
@@ -217,9 +225,14 @@ describe('<UISrefActive>', () => {
         </UISrefActive>
       </UIRouter>,
     );
-    const node = wrapper.find(UISrefActive).at(0);
-    expect(node.instance().context.parentUIViewAddress).toBeUndefined();
-    expect(node.instance().states.length).toBe(3);
+    const instance = wrapper
+      .find(UISrefActive)
+      .at(0)
+      .find('SrefActive')
+      .at(0)
+      .instance();
+    expect(instance.context.parentUIViewAddress).toBeUndefined();
+    expect(instance.states.length).toBe(3);
   });
 
   it("removes active state of UISref when it's unmounted", () => {
@@ -237,10 +250,15 @@ describe('<UISrefActive>', () => {
       </UIRouter>
     );
     const wrapper = mount(<Comp show={true} />);
-    const node = wrapper.find(UISrefActive).at(0);
-    expect(node.instance().states.length).toBe(1);
+    const instance = wrapper
+      .find(UISrefActive)
+      .at(0)
+      .find('SrefActive')
+      .at(0)
+      .instance();
+    expect(instance.states.length).toBe(1);
     wrapper.setProps({ show: false });
-    expect(node.instance().states.length).toBe(0);
+    expect(instance.states.length).toBe(0);
   });
 
   it('checks for exact state match when exact prop is provided', async () => {
@@ -272,7 +290,7 @@ describe('<UISrefActive>', () => {
     await router.stateService.go('_parent._child');
     wrapper.update();
     expect(wrapper.find('a.active').length).toBe(1);
-    return router.stateService.go('_parent');
+    await router.stateService.go('_parent');
     wrapper.update();
     expect(wrapper.find('a.active').length).toBe(2);
   });
