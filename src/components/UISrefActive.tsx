@@ -32,7 +32,9 @@ export interface UISrefActiveState {
 export const StateNameMustBeAStringError = new Error('State name provided to <UISref {to}> must be a string.');
 
 /** @internalapi */
-export const { Provider: UISrefActiveProvider, Consumer: UISrefActiveConsumer } = React.createContext();
+export const { Provider: UISrefActiveProvider, Consumer: UISrefActiveConsumer } = React.createContext<Function>(
+  undefined,
+);
 
 class SrefActive extends Component<UISrefActiveProps, any> {
   // keep track of states to watch and their activeClasses

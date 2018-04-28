@@ -109,7 +109,7 @@ export const TransitionPropCollisionError = new Error(
 );
 
 /** @internalapi */
-export const { Provider: UIViewProvider, Consumer: UIViewConsumer } = React.createContext();
+export const { Provider: UIViewProvider, Consumer: UIViewConsumer } = React.createContext<UIViewAddress>(undefined);
 
 class View extends Component<UIViewProps, UIViewState> {
   // This object contains all the metadata for this UIView

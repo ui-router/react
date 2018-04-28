@@ -26,7 +26,7 @@ export const {
    * ```
    */
   Consumer: UIRouterConsumer,
-} = React.createContext();
+} = React.createContext<UIRouterReact>(undefined);
 
 export interface UIRouterProps {
   plugins?: any[]; // should fix type
