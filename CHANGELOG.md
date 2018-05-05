@@ -1,3 +1,65 @@
+# 0.7.0 (2018-05-05)
+[Compare `@uirouter/react` versions 0.6.2 and 0.7.0](https://github.com/ui-router/react/compare/0.6.2...0.7.0)
+
+### Bug Fixes
+
+* **package:** update prop-types to version 15.6.1 ([1d0ee26](https://github.com/ui-router/react/commit/1d0ee26))
+
+
+### Features
+
+* use new React 16.3 context API ([580700f](https://github.com/ui-router/react/commit/580700f)), closes [#54](https://github.com/ui-router/react/issues/54)
+* **react:** update minimum react version supported ([4acb7a7](https://github.com/ui-router/react/commit/4acb7a7))
+
+
+### BREAKING CHANGES
+
+* **react:** from version `0.7.0` `@uirouter/react` only supports react from version `16.3.x` because of the new Context API.
+If you need to use it with previous versions of React you should check the `0.6.x`, but bear in mind that it’s no longer supported and it’s advised to update React instead.
+* `@uirouter/react` now uses the new React 16.3 Context API. If you were accessing the router instance via the legacy context api (which was never explecitly supported) you need to update your code accordingly:
+
+before:
+```jsx
+class SomeComponent extends React.Component {
+  static contextTypes = {
+    router: PropTypes.object
+  }
+
+  render () {
+    // access context via this.context
+    const router = this.context.router;
+    // do whatever needed with the router
+  }
+}
+```
+
+after:
+```jsx
+class SomeComponent extends React.Component {
+  render () {
+    // access router via props
+    const router = this.props.router;
+    // do whatever needed with the router
+  }
+}
+
+// when rendering the component wrap it with the `<UIRouterConsumer>` component
+<UIRouterConsumer>
+  {router => <SomeComponent router={router} />}
+</UIRouterConsumer>
+```
+
+
+### Updated `@uirouter/core` from 5.0.17 to 5.0.18
+[Compare `@uirouter/core` versions 5.0.17 and 5.0.18](https://github.com/ui-router/core/compare/5.0.17...5.0.18)
+
+### Bug Fixes
+
+* **angular:** A hack to force the Angular compiler to import from module index ([d56a2be](https://github.com/ui-router/core/commit/d56a2be))
+* **StateRegistry:** Notify listeners of added states when there are orphans in the state queue ([5a9bac9](https://github.com/ui-router/core/commit/5a9bac9))
+* **transition:** Fix typing of Transition.params() ([ebea30e](https://github.com/ui-router/core/commit/ebea30e))
+* **transition:** Normalize `error()` to always return `Rejection` ([9bcc5db](https://github.com/ui-router/core/commit/9bcc5db))
+
 ## 0.6.3 (2018-05-03)
 [Compare `@uirouter/react` versions 0.6.2 and 0.6.3](https://github.com/ui-router/react/compare/0.6.2...0.6.3)
 
