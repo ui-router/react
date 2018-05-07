@@ -32,8 +32,8 @@ class Sref extends Component<UISrefProps, any> {
   deregister: Function;
   static propTypes = {
     router: PropTypes.object.isRequired,
-    parentUIView: PropTypes.object.isRequired,
-    addStateInfoToParentActive: PropTypes.func.isRequired,
+    parentUIView: PropTypes.object,
+    addStateInfoToParentActive: PropTypes.func,
     children: PropTypes.element.isRequired,
     to: PropTypes.string.isRequired,
     params: PropTypes.object,

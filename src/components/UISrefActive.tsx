@@ -45,7 +45,7 @@ class SrefActive extends Component<UISrefActiveProps, any> {
   deregister: Function;
 
   static propTypes = {
-    parentUIView: PropTypes.object.isRequired,
+    parentUIView: PropTypes.object,
     router: PropTypes.object.isRequired,
     class: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
