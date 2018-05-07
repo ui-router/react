@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { CSSTransitionGroup } from 'react-transition-group';
-import { UIRouter, UIView, pushStateLocationPlugin } from '@uirouter/react';
+import { UIRouter, UIView, hashLocationPlugin } from '@uirouter/react';
 
 import './index.css';
 
@@ -9,7 +9,7 @@ import { Home, About, Menu } from './components';
 
 const states = [
   {
-    url: '/',
+    url: '/home',
     name: 'home',
     component: Home,
   },
@@ -19,18 +19,15 @@ const states = [
     component: About,
   },
 ];
+const config = router => router.urlService.rules.initial({ state: 'home' });
 
 const App = () => (
-  <UIRouter plugins={[pushStateLocationPlugin]} states={states}>
+  <UIRouter plugins={[hashLocationPlugin]} states={states} config={config}>
     <div>
       <Menu />
       <UIView
         render={(RoutedComponent, props) => (
-          <CSSTransitionGroup
-            transitionName="example"
-            transitionEnterTimeout={500}
-            transitionLeaveTimeout={300}
-          >
+          <CSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
             <RoutedComponent {...props} key={props.transition} />
           </CSSTransitionGroup>
         )}
