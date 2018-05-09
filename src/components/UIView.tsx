@@ -243,7 +243,8 @@ class View extends Component<UIViewProps, UIViewState> {
     }
 
     this.uiViewData.config = newConfig;
-    let props = { ...resolves, transition: trans };
+    const key = Date.now();
+    let props = { ...resolves, transition: trans, key };
 
     let newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
     this.setState({
