@@ -6,7 +6,8 @@
   "typings": "lib/index.d.ts",
   "jsnext:main": "lib-esm/index.js",
   "scripts": {
-    "test": "NODE_ENV=production jest --silent",
+    "patch": "patch -N -r - -p1 < node_modules/enzyme-context-patch/patches/enzyme-adapter-react-16+1.1.1.patch || true",
+    "test": "npm run patch && NODE_ENV=production jest --silent",
     "test:downstream": "npm run build && test_downstream_projects",
     "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config ./examples/typescript/webpack.config.js --history-api-fallback --content-base examples/typescript",
     "clean": "shx rm -rf _bundles lib lib-esm build",
