@@ -57,7 +57,7 @@ const states = [
 
 describe('<UIView>', () => {
   describe('(unmounted)', () => {
-    let router;
+    let router: UIRouterReact;
     beforeEach(() => {
       router = new UIRouterReact();
       router.plugin(memoryLocationPlugin);
@@ -98,12 +98,12 @@ describe('<UIView>', () => {
   });
 
   describe('(mounted)', () => {
-    let router;
+    let router: UIRouterReact;
     beforeEach(() => {
       router = new UIRouterReact();
       router.plugin(servicesPlugin);
       router.plugin(memoryLocationPlugin);
-      states.forEach(state => router.stateRegistry.register(state));
+      states.forEach(state => router.stateRegistry.register(state as ReactStateDeclaration));
     });
 
     it('renders its State Component', () => {
@@ -123,7 +123,7 @@ describe('<UIView>', () => {
         name: '__state',
         component: Comp,
         resolve: [{ resolveFn: () => true, token: 'myresolve' }],
-      });
+      } as ReactStateDeclaration);
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
@@ -141,7 +141,7 @@ describe('<UIView>', () => {
         name: '__state',
         component: Comp,
         resolve: [{ token: 'foo', resolveFn: () => 'bar' }],
-      });
+      } as ReactStateDeclaration);
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
@@ -158,7 +158,7 @@ describe('<UIView>', () => {
         name: '__state',
         component: Comp,
         resolve: [{ token: 'transition', resolveFn: () => null }],
-      });
+      } as ReactStateDeclaration);
 
       await router.stateService.go('__state');
 
