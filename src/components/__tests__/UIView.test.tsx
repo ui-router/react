@@ -268,5 +268,35 @@ describe('<UIView>', () => {
       await router.stateService.go('withrenderprop');
       expect(wrapper.html()).toEqual(`<div><span>withrenderprop</span><span>bar</span></div>`);
     });
+
+    it('unmounts the State Component when calling stateService.reload(true)', async () => {
+      const componentDidMountWatcher = jest.fn();
+      const componentWillUnmountWatcher = jest.fn();
+      class TestUnmountComponent extends React.Component {
+        componentDidMount() {
+          componentDidMountWatcher();
+        }
+        componentWillUnmount() {
+          componentWillUnmountWatcher();
+        }
+        render() {
+          return <div />;
+        }
+      }
+      const testState = {
+        name: 'testunmount',
+        component: TestUnmountComponent,
+      };
+      router.stateRegistry.register(testState);
+      const wrapper = mount(
+        <UIRouter router={router}>
+          <UIView />
+        </UIRouter>,
+      );
+      await router.stateService.go('testunmount');
+      await router.stateService.reload('testunmount');
+      expect(componentDidMountWatcher).toHaveBeenCalledTimes(2);
+      expect(componentWillUnmountWatcher).toHaveBeenCalledTimes(1);
+    });
   });
 });
