@@ -8,6 +8,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "lib",
+    "skipLibCheck": true,
     "sourceMap": false,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5"
