@@ -33,7 +33,7 @@ export const StateNameMustBeAStringError = new Error('State name provided to <UI
 
 /** @internalapi */
 export const { Provider: UISrefActiveProvider, Consumer: UISrefActiveConsumer } = React.createContext<Function>(
-  undefined,
+  undefined
 );
 
 class SrefActive extends Component<UISrefActiveProps, any> {
@@ -131,7 +131,7 @@ class SrefActive extends Component<UISrefActiveProps, any> {
             this.props.children,
             Object.assign({}, this.props.children.props, {
               className: classNames(this.props.children.props.className, activeClasses),
-            }),
+            })
           )
         : this.props.children;
     return <UISrefActiveProvider value={this.addStateInfo}>{children}</UISrefActiveProvider>;

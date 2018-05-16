@@ -21,7 +21,7 @@ describe('<UIRouter>', () => {
       const wrapper = mount(
         <UIRouter>
           <Child />
-        </UIRouter>,
+        </UIRouter>
       );
     }).toThrow();
   });
@@ -30,7 +30,7 @@ describe('<UIRouter>', () => {
     const wrapper = mount(
       <UIRouter plugins={[memoryLocationPlugin]} states={[]}>
         <UIRouterConsumer>{router => <Child router={router} />}</UIRouterConsumer>
-      </UIRouter>,
+      </UIRouter>
     );
     expect(wrapper.find(Child).props().router).toBeDefined();
   });
@@ -41,7 +41,7 @@ describe('<UIRouter>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIRouterConsumer>{router => <Child router={router} />}</UIRouterConsumer>
-      </UIRouter>,
+      </UIRouter>
     );
     expect(wrapper.find(Child).props().router).toBe(router);
   });
@@ -56,7 +56,7 @@ describe('<UIRouter>', () => {
               return null;
             }}
           </UIRouterConsumer>
-        </UIRouter>,
+        </UIRouter>
       );
     });
 
@@ -71,7 +71,7 @@ describe('<UIRouter>', () => {
               return null;
             }}
           </UIRouterConsumer>
-        </UIRouter>,
+        </UIRouter>
       );
     });
   });

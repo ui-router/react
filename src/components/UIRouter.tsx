@@ -62,7 +62,7 @@ router.plugin(pushStateLocationPlugin);
 
 /** @hidden */
 export const UIRouterInstanceUndefinedError = new Error(
-  `UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`,
+  `UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`
 );
 
 export class UIRouter extends Component<UIRouterProps, UIRouterState> {

@@ -67,7 +67,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       expect(wrapper.html()).toBe('<div></div>');
     });
@@ -79,8 +79,8 @@ describe('<UIView>', () => {
             <UIView>
               <span />
             </UIView>
-          </UIRouter>,
-        ).contains(<span />),
+          </UIRouter>
+        ).contains(<span />)
       ).toBe(true);
     });
 
@@ -91,8 +91,8 @@ describe('<UIView>', () => {
             <UIView className="myClass" style={{ margin: 5 }}>
               <span />
             </UIView>
-          </UIRouter>,
-        ).contains(<span className="myClass" style={{ margin: 5 }} />),
+          </UIRouter>
+        ).contains(<span className="myClass" style={{ margin: 5 }} />)
       ).toBe(true);
     });
   });
@@ -110,7 +110,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       return router.stateService.go('parent').then(() => {
         expect(wrapper.html()).toEqual(`<div><span>parent</span><div></div></div>`);
@@ -127,7 +127,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       await router.stateService.go('__state');
       wrapper.update();
@@ -145,7 +145,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       await router.stateService.go('__state');
       wrapper.update();
@@ -166,7 +166,7 @@ describe('<UIView>', () => {
         const wrapper = mount(
           <UIRouter router={router}>
             <UIView />
-          </UIRouter>,
+          </UIRouter>
         );
       }).toThrow(TransitionPropCollisionError);
     });
@@ -176,7 +176,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       expect(wrapper.html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
     });
@@ -186,7 +186,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       expect(wrapper.html()).toEqual(`<div><span>namedParent</span><div></div><div></div></div>`);
     });
@@ -196,7 +196,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       expect(wrapper.html()).toEqual(`<div><span>namedParent</span><span>child1</span><span>child2</span></div>`);
     });
@@ -205,7 +205,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       await router.stateService.go('parent.child');
       expect(wrapper.html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
@@ -236,7 +236,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       await router.stateService.go('__state');
       expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
@@ -263,7 +263,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView render={(Comp, props) => <Comp {...props} foo={<span>bar</span>} />} />
-        </UIRouter>,
+        </UIRouter>
       );
       await router.stateService.go('withrenderprop');
       expect(wrapper.html()).toEqual(`<div><span>withrenderprop</span><span>bar</span></div>`);
@@ -291,7 +291,7 @@ describe('<UIView>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
       await router.stateService.go('testunmount');
       await router.stateService.reload('testunmount');

@@ -75,7 +75,7 @@ export interface UIViewResolves {
  */
 export type RenderPropCallback = (
   Component: StatelessComponent<any> | ComponentClass<any> | ClassicComponentClass<any>,
-  Props: any,
+  Props: any
 ) => JSX.Element | null;
 
 export interface UIViewInjectedProps {
@@ -105,7 +105,7 @@ export interface UIViewState {
 
 export const TransitionPropCollisionError = new Error(
   '`transition` cannot be used as resolve token. ' +
-    'Please rename your resolve to avoid conflicts with the router transition.',
+    'Please rename your resolve to avoid conflicts with the router transition.'
 );
 
 /** @internalapi */

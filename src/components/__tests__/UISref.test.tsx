@@ -35,7 +35,7 @@ describe('<UISref>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
-      </UIRouter>,
+      </UIRouter>
     );
     await router.stateService.go('state');
     wrapper.update();
@@ -48,7 +48,7 @@ describe('<UISref>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
-      </UIRouter>,
+      </UIRouter>
     );
     await router.stateService.go('state');
     wrapper.update();
@@ -70,7 +70,7 @@ describe('<UISref>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
-      </UIRouter>,
+      </UIRouter>
     );
     await router.stateService.go('state');
     wrapper.update();
@@ -87,7 +87,7 @@ describe('<UISref>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
-      </UIRouter>,
+      </UIRouter>
     );
     await router.stateService.go('state');
     wrapper.update();
@@ -106,7 +106,7 @@ describe('<UISref>', () => {
         <UISref to="state">
           <a>link</a>
         </UISref>
-      </UIRouter>,
+      </UIRouter>
     );
     const uiSref = wrapper
       .find(UISref)

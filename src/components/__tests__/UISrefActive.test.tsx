@@ -105,7 +105,7 @@ describe('<UISrefActive>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
-      </UIRouter>,
+      </UIRouter>
     );
     await router.stateService.go('simple');
     wrapper.update();
@@ -118,7 +118,7 @@ describe('<UISrefActive>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
-      </UIRouter>,
+      </UIRouter>
     );
     await router.stateService.go('parent.child1');
     wrapper.update();
@@ -138,7 +138,7 @@ describe('<UISrefActive>', () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
-        </UIRouter>,
+        </UIRouter>
       );
     }).toThrow(StateNameMustBeAStringError);
   });
@@ -147,7 +147,7 @@ describe('<UISrefActive>', () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
-      </UIRouter>,
+      </UIRouter>
     );
     let spy, node;
     await router.stateService.go('simple');
@@ -174,7 +174,7 @@ describe('<UISrefActive>', () => {
           </UISrefActive>
           <UIView />
         </div>
-      </UIRouter>,
+      </UIRouter>
     );
     await router.stateService.go('withParams', { param: 5 });
     wrapper.update();
@@ -194,7 +194,7 @@ describe('<UISrefActive>', () => {
             <a>child1</a>
           </UISref>
         </UISrefActive>
-      </UIRouter>,
+      </UIRouter>
     );
     let node = wrapper.find(UISrefActive).at(0);
     const instance = wrapper
@@ -223,7 +223,7 @@ describe('<UISrefActive>', () => {
             </UISref>
           </div>
         </UISrefActive>
-      </UIRouter>,
+      </UIRouter>
     );
     const instance = wrapper
       .find(UISrefActive)
@@ -277,7 +277,7 @@ describe('<UISrefActive>', () => {
           </UISrefActive>
           <UIView />
         </div>
-      </UIRouter>,
+      </UIRouter>
     );
     router.stateRegistry.register({
       name: '_parent',
