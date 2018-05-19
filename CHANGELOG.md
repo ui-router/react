@@ -1,3 +1,28 @@
+# 0.8.0 (2018-05-19)
+[Compare `@uirouter/react` versions 0.7.0 and 0.8.0](https://github.com/ui-router/react/compare/0.7.0...0.8.0)
+
+### Bug Fixes
+
+* **UISref/UISrefActive:** make proptypes non-required: parentUIView, addStateInfoToParentActive ([c7aa299](https://github.com/ui-router/react/commit/c7aa299)), closes [#173](https://github.com/ui-router/react/issues/173)
+
+
+### Features
+
+* **UIView:** force component re-mount on reload() ([d01162a](https://github.com/ui-router/react/commit/d01162a)), closes [#172](https://github.com/ui-router/react/issues/172)
+
+
+### BREAKING CHANGES
+
+* **UIView:** when a state is entered/exited the State Component is remounted, re-running its lifecycle methods.
+
+
+### Updated `@uirouter/core` from 5.0.18 to 5.0.19
+[Compare `@uirouter/core` versions 5.0.18 and 5.0.19](https://github.com/ui-router/core/compare/5.0.18...5.0.19)
+
+### Bug Fixes
+
+* **enums:** Workaround angular compiler export issue https://github.com/angular/angular/issues/23759 ([38d25fa](https://github.com/ui-router/core/commit/38d25fa))
+
 # 0.7.0 (2018-05-05)
 [Compare `@uirouter/react` versions 0.6.2 and 0.7.0](https://github.com/ui-router/react/compare/0.6.2...0.7.0)
 
