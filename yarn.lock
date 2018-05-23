@@ -6098,8 +6098,8 @@ pretty-format@^22.4.0, pretty-format@^22.4.3:
     ansi-styles "^3.2.0"
 
 pretty-quick@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/pretty-quick/-/pretty-quick-1.4.1.tgz#9d41f778d2d4d940ec603d1293a0998e84c4722c"
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/pretty-quick/-/pretty-quick-1.5.0.tgz#304853ece7f8cb56bec74ba3ccd978037e7f2117"
   dependencies:
     chalk "^2.3.0"
     execa "^0.8.0"
