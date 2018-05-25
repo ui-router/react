@@ -1,3 +1,10 @@
+## 0.8.1 (2018-05-25)
+[Compare `@uirouter/react` versions 0.8.0 and 0.8.1](https://github.com/ui-router/react/compare/0.8.0...0.8.1)
+
+### Features
+
+* **internal:** exposed the internal View component for use by [@uirouter](https://github.com/uirouter)/react-hybrid ([9c07226](https://github.com/ui-router/react/commit/9c07226))
+
 # 0.8.0 (2018-05-19)
 [Compare `@uirouter/react` versions 0.7.0 and 0.8.0](https://github.com/ui-router/react/compare/0.7.0...0.8.0)
 
