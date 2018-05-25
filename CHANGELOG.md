@@ -1,3 +1,15 @@
+## 0.8.2 (2018-05-25)
+[Compare `@uirouter/react` versions 0.8.1 and 0.8.2](https://github.com/ui-router/react/compare/0.8.1...0.8.2)
+
+### Bug Fixes
+
+* **enzyme:** fix enzyme patch leaving a file called '-' ([4c2157c](https://github.com/ui-router/react/commit/4c2157c))
+
+
+### Features
+
+* **internal:** Change UIView from arrow to Component Class ([ce2bc1e](https://github.com/ui-router/react/commit/ce2bc1e))
+
 ## 0.8.1 (2018-05-25)
 [Compare `@uirouter/react` versions 0.8.0 and 0.8.1](https://github.com/ui-router/react/compare/0.8.0...0.8.1)
 
