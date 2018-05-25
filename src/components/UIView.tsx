@@ -277,3 +277,4 @@ export const UIView = props => (
 );
 
 (UIView as any).displayName = 'UIView';
+(UIView as any).__internalViewComponent = View;
