@@ -268,13 +268,19 @@ class View extends Component<UIViewProps, UIViewState> {
   }
 }
 
-export const UIView = props => (
-  <UIRouterConsumer>
-    {router => (
-      <UIViewConsumer>{parentUIView => <View {...props} router={router} parentUIView={parentUIView} />}</UIViewConsumer>
-    )}
-  </UIRouterConsumer>
-);
+export class UIView extends React.Component {
+  static displayName = 'UIView';
+  static __internalViewComponent: React.ComponentClass<UIViewProps> = View;
 
-(UIView as any).displayName = 'UIView';
-(UIView as any).__internalViewComponent = View;
+  render() {
+    return (
+      <UIRouterConsumer>
+        {router => (
+          <UIViewConsumer>
+            {parentUIView => <View {...this.props} router={router} parentUIView={parentUIView} />}
+          </UIViewConsumer>
+        )}
+      </UIRouterConsumer>
+    );
+  }
+}
