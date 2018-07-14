@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "jsnext:main": "lib-esm/index.js",
+  "module": "lib-esm/index.js",
   "scripts": {
     "patch": "patch -N -r patch.rej -p1 < node_modules/enzyme-context-patch/patches/enzyme-adapter-react-16+1.1.1.patch || true && shx rm -f patch.rej",
     "test": "npm run patch && NODE_ENV=production jest --silent",
