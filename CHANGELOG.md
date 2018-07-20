@@ -1,3 +1,21 @@
+## 0.8.3 (2018-07-20)
+[Compare `@uirouter/react` versions 0.8.2 and 0.8.3](https://github.com/ui-router/react/compare/0.8.2...0.8.3)
+
+
+### Updated `@uirouter/core` from 5.0.19 to 5.0.20
+[Compare `@uirouter/core` versions 5.0.19 and 5.0.20](https://github.com/ui-router/core/compare/5.0.19...5.0.20)
+
+### Bug Fixes
+
+* **params:** When creating an array parameter from a custom type, copy the `raw` property ([b6dd738](https://github.com/ui-router/core/commit/b6dd738)), closes [#178](https://github.com/ui-router/core/issues/178)
+
+
+### Features
+
+* **dynamic:** Support dynamic flag on a state declaration ([3cd5a2a](https://github.com/ui-router/core/commit/3cd5a2a))
+* **transition:** Added transition.paramsChanged() to get added/deleted/changed parameter values for a transition ([10b7fde](https://github.com/ui-router/core/commit/10b7fde))
+* **view:** Add _pluginapi._registeredUIView() to get a ui-view by id ([6533b51](https://github.com/ui-router/core/commit/6533b51))
+
 ## 0.8.2 (2018-05-25)
 [Compare `@uirouter/react` versions 0.8.1 and 0.8.2](https://github.com/ui-router/react/compare/0.8.1...0.8.2)
 
