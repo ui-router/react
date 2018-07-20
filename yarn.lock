@@ -90,13 +90,13 @@
     "@types/glob" "*"
     "@types/node" "*"
 
-"@uirouter/core@5.0.19":
-  version "5.0.19"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.19.tgz#fe2888190393a8c92584c354e65ab8322c1b0db4"
+"@uirouter/core@5.0.20":
+  version "5.0.20"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.20.tgz#9c27d8d14d50358040840fd00e9d38c36be1adc5"
 
-"@uirouter/publish-scripts@^2.3.18":
-  version "2.3.19"
-  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.3.19.tgz#22cc4058c32120811ebb425f8f0ce0ca8d4ac2ad"
+"@uirouter/publish-scripts@^2.3.20":
+  version "2.3.20"
+  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.3.20.tgz#a3d57e5f134b0d05df3b2382f3cfcf6491ede786"
   dependencies:
     conventional-changelog "^2.0.1"
     conventional-changelog-ui-router-core "^1.4.2"
@@ -2289,9 +2289,9 @@ enzyme-adapter-utils@^1.3.0:
     object.assign "^4.0.4"
     prop-types "^15.6.0"
 
-enzyme-context-patch@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/enzyme-context-patch/-/enzyme-context-patch-0.0.7.tgz#24559e8ed25e83ced33bfc72fe7e1678a5d90a28"
+enzyme-context-patch@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/enzyme-context-patch/-/enzyme-context-patch-0.0.8.tgz#ef47acae52f1dc755b92c8b2b8a35b8cc5eb924b"
 
 enzyme@^3.3.0:
   version "3.3.0"
@@ -6528,9 +6528,9 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
-ts-jest@^23.0.0:
-  version "23.0.0"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.0.0.tgz#3216310fb51e40789c6e4aa20bfe80198d250e9b"
+ts-jest@^23.0.1:
+  version "23.0.1"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.0.1.tgz#c90e747b2787d3394319cde77c2748a87aaf2f48"
   dependencies:
     babel-plugin-istanbul "^4.1.6"
     babel-preset-jest "^23.0.0"
@@ -6868,9 +6868,9 @@ webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
 
-webpack-cli@^3.0.8:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/webpack-cli/-/webpack-cli-3.0.8.tgz#90eddcf04a4bfc31aa8c0edc4c76785bc4f1ccd9"
+webpack-cli@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/webpack-cli/-/webpack-cli-3.1.0.tgz#d71a83687dcfeb758fdceeb0fe042f96bcf62994"
   dependencies:
     chalk "^2.4.1"
     cross-spawn "^6.0.5"
@@ -6882,7 +6882,7 @@ webpack-cli@^3.0.8:
     loader-utils "^1.1.0"
     supports-color "^5.4.0"
     v8-compile-cache "^2.0.0"
-    yargs "^11.1.0"
+    yargs "^12.0.1"
 
 webpack-dev-middleware@3.1.3:
   version "3.1.3"
@@ -7144,23 +7144,6 @@ yargs-parser@^9.0.2:
 yargs@11.0.0, yargs@^11.0.0:
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-11.0.0.tgz#c052931006c5eee74610e5fc0354bedfd08a201b"
-  dependencies:
-    cliui "^4.0.0"
-    decamelize "^1.1.1"
-    find-up "^2.1.0"
-    get-caller-file "^1.0.1"
-    os-locale "^2.0.0"
-    require-directory "^2.1.1"
-    require-main-filename "^1.0.1"
-    set-blocking "^2.0.0"
-    string-width "^2.0.0"
-    which-module "^2.0.0"
-    y18n "^3.2.1"
-    yargs-parser "^9.0.2"
-
-yargs@^11.1.0:
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-11.1.0.tgz#90b869934ed6e871115ea2ff58b03f4724ed2d77"
   dependencies:
     cliui "^4.0.0"
     decamelize "^1.1.1"
