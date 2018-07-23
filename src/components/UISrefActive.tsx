@@ -17,6 +17,7 @@ let classNames = _classNames;
 
 export interface UISrefActiveProps {
   parentUIView: UIViewAddress;
+  addStateInfoToParentActive: Function;
   router: UIRouterReact;
   class?: string;
   exact?: Boolean;
@@ -46,6 +47,7 @@ class SrefActive extends Component<UISrefActiveProps, any> {
 
   static propTypes = {
     parentUIView: PropTypes.object,
+    addStateInfoToParentActive: PropTypes.func,
     router: PropTypes.object.isRequired,
     class: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
@@ -71,7 +73,17 @@ class SrefActive extends Component<UISrefActiveProps, any> {
   addStateInfo = (stateName, stateParams) => {
     const activeClass = this.props.class;
     let deregister = this.addState(stateName, stateParams, activeClass);
+    const addStateInfo = this.props.addStateInfoToParentActive;
     this.updateActiveClasses();
+
+    if (typeof addStateInfo === 'function') {
+      const parentDeregister = addStateInfo(stateName, stateParams);
+      return () => {
+        deregister();
+        parentDeregister();
+      };
+    }
+
     return deregister;
   };
 
@@ -142,7 +154,18 @@ export const UISrefActive = props => (
   <UIRouterConsumer>
     {router => (
       <UIViewConsumer>
-        {parentUIView => <SrefActive {...props} router={router} parentUIView={parentUIView} />}
+        {parentUIView => (
+          <UISrefActiveConsumer>
+            {addStateInfo => (
+              <SrefActive
+                {...props}
+                router={router}
+                parentUIView={parentUIView}
+                addStateInfoToParentActive={addStateInfo}
+              />
+            )}
+          </UISrefActiveConsumer>
+        )}
       </UIViewConsumer>
     )}
   </UIRouterConsumer>

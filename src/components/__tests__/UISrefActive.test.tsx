@@ -235,6 +235,40 @@ describe('<UISrefActive>', () => {
     expect(instance.states.length).toBe(3);
   });
 
+  it('works with nested <UISrefActive>', () => {
+    const wrapper = mount(
+      <UIRouter router={router}>
+        <UISrefActive class="active">
+          <div>
+            <UISrefActive class="active">
+              <UISref to="parent.child1">
+                <a>child1</a>
+              </UISref>
+            </UISrefActive>
+            <UISrefActive class="active">
+              <UISref to="parent.child2">
+                <a>child2</a>
+              </UISref>
+            </UISrefActive>
+            <UISrefActive class="active">
+              <UISref to="parent.child3">
+                <a>child3</a>
+              </UISref>
+            </UISrefActive>
+          </div>
+        </UISrefActive>
+      </UIRouter>
+    );
+    const instance = wrapper
+      .find(UISrefActive)
+      .at(0)
+      .find('SrefActive')
+      .at(0)
+      .instance();
+    expect(instance.context.parentUIViewAddress).toBeUndefined();
+    expect(instance.states.length).toBe(3);
+  });
+
   it("removes active state of UISref when it's unmounted", () => {
     const Comp = props => (
       <UIRouter router={router}>
