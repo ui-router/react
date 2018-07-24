@@ -55,11 +55,7 @@ const routerConfig = (router: UIRouterReact) => {
 
 let el = document.getElementById('react-app');
 let app = (
-  <UIRouter
-    plugins={[pushStateLocationPlugin]}
-    states={[home, child, nest]}
-    config={routerConfig}
-  >
+  <UIRouter plugins={[pushStateLocationPlugin]} states={[home, child, nest]} config={routerConfig}>
     <div>
       <UISrefActive class="active">
         <UISref to="home">
