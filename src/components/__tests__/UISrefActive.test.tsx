@@ -235,38 +235,88 @@ describe('<UISrefActive>', () => {
     expect(instance.states.length).toBe(3);
   });
 
-  it('works with nested <UISrefActive>', () => {
+  it('works with nested <UISrefActive>', async () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UISrefActive class="active">
           <div>
-            <UISrefActive class="active">
-              <UISref to="parent.child1">
-                <a>child1</a>
+            <UISrefActive class="state1">
+              <UISref to="state1">
+                <a>state1</a>
               </UISref>
             </UISrefActive>
-            <UISrefActive class="active">
-              <UISref to="parent.child2">
-                <a>child2</a>
+            <UISrefActive class="state2">
+              <UISref to="state2">
+                <a>state2</a>
               </UISref>
             </UISrefActive>
-            <UISrefActive class="active">
-              <UISref to="parent.child3">
-                <a>child3</a>
+            <UISrefActive class="state3">
+              <UISref to="state3">
+                <a>state3</a>
               </UISref>
             </UISrefActive>
           </div>
         </UISrefActive>
       </UIRouter>
     );
+
     const instance = wrapper
       .find(UISrefActive)
       .at(0)
       .find('SrefActive')
       .at(0)
       .instance();
-    expect(instance.context.parentUIViewAddress).toBeUndefined();
     expect(instance.states.length).toBe(3);
+
+    router.stateRegistry.register({
+      name: 'state1',
+      component: () => <UIView />,
+    });
+    router.stateRegistry.register({
+      name: 'state2',
+      component: () => <UIView />,
+    });
+
+    await router.stateService.go('state1');
+    wrapper.update();
+    expect(wrapper.find('div.active').length).toBe(1);
+    expect(wrapper.find('a.state2').length).toBe(0);
+    expect(wrapper.find('a.state1').length).toBe(1);
+    await router.stateService.go('state2');
+    wrapper.update();
+    expect(wrapper.find('div.active').length).toBe(1);
+    expect(wrapper.find('a.state2').length).toBe(1);
+    expect(wrapper.find('a.state1').length).toBe(0);
+  });
+
+  it('passes down className from parent correctly', async () => {
+    const wrapper = mount(
+      <UIRouter router={router}>
+        <UISrefActive class="active">
+          <UISrefActive class="state1">
+            <UISref to="state1">
+              <a>state1</a>
+            </UISref>
+          </UISrefActive>
+        </UISrefActive>
+      </UIRouter>
+    );
+
+    router.stateRegistry.register({
+      name: 'state1',
+      component: () => <UIView />,
+    });
+    router.stateRegistry.register({
+      name: 'otherstate',
+      component: () => <UIView />,
+    });
+
+    await router.stateService.go('state1');
+    wrapper.update();
+    expect(wrapper.find('a.active.state1').length).toBe(1);
+    await router.stateService.go('otherstate');
+    wrapper.update();
+    expect(wrapper.find('a.active').length).toBe(0);
   });
 
   it("removes active state of UISref when it's unmounted", () => {
