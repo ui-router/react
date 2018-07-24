@@ -22,6 +22,7 @@ export interface UISrefActiveProps {
   class?: string;
   exact?: Boolean;
   children?: any;
+  className?: string;
 }
 
 export interface UISrefActiveState {
@@ -51,6 +52,7 @@ class SrefActive extends Component<UISrefActiveProps, any> {
     router: PropTypes.object.isRequired,
     class: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
+    className: PropTypes.string,
   };
 
   state = {
@@ -137,12 +139,13 @@ class SrefActive extends Component<UISrefActiveProps, any> {
 
   render() {
     const { activeClasses } = this.state;
+    const { className } = this.props;
     const children =
       activeClasses.length > 0
         ? cloneElement(
             this.props.children,
             Object.assign({}, this.props.children.props, {
-              className: classNames(this.props.children.props.className, activeClasses),
+              className: classNames(className, this.props.children.props.className, activeClasses),
             })
           )
         : this.props.children;

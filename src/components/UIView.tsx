@@ -87,8 +87,8 @@ export interface UIViewInjectedProps {
 
 /** Component Props for `UIView` */
 export interface UIViewProps {
-  router: UIRouterReact;
-  parentUIView: UIViewAddress;
+  router?: UIRouterReact;
+  parentUIView?: UIViewAddress;
   name?: string;
   className?: string;
   style?: Object;
@@ -268,7 +268,7 @@ class View extends Component<UIViewProps, UIViewState> {
   }
 }
 
-export class UIView extends React.Component {
+export class UIView extends React.Component<UIViewProps, any> {
   static displayName = 'UIView';
   static __internalViewComponent: React.ComponentClass<UIViewProps> = View;
 
