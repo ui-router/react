@@ -245,6 +245,40 @@ describe('<UIView>', () => {
       expect(uiCanExitSpy).toBeCalled();
     });
 
+    it('calls uiCanExit function of a React.forwardRef() State Component when unmounting', async () => {
+      let uiCanExitSpy = jest.fn();
+      class Comp extends React.Component<any, any> {
+        uiCanExit = uiCanExitSpy;
+        render() {
+          return <span>UiCanExitHookComponent</span>;
+        }
+      }
+      const ForwardRef = React.forwardRef((props, ref) => <Comp {...props} ref={ref} />);
+      const Exit = () => <span>exit</span>;
+      router = new UIRouterReact();
+      router.plugin(servicesPlugin);
+      router.plugin(memoryLocationPlugin);
+      router.stateRegistry.register({
+        name: '__state',
+        component: ForwardRef,
+      } as ReactStateDeclaration);
+      router.stateRegistry.register({
+        name: 'exit',
+        component: Exit,
+      } as ReactStateDeclaration);
+      const wrapper = mount(
+        <UIRouter router={router}>
+          <UIView />
+        </UIRouter>
+      );
+      await router.stateService.go('__state');
+      console.log(wrapper.html());
+      expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
+      await router.stateService.go('exit');
+      expect(wrapper.html()).toEqual('<span>exit</span>');
+      expect(uiCanExitSpy).toBeCalled();
+    });
+
     it('deregisters the UIView when unmounted', () => {
       const Component = props => <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>;
       const wrapper = mount(<Component show={true} />);

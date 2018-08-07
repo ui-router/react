@@ -152,7 +152,10 @@ class View extends Component<UIViewProps, UIViewState> {
     // only class components can implement the
     // uiCanExit hook and ref doesn't work on
     // stateless function components
-    if (typeof component !== 'string' && !!component.prototype.render) {
+    if (
+      typeof component !== 'string' &&
+      (!!component.render || (component.prototype && !!component.prototype.render))
+    ) {
       props.ref = c => {
         this.componentInstance = c;
         this.registerUiCanExitHook(stateName);
