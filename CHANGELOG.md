@@ -1,3 +1,10 @@
+## 0.8.5 (2018-08-09)
+[Compare `@uirouter/react` versions 0.8.4 and 0.8.5](https://github.com/ui-router/react/compare/0.8.4...0.8.5)
+
+### Features
+
+* **UISref:** Call child element's onClick prop first, if it exists ([095a90d](https://github.com/ui-router/react/commit/095a90d)), closes [#240](https://github.com/ui-router/react/issues/240)
+
 ## 0.8.4 (2018-08-07)
 [Compare `@uirouter/react` versions 0.8.3 and 0.8.4](https://github.com/ui-router/react/compare/0.8.3...0.8.4)
 
