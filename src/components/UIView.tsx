@@ -9,7 +9,6 @@ import {
   createElement,
   cloneElement,
   isValidElement,
-  ReactElement,
   SFC,
   ClassType,
   StatelessComponent,
@@ -18,16 +17,7 @@ import {
 } from 'react';
 import * as PropTypes from 'prop-types';
 
-import {
-  ActiveUIView,
-  ViewContext,
-  ViewConfig,
-  Transition,
-  ResolveContext,
-  StateParams,
-  applyPairs,
-  extend,
-} from '@uirouter/core';
+import { ActiveUIView, ViewContext, Transition, ResolveContext, StateParams, applyPairs } from '@uirouter/core';
 
 import { UIRouterReact, UIRouterConsumer } from '../index';
 import { ReactViewConfig } from '../reactViews';

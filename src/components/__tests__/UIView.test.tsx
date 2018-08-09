@@ -253,7 +253,7 @@ describe('<UIView>', () => {
           return <span>UiCanExitHookComponent</span>;
         }
       }
-      const ForwardRef = React.forwardRef((props, ref) => <Comp {...props} ref={ref} />);
+      const ForwardRef = React.forwardRef((props, ref: any) => <Comp {...props} ref={ref} />);
       const Exit = () => <span>exit</span>;
       router = new UIRouterReact();
       router.plugin(servicesPlugin);

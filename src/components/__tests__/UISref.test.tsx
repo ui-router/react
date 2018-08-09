@@ -1,9 +1,9 @@
 declare var jest, describe, it, expect, beforeEach;
 
-import * as React from 'react';
 import { mount } from 'enzyme';
+import * as React from 'react';
 
-import { UIRouterReact, UIRouter, UIView, UISref, pushStateLocationPlugin, servicesPlugin } from '../../index';
+import { pushStateLocationPlugin, servicesPlugin, UIRouter, UIRouterReact, UISref, UIView } from '../../index';
 
 const states = [
   {
@@ -80,6 +80,54 @@ describe('<UISref>', () => {
     expect(props.href.includes('/state2')).toBe(true);
     link.simulate('click');
     expect(hookSpy).toHaveBeenCalled();
+  });
+
+  it('calls the child elements onClick function first', async () => {
+    const onClickSpy = jest.fn();
+    router.stateRegistry.register({
+      name: 'onclick',
+      url: '/onclick',
+      component: () => (
+        <UISref to="state2">
+          <a onClick={onClickSpy}>state2</a>
+        </UISref>
+      ),
+    });
+    const wrapper = mount(
+      <UIRouter router={router}>
+        <UIView />
+      </UIRouter>
+    );
+    await router.stateService.go('onclick');
+    wrapper.update();
+    const goSpy = (router.stateService.go = jest.fn());
+    wrapper.find('a').simulate('click');
+    expect(onClickSpy).toHaveBeenCalled();
+    expect(goSpy).toHaveBeenCalled();
+  });
+
+  it('calls the child elements onClick function and honors e.preventDefault()', async () => {
+    const onClickSpy = jest.fn(e => e.preventDefault());
+    router.stateRegistry.register({
+      name: 'preventdefault',
+      url: '/preventdefault',
+      component: () => (
+        <UISref to="state2">
+          <a onClick={onClickSpy}>state2</a>
+        </UISref>
+      ),
+    });
+    const wrapper = mount(
+      <UIRouter router={router}>
+        <UIView />
+      </UIRouter>
+    );
+    await router.stateService.go('preventdefault');
+    wrapper.update();
+    const goSpy = (router.stateService.go = jest.fn());
+    wrapper.find('a').simulate('click');
+    expect(onClickSpy).toHaveBeenCalled();
+    expect(goSpy).not.toHaveBeenCalled();
   });
 
   it("doesn't trigger a transition when middle-clicked/ctrl+clicked", async () => {

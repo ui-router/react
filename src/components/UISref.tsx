@@ -7,7 +7,7 @@ import { Component, createElement, cloneElement, isValidElement, ValidationMap }
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
-import { extend, TransitionOptions } from '@uirouter/core';
+import { extend, isFunction, TransitionOptions } from '@uirouter/core';
 
 import { UIRouterReact, UIRouterConsumer } from '../index';
 import { UIViewAddress, UIViewConsumer } from './UIView';
@@ -62,6 +62,11 @@ class Sref extends Component<UISrefProps, any> {
   };
 
   handleClick = e => {
+    const childOnClick = this.props.children.props.onClick;
+    if (isFunction(childOnClick)) {
+      childOnClick(e);
+    }
+
     if (!e.defaultPrevented && !(e.button == 1 || e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       let params = this.props.params || {};
