@@ -28,8 +28,8 @@
       "name": "@uirouter/react",
       "theme": "node_modules/ui-router-typedoc-themes/bin/default",
       "out": "_doc",
-      "internal-aliases": "internal,coreapi,reactapi",
-      "external-aliases": "internalapi,external",
+      "internal-aliases": "internal,publicapi,reactapi",
+      "external-aliases": "external,internalapi",
       "navigation-label-globals": "@uirouter/react"
     }
   }

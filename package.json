@@ -1,6 +1,6 @@
 {
   "name": "@uirouter/react",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "State based routing for React",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -43,7 +43,7 @@
     "url": "https://github.com/ui-router/react.git"
   },
   "dependencies": {
-    "@uirouter/core": "5.0.20",
+    "@uirouter/core": "5.0.21",
     "classnames": "^2.2.5",
     "prop-types": "^15.6.1"
   },
