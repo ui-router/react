@@ -4,16 +4,17 @@
  */ /** */
 import * as React from 'react';
 import {
-  Component,
-  ValidationMap,
-  createElement,
-  cloneElement,
-  isValidElement,
-  SFC,
   ClassType,
-  StatelessComponent,
-  ComponentClass,
   ClassicComponentClass,
+  Component,
+  ComponentClass,
+  SFC,
+  StatelessComponent,
+  ValidationMap,
+  Validator,
+  cloneElement,
+  createElement,
+  isValidElement,
 } from 'react';
 import * as PropTypes from 'prop-types';
 
@@ -124,8 +125,8 @@ class View extends Component<UIViewProps, UIViewState> {
   };
 
   static propTypes: ValidationMap<UIViewProps> = {
-    router: PropTypes.object.isRequired,
-    parentUIView: PropTypes.object,
+    router: PropTypes.object.isRequired as Validator<UIRouterReact>,
+    parentUIView: PropTypes.object as Validator<UIViewAddress>,
     name: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
