@@ -6560,9 +6560,13 @@ typedoc@0.12.0:
     typedoc-default-themes "^0.5.0"
     typescript "3.0.x"
 
-typescript@3.0.x, typescript@^3.0.1:
+typescript@3.0.x:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.0.3.tgz#4853b3e275ecdaa27f78fda46dc273a7eb7fc1c8"
+
+typescript@^3.0.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.1.tgz#3362ba9dd1e482ebb2355b02dfe8bcd19a2c7c96"
 
 uglify-es@^3.3.4:
   version "3.3.9"
