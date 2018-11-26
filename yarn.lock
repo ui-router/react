@@ -68,20 +68,14 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-dom@=16.0.7":
-  version "16.0.7"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.7.tgz#54d0f867a76b90597e8432030d297982f25c20ba"
+"@types/react-dom@=16.0.10":
+  version "16.0.10"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.10.tgz#0c8980a639fa1d92a8547c8b6d0cf47af96c8966"
   dependencies:
     "@types/node" "*"
     "@types/react" "*"
 
-"@types/react@*":
-  version "16.4.7"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.7.tgz#f33f6d759a7e1833befa15224d68942d178a5a3f"
-  dependencies:
-    csstype "^2.2.0"
-
-"@types/react@16.4.14":
+"@types/react@*", "@types/react@16.4.14":
   version "16.4.14"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.14.tgz#47c604c8e46ed674bbdf4aabf82b34b9041c6a04"
   dependencies:
