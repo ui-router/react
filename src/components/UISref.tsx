@@ -9,10 +9,10 @@ import * as _classNames from 'classnames';
 
 import { extend, isFunction, TransitionOptions } from '@uirouter/core';
 
-import { UIRouterReact, UIRouterConsumer } from '../index';
-import { UIViewAddress, UIViewConsumer } from './UIView';
+import { UIRouterReact, UIRouterContext } from '../index';
+import { UIViewAddress, UIViewContext } from './UIView';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
-import { UISrefActive, UISrefActiveConsumer } from './UISrefActive';
+import { UISrefActive, UISrefActiveContext } from './UISrefActive';
 
 let classNames = _classNames;
 
@@ -91,19 +91,19 @@ class Sref extends Component<UISrefProps, any> {
 }
 
 export const UISref = props => (
-  <UIRouterConsumer>
+  <UIRouterContext.Consumer>
     {router => (
-      <UIViewConsumer>
+      <UIViewContext.Consumer>
         {parentUIView => (
-          <UISrefActiveConsumer>
+          <UISrefActiveContext.Consumer>
             {addStateInfo => (
               <Sref {...props} router={router} parentUIView={parentUIView} addStateInfoToParentActive={addStateInfo} />
             )}
-          </UISrefActiveConsumer>
+          </UISrefActiveContext.Consumer>
         )}
-      </UIViewConsumer>
+      </UIViewContext.Consumer>
     )}
-  </UIRouterConsumer>
+  </UIRouterContext.Consumer>
 );
 
 (UISref as any).displayName = 'UISref';
