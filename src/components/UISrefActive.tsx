@@ -7,11 +7,11 @@ import { Component, cloneElement } from 'react';
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
-import { UIRouterReact, UIRouterConsumer } from '../index';
+import { UIRouterReact, UISref, UIRouterContext } from '../index';
 import { UIViewAddress } from './UIView';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
 
-import { UIViewConsumer } from './UIView';
+import { UIViewContext } from './UIView';
 
 let classNames = _classNames;
 
@@ -34,9 +34,7 @@ export interface UISrefActiveState {
 export const StateNameMustBeAStringError = new Error('State name provided to <UISref {to}> must be a string.');
 
 /** @internalapi */
-export const { Provider: UISrefActiveProvider, Consumer: UISrefActiveConsumer } = React.createContext<Function>(
-  undefined
-);
+export const UISrefActiveContext = React.createContext<Function>(undefined);
 
 class SrefActive extends Component<UISrefActiveProps, any> {
   // keep track of states to watch and their activeClasses
@@ -151,16 +149,16 @@ class SrefActive extends Component<UISrefActiveProps, any> {
             })
           )
         : this.props.children;
-    return <UISrefActiveProvider value={this.addStateInfo}>{children}</UISrefActiveProvider>;
+    return <UISrefActiveContext.Provider value={this.addStateInfo}>{children}</UISrefActiveContext.Provider>;
   }
 }
 
 export const UISrefActive = props => (
-  <UIRouterConsumer>
+  <UIRouterContext.Consumer>
     {router => (
-      <UIViewConsumer>
+      <UIViewContext.Consumer>
         {parentUIView => (
-          <UISrefActiveConsumer>
+          <UISrefActiveContext.Consumer>
             {addStateInfo => (
               <SrefActive
                 {...props}
@@ -169,11 +167,11 @@ export const UISrefActive = props => (
                 addStateInfoToParentActive={addStateInfo}
               />
             )}
-          </UISrefActiveConsumer>
+          </UISrefActiveContext.Consumer>
         )}
-      </UIViewConsumer>
+      </UIViewContext.Consumer>
     )}
-  </UIRouterConsumer>
+  </UIRouterContext.Consumer>
 );
 
 (UISrefActive as any).displayName = 'UISrefActive';
