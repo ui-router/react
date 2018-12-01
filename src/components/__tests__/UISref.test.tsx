@@ -1,7 +1,14 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import { pushStateLocationPlugin, servicesPlugin, UIRouter, UIRouterReact, UISref, UIView } from '../../index';
+import {
+  pushStateLocationPlugin,
+  servicesPlugin,
+  UIRouter,
+  UIRouterReact,
+  UISref,
+  UIView,
+} from '../../index';
 
 const states = [
   {

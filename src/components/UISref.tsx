@@ -3,7 +3,13 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import { Component, cloneElement } from 'react';
+import {
+  Component,
+  createElement,
+  cloneElement,
+  isValidElement,
+  ValidationMap,
+} from 'react';
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
@@ -46,7 +52,10 @@ class Sref extends Component<SrefProps, any> {
 
   componentDidMount() {
     const addStateInfo = this.props.addStateInfoToParentActive;
-    this.deregister = typeof addStateInfo === 'function' ? addStateInfo(this.props.to, this.props.params) : () => {};
+    this.deregister =
+      typeof addStateInfo === 'function'
+        ? addStateInfo(this.props.to, this.props.params)
+        : () => {};
     const router = this.props.router;
     if (typeof router === 'undefined') {
       throw UIRouterInstanceUndefinedError;
@@ -61,7 +70,8 @@ class Sref extends Component<SrefProps, any> {
 
   getOptions = () => {
     let parent = this.props.parentUIView;
-    let parentContext = (parent && parent.context) || this.props.router.stateRegistry.root();
+    let parentContext =
+      (parent && parent.context) || this.props.router.stateRegistry.root();
     let defOpts = { relative: parentContext, inherit: true };
     return extend(defOpts, this.props.options || {});
   };
@@ -102,7 +112,12 @@ export const UISref = (props: UISrefProps) => (
         {parentUIView => (
           <UISrefActiveContext.Consumer>
             {addStateInfo => (
-              <Sref {...props} router={router} parentUIView={parentUIView} addStateInfoToParentActive={addStateInfo} />
+              <Sref
+                {...props}
+                router={router}
+                parentUIView={parentUIView}
+                addStateInfoToParentActive={addStateInfo}
+              />
             )}
           </UISrefActiveContext.Consumer>
         )}
