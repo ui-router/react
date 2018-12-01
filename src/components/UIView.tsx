@@ -22,7 +22,7 @@ import * as PropTypes from 'prop-types';
 
 import { ActiveUIView, ViewContext, Transition, ResolveContext, StateParams, applyPairs } from '@uirouter/core';
 
-import { UIRouterReact, UIRouterConsumer } from '../index';
+import { UIRouterReact, UIRouterContext } from '../index';
 import { ReactViewConfig } from '../reactViews';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
 
@@ -103,7 +103,7 @@ export const TransitionPropCollisionError = new Error(
 );
 
 /** @internalapi */
-export const { Provider: UIViewProvider, Consumer: UIViewConsumer } = createContext<UIViewAddress>(undefined);
+export const UIViewContext = createContext<UIViewAddress>(undefined);
 
 class View extends Component<UIViewProps, UIViewState> {
   // This object contains all the metadata for this UIView
@@ -168,7 +168,7 @@ class View extends Component<UIViewProps, UIViewState> {
     // if a render function is passed use that,
     // otherwise render the component normally
     const ChildOrRenderFunction = typeof render !== 'undefined' && loaded ? render(component, childProps) : child;
-    return <UIViewProvider value={this.uiViewAddress}>{ChildOrRenderFunction}</UIViewProvider>;
+    return <UIViewContext.Provider value={this.uiViewAddress}>{ChildOrRenderFunction}</UIViewContext.Provider>;
   }
 
   componentDidMount() {
@@ -282,13 +282,13 @@ export class UIView extends Component<UIViewProps, any> {
 
   render() {
     return (
-      <UIRouterConsumer>
+      <UIRouterContext.Consumer>
         {router => (
-          <UIViewConsumer>
+          <UIViewContext.Consumer>
             {parentUIView => <View {...this.props} router={router} parentUIView={parentUIView} />}
-          </UIViewConsumer>
+          </UIViewContext.Consumer>
         )}
-      </UIRouterConsumer>
+      </UIRouterContext.Consumer>
     );
   }
 }
