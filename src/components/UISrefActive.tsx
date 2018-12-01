@@ -31,7 +31,9 @@ export interface UISrefActiveState {
   hash: string;
 }
 
-export const StateNameMustBeAStringError = new Error('State name provided to <UISref {to}> must be a string.');
+export const StateNameMustBeAStringError = new Error(
+  'State name provided to <UISref {to}> must be a string.'
+);
 
 /** @internalapi */
 export const UISrefActiveContext = React.createContext<Function>(undefined);
@@ -63,7 +65,9 @@ class SrefActive extends Component<UISrefActiveProps, any> {
       throw UIRouterInstanceUndefinedError;
     }
     // register callback for state change
-    this.deregister = router.transitionService.onSuccess({}, () => this.updateActiveClasses());
+    this.deregister = router.transitionService.onSuccess({}, () =>
+      this.updateActiveClasses()
+    );
   }
 
   componentWillUnmount() {
@@ -90,7 +94,8 @@ class SrefActive extends Component<UISrefActiveProps, any> {
   addState = (stateName, stateParams, activeClass) => {
     const { stateService } = this.props.router;
     let parent = this.props.parentUIView;
-    let stateContext = (parent && parent.context) || this.props.router.stateRegistry.root();
+    let stateContext =
+      (parent && parent.context) || this.props.router.stateRegistry.root();
     let state = stateService.get(stateName, stateContext);
     let stateHash = this.createStateHash(stateName, stateParams);
     let stateInfo = {
@@ -110,7 +115,9 @@ class SrefActive extends Component<UISrefActiveProps, any> {
     if (typeof state !== 'string') {
       throw StateNameMustBeAStringError;
     }
-    return params && typeof params === 'object' ? state + JSON.stringify(params) : state;
+    return params && typeof params === 'object'
+      ? state + JSON.stringify(params)
+      : state;
   };
 
   getActiveClasses = (): string => {
@@ -119,8 +126,10 @@ class SrefActive extends Component<UISrefActiveProps, any> {
     let { exact } = this.props;
     this.states.forEach(s => {
       let { state, params, hash } = s;
-      if (!exact && stateService.includes(state.name, params)) activeClasses.push(this.activeClasses[hash]);
-      if (exact && stateService.is(state.name, params)) activeClasses.push(this.activeClasses[hash]);
+      if (!exact && stateService.includes(state.name, params))
+        activeClasses.push(this.activeClasses[hash]);
+      if (exact && stateService.is(state.name, params))
+        activeClasses.push(this.activeClasses[hash]);
     });
     return classNames(activeClasses);
   };
@@ -143,11 +152,19 @@ class SrefActive extends Component<UISrefActiveProps, any> {
         ? cloneElement(
             this.props.children,
             Object.assign({}, this.props.children.props, {
-              className: classNames(className, this.props.children.props.className, activeClasses),
+              className: classNames(
+                className,
+                this.props.children.props.className,
+                activeClasses
+              ),
             })
           )
         : this.props.children;
-    return <UISrefActiveContext.Provider value={this.addStateInfo}>{children}</UISrefActiveContext.Provider>;
+    return (
+      <UISrefActiveContext.Provider value={this.addStateInfo}>
+        {children}
+      </UISrefActiveContext.Provider>
+    );
   }
 }
 

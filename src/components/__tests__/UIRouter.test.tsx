@@ -4,7 +4,12 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 
-import { UIRouter, UIRouterContext, UIRouterReact, memoryLocationPlugin } from '../../index';
+import {
+  UIRouter,
+  UIRouterContext,
+  UIRouterReact,
+  memoryLocationPlugin,
+} from '../../index';
 
 class Child extends React.Component<any, any> {
   static propTypes: React.ValidationMap<any> = {
@@ -29,7 +34,9 @@ describe('<UIRouter>', () => {
   it('creates a router instance', () => {
     const wrapper = mount(
       <UIRouter plugins={[memoryLocationPlugin]} states={[]}>
-        <UIRouterContext.Consumer>{router => <Child router={router} />}</UIRouterContext.Consumer>
+        <UIRouterContext.Consumer>
+          {router => <Child router={router} />}
+        </UIRouterContext.Consumer>
       </UIRouter>
     );
     expect(wrapper.find(Child).props().router).toBeDefined();
@@ -40,7 +47,9 @@ describe('<UIRouter>', () => {
     router.plugin(memoryLocationPlugin);
     const wrapper = mount(
       <UIRouter router={router}>
-        <UIRouterContext.Consumer>{router => <Child router={router} />}</UIRouterContext.Consumer>
+        <UIRouterContext.Consumer>
+          {router => <Child router={router} />}
+        </UIRouterContext.Consumer>
       </UIRouter>
     );
     expect(wrapper.find(Child).props().router).toBe(router);
