@@ -8,7 +8,10 @@ import {
   UIRouterReact,
   UISref,
   UIView,
+  getTransitionOptions,
 } from '../../index';
+import { UISrefActiveContext } from '../UISrefActive';
+import { ViewContext } from '@uirouter/core';
 
 const states = [
   {
@@ -49,24 +52,22 @@ describe('<UISref>', () => {
     expect(props.href.includes('/state2')).toBe(true);
   });
 
-  it('calls deregister active state checking when unmounting', async () => {
+  it('calls registers and deregisters active state from parent UISrefActive checking when mounting/unmounting', async () => {
+    const deregisterFn = jest.fn();
+    const parentUISrefActiveAddStateFn = jest.fn(() => deregisterFn);
     const wrapper = mount(
       <UIRouter router={router}>
-        <UIView />
+        <UISrefActiveContext.Provider value={parentUISrefActiveAddStateFn}>
+          <UIView />
+        </UISrefActiveContext.Provider>
       </UIRouter>
     );
     await router.stateService.go('state');
     wrapper.update();
     expect(wrapper.html()).toBe('<a href="/state2" class="">state2</a>');
-    const uiSref = wrapper
-      .find(UISref)
-      .at(0)
-      .find('Sref')
-      .at(0);
-    // @ts-ignore
-    const deregisterSpy = jest.spyOn(uiSref.instance(), 'deregister');
+    expect(parentUISrefActiveAddStateFn).toHaveBeenCalled();
     await router.stateService.go('state2');
-    expect(deregisterSpy).toHaveBeenCalled();
+    expect(deregisterFn).toHaveBeenCalled();
   });
 
   it('triggers a transition to target state', async () => {
@@ -155,21 +156,10 @@ describe('<UISref>', () => {
     expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('uses rootContext for options when not nested in a <UIView>', () => {
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <UISref to="state">
-          <a>link</a>
-        </UISref>
-      </UIRouter>
-    );
-    const uiSref = wrapper
-      .find(UISref)
-      .at(0)
-      .find('Sref')
-      .at(0);
-    expect(uiSref.instance().context.parentUIViewAddress).toBeUndefined();
-    // @ts-ignore
-    expect(uiSref.instance().getOptions().relative.name).toBe('');
+  describe('getTransitionOptions()', () => {
+    it('uses the root context for options when no parentUIViewAddress is provided', () => {
+      const options = getTransitionOptions(router, {});
+      expect((options.relative as ViewContext).name).toBe('');
+    });
   });
 });
