@@ -17,7 +17,7 @@ let classNames = _classNames;
 
 export interface UISrefActiveProps {
   parentUIView: UIViewAddress;
-  addStateInfoToParentActive: Function;
+  addStateInfoToParentActive: AddStateInfoFn;
   router: UIRouterReact;
   class?: string;
   exact?: Boolean;
@@ -31,12 +31,17 @@ export interface UISrefActiveState {
   hash: string;
 }
 
+export type AddStateInfoFn = (
+  to: string,
+  params: { [key: string]: any }
+) => () => void;
+
 export const StateNameMustBeAStringError = new Error(
   'State name provided to <UISref {to}> must be a string.'
 );
 
 /** @internalapi */
-export const UISrefActiveContext = React.createContext<Function>(undefined);
+export const UISrefActiveContext = React.createContext<AddStateInfoFn>(null);
 
 class SrefActive extends Component<UISrefActiveProps, any> {
   // keep track of states to watch and their activeClasses
@@ -74,7 +79,7 @@ class SrefActive extends Component<UISrefActiveProps, any> {
     this.deregister();
   }
 
-  addStateInfo = (stateName, stateParams) => {
+  addStateInfo: AddStateInfoFn = (stateName, stateParams) => {
     const activeClass = this.props.class;
     let deregister = this.addState(stateName, stateParams, activeClass);
     const addStateInfo = this.props.addStateInfoToParentActive;
