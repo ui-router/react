@@ -1,7 +1,8 @@
 import { useRef, useEffect } from 'react';
 import { isFunction } from '@uirouter/core';
 
-type EffectCallback = () => void | (() => void);
+type EffectCleanup = void | (() => void);
+type EffectCallback = () => EffectCleanup;
 
 /**
  * React hook for running an effect as soon as the first time the Component renders.
@@ -12,16 +13,16 @@ type EffectCallback = () => void | (() => void);
  */
 export function useFirstRenderEffect(effect: EffectCallback) {
   const hasRun = useRef<boolean>(false);
-  let cleanup;
+  const cleanup = useRef<EffectCleanup>(null);
 
   if (hasRun.current === false) {
-    cleanup = effect();
+    cleanup.current = effect();
     hasRun.current = true;
   }
 
   useEffect(() => {
     return () => {
-      if (isFunction(cleanup)) cleanup();
+      if (isFunction(cleanup.current)) cleanup.current();
     };
   }, []);
 }
