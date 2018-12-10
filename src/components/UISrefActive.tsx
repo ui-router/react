@@ -3,27 +3,19 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import { Component, cloneElement, ValidationMap } from 'react';
-import * as PropTypes from 'prop-types';
+import { useState, useCallback, useContext, useRef } from 'react';
+import { cloneElement } from 'react';
 import * as _classNames from 'classnames';
 
-import { UIRouterReact, UISref, UIRouterContext } from '../index';
+import { useFirstRenderEffect } from './hooks';
+import { UIRouterReact, UIRouterContext } from '../index';
 import { UIViewAddress } from './UIView';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
 
 import { UIViewContext } from './UIView';
 
+/** @hidden */
 let classNames = _classNames;
-
-export interface UISrefActiveProps {
-  parentUIView: UIViewAddress;
-  addStateInfoToParentActive: AddStateInfoFn;
-  router: UIRouterReact;
-  class?: string;
-  exact?: Boolean;
-  children?: any;
-  className?: string;
-}
 
 export interface UISrefActiveState {
   state: { name?: string; [key: string]: any };
@@ -31,167 +23,240 @@ export interface UISrefActiveState {
   hash: string;
 }
 
+/** @hidden */
 export type AddStateInfoFn = (
   to: string,
   params: { [key: string]: any }
 ) => () => void;
 
-export const StateNameMustBeAStringError = new Error(
+/** @hidden */
+type UISrefActiveStateContainer = {
+  info: UISrefActiveState;
+  hash: string;
+};
+
+/** @hidden */
+export const IncorrectStateNameTypeError = new Error(
   'State name provided to <UISref {to}> must be a string.'
 );
 
 /** @internalapi */
 export const UISrefActiveContext = React.createContext<AddStateInfoFn>(null);
 
-class SrefActive extends Component<UISrefActiveProps, any> {
+/** @hidden */
+function createStateHash(state: string, params: {}) {
+  if (typeof state !== 'string') {
+    throw IncorrectStateNameTypeError;
+  }
+  return params && typeof params === 'object'
+    ? state + JSON.stringify(params)
+    : state;
+}
+
+/**
+ * @hidden
+ * Creates a UISrefActiveStateContainer from a state name and its params and an optional parent UIView address.
+ * It returns a State Info and its hash to be used to check againts the current state when the component needs to apply active classes.
+ */
+export function createStateInfoAndHash(
+  router: UIRouterReact,
+  parentUIViewAddress: UIViewAddress,
+  stateName: string,
+  stateParams: object
+): UISrefActiveStateContainer {
+  const { stateService, stateRegistry } = router;
+  const stateContext =
+    (parentUIViewAddress && parentUIViewAddress.context) ||
+    stateRegistry.root();
+  const state = stateService.get(stateName, stateContext);
+  const stateHash = createStateHash(stateName, stateParams);
+  const stateInfo = {
+    state: state || { name: stateName },
+    params: stateParams,
+    hash: stateHash,
+  };
+
+  return {
+    info: stateInfo,
+    hash: stateHash,
+  };
+}
+
+/**
+ * @hidden
+ * Takes a UISrefActiveStateContainer and adds the state info and the activeClass and registers them in the array and map.
+ * It returns a function to remove the state info and the class from the contaners when called.
+ */
+export function addToRegisterWithUnsubscribe(
+  states: Array<UISrefActiveState>,
+  classesMap: { [key: string]: string },
+  newState: UISrefActiveStateContainer,
+  newClass: string
+) {
+  states.push(newState.info);
+  classesMap[newState.hash] = newClass;
+  return () => {
+    const idx = states.indexOf(newState.info);
+    if (idx !== -1) {
+      states.splice(idx, 1);
+      delete classesMap[newState.hash];
+    }
+  };
+}
+
+export interface UISrefActiveProps {
+  /**
+   * The class string to apply when the state is active (i.e. `"menu-item-active"`)
+   */
+  class?: string;
+  /**
+   * Whether the target state of the child [[UISref]] should match exactly the state or could also be a child state.
+   * When set to `true`, if state params are supplied then they will be tested for strict equality against the current active url params, so all params must match with none missing and no extras.
+   */
+  exact?: Boolean;
+  /**
+   * The component to apply the active class to. It should be a [[UISref]] or any node with [[UISref]] descendant
+   */
+  children?: any;
+  /**
+   * Any class will be passed down to its child component
+   */
+  className?: string;
+}
+
+/**
+ * A component working alongside `[[UISref]]` to add classes to its child element when one of the included `[[UISref]]`'s state is active, and removing them when it is inactive.
+ *
+ * The primary use-case is to simplify the special appearance of navigation menus relying on `[[<UISref>]]`, by having the "active" state's menu button appear different, distinguishing it from the inactive menu items.
+ *
+ * It will register **every** nested `[[<UISref>]]` and add the class to its child every time one of the states is active.
+ *
+ * ```jsx
+ * <UISrefActive class="active-item">
+ *   <UISref to="homestate"><a class="menu-item">Home</a></UISref>
+ * </UISrefActive>
+ *
+ * // rendered when state is inactive
+ * <a href="/path/to/homestate" class="menu-item">Home</a>
+ *
+ * // rendered when state is active
+ * <a href="/path/to/homestate" class="menu-item active-item">Home</a>
+ * ```
+ */
+export function UISrefActive({
+  children,
+  className,
+  class: classToApply,
+  exact,
+}: UISrefActiveProps) {
+  const router = useContext<UIRouterReact>(UIRouterContext);
+  const parentUIViewAddress = useContext<UIViewAddress>(UIViewContext);
+  const parentAddStateInfo = useContext<AddStateInfoFn>(UISrefActiveContext);
+
   // keep track of states to watch and their activeClasses
-  states: Array<UISrefActiveState> = [];
-  activeClasses: { [key: string]: string } = {};
+  const states = useRef<Array<UISrefActiveState>>([]);
+  const activeClassesMap = useRef<{ [key: string]: string }>({});
 
-  // deregister the callback for state changed when unmounted
-  deregister: Function;
+  const activeClassesRef = useRef<string>('');
+  const [activeClasses, setActiveClasses] = useState<string>('');
 
-  static propTypes = {
-    parentUIView: PropTypes.object,
-    addStateInfoToParentActive: PropTypes.func,
-    router: PropTypes.object.isRequired,
-    class: PropTypes.string.isRequired,
-    children: PropTypes.element.isRequired,
-    className: PropTypes.string,
-  };
+  const getActiveClasses = useCallback(
+    (): string => {
+      const classes = [];
+      const { stateService } = router;
+      states.current.forEach(s => {
+        const { state, params, hash } = s;
+        if (!exact && stateService.includes(state.name, params))
+          classes.push(activeClassesMap.current[hash]);
+        if (exact && stateService.is(state.name, params))
+          classes.push(activeClassesMap.current[hash]);
+      });
+      return classNames(classes);
+    },
+    [router, states, activeClassesMap, exact]
+  );
 
-  state = {
-    activeClasses: '',
-  };
+  const updateActiveClasses = useCallback(
+    () => {
+      const newActiveClasses = getActiveClasses();
+      if (activeClassesRef.current !== newActiveClasses) {
+        activeClassesRef.current = newActiveClasses;
+        setActiveClasses(newActiveClasses);
+      }
+    },
+    [activeClassesRef.current, setActiveClasses, getActiveClasses]
+  );
 
-  componentWillMount() {
-    const router = this.props.router;
+  const registerStateAndClass = useCallback(
+    (stateName, stateParams, activeClass) => {
+      const state = createStateInfoAndHash(
+        router,
+        parentUIViewAddress,
+        stateName,
+        stateParams
+      );
+      return addToRegisterWithUnsubscribe(
+        states.current,
+        activeClassesMap.current,
+        state,
+        activeClass
+      );
+    },
+    [router, parentUIViewAddress, activeClassesMap, states.current]
+  );
+
+  const addStateInfo = useCallback(
+    (stateName, stateParams) => {
+      const deregister = registerStateAndClass(
+        stateName,
+        stateParams,
+        classToApply
+      );
+      updateActiveClasses();
+
+      if (typeof parentAddStateInfo === 'function') {
+        const parentDeregister = parentAddStateInfo(stateName, stateParams);
+        return () => {
+          deregister();
+          parentDeregister();
+        };
+      }
+
+      return deregister;
+    },
+    [classToApply, parentAddStateInfo, registerStateAndClass]
+  );
+
+  useFirstRenderEffect(() => {
     if (typeof router === 'undefined') {
       throw UIRouterInstanceUndefinedError;
     }
     // register callback for state change
-    this.deregister = router.transitionService.onSuccess({}, () =>
-      this.updateActiveClasses()
-    );
-  }
-
-  componentWillUnmount() {
-    this.deregister();
-  }
-
-  addStateInfo: AddStateInfoFn = (stateName, stateParams) => {
-    const activeClass = this.props.class;
-    let deregister = this.addState(stateName, stateParams, activeClass);
-    const addStateInfo = this.props.addStateInfoToParentActive;
-    this.updateActiveClasses();
-
-    if (typeof addStateInfo === 'function') {
-      const parentDeregister = addStateInfo(stateName, stateParams);
-      return () => {
-        deregister();
-        parentDeregister();
-      };
-    }
-
-    return deregister;
-  };
-
-  addState = (stateName, stateParams, activeClass) => {
-    const { stateService } = this.props.router;
-    let parent = this.props.parentUIView;
-    let stateContext =
-      (parent && parent.context) || this.props.router.stateRegistry.root();
-    let state = stateService.get(stateName, stateContext);
-    let stateHash = this.createStateHash(stateName, stateParams);
-    let stateInfo = {
-      state: state || { name: stateName },
-      params: stateParams,
-      hash: stateHash,
-    };
-    this.states.push(stateInfo);
-    this.activeClasses[stateHash] = activeClass;
-    return () => {
-      let idx = this.states.indexOf(stateInfo);
-      if (idx !== -1) this.states.splice(idx, 1);
-    };
-  };
-
-  createStateHash = (state: string, params: Object) => {
-    if (typeof state !== 'string') {
-      throw StateNameMustBeAStringError;
-    }
-    return params && typeof params === 'object'
-      ? state + JSON.stringify(params)
-      : state;
-  };
-
-  getActiveClasses = (): string => {
-    let activeClasses = [];
-    let { stateService } = this.props.router;
-    let { exact } = this.props;
-    this.states.forEach(s => {
-      let { state, params, hash } = s;
-      if (!exact && stateService.includes(state.name, params))
-        activeClasses.push(this.activeClasses[hash]);
-      if (exact && stateService.is(state.name, params))
-        activeClasses.push(this.activeClasses[hash]);
+    const deregister = router.transitionService.onSuccess({}, () => {
+      updateActiveClasses();
     });
-    return classNames(activeClasses);
-  };
 
-  updateActiveClasses = (): void => {
-    const { activeClasses } = this.state;
-    const newActiveClasses = this.getActiveClasses();
-    if (activeClasses !== newActiveClasses) {
-      this.setState({
-        activeClasses: this.getActiveClasses(),
-      });
-    }
-  };
+    return () => {
+      deregister();
+    };
+  });
 
-  render() {
-    const { activeClasses } = this.state;
-    const { className } = this.props;
-    const children =
-      activeClasses.length > 0
-        ? cloneElement(
-            this.props.children,
-            Object.assign({}, this.props.children.props, {
-              className: classNames(
-                className,
-                this.props.children.props.className,
-                activeClasses
-              ),
-            })
-          )
-        : this.props.children;
-    return (
-      <UISrefActiveContext.Provider value={this.addStateInfo}>
-        {children}
-      </UISrefActiveContext.Provider>
-    );
-  }
+  // If any active class is defined, apply it the children
+  const childrenWithActiveClasses =
+    activeClasses.length > 0
+      ? cloneElement(children, {
+          ...children.props,
+          className: classNames(
+            className,
+            children.props.className,
+            activeClasses
+          ),
+        })
+      : children;
+
+  return (
+    <UISrefActiveContext.Provider value={addStateInfo}>
+      {childrenWithActiveClasses}
+    </UISrefActiveContext.Provider>
+  );
 }
-
-export const UISrefActive = props => (
-  <UIRouterContext.Consumer>
-    {router => (
-      <UIViewContext.Consumer>
-        {parentUIView => (
-          <UISrefActiveContext.Consumer>
-            {addStateInfo => (
-              <SrefActive
-                {...props}
-                router={router}
-                parentUIView={parentUIView}
-                addStateInfoToParentActive={addStateInfo}
-              />
-            )}
-          </UISrefActiveContext.Consumer>
-        )}
-      </UIViewContext.Consumer>
-    )}
-  </UIRouterContext.Consumer>
-);
-
-(UISrefActive as any).displayName = 'UISrefActive';

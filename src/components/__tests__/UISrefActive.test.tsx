@@ -11,8 +11,11 @@ import {
   UISrefActive,
   pushStateLocationPlugin,
   servicesPlugin,
-  StateNameMustBeAStringError,
+  IncorrectStateNameTypeError,
+  createStateInfoAndHash,
+  addToRegisterWithUnsubscribe,
 } from '../../index';
+import { ViewContext } from '@uirouter/core';
 
 var states = [
   {
@@ -140,27 +143,30 @@ describe('<UISrefActive>', () => {
           <UIView />
         </UIRouter>
       );
-    }).toThrow(StateNameMustBeAStringError);
+    }).toThrow(IncorrectStateNameTypeError);
   });
 
   it('deregisters transition hook for active class when unmounted', async () => {
+    const currentOnSuccess = router.transitionService.onSuccess;
+    let monkeyPatchedDeregister;
+    router.transitionService.onSuccess = (opts, cb) => {
+      const deregister = currentOnSuccess(opts, cb);
+      monkeyPatchedDeregister = jest.fn(() => {
+        deregister();
+      });
+      return monkeyPatchedDeregister;
+    };
+
     const wrapper = mount(
       <UIRouter router={router}>
         <UIView />
       </UIRouter>
     );
-    let spy, node;
     await router.stateService.go('simple');
     wrapper.update();
-    const instance = wrapper
-      .find(UISrefActive)
-      .at(0)
-      .find('SrefActive')
-      .at(0)
-      .instance();
-    const deregisterSpy = jest.spyOn(instance, 'deregister');
     await router.stateService.go('simple2');
-    expect(deregisterSpy).toHaveBeenCalled();
+    wrapper.update();
+    expect(monkeyPatchedDeregister).toHaveBeenCalled();
   });
 
   it('works with state parameters', async () => {
@@ -186,28 +192,7 @@ describe('<UISrefActive>', () => {
     expect(activeLink.length).toBe(0);
   });
 
-  it('uses rootContext for <UISref> state when not nested in a <UIView>', () => {
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <UISrefActive class="active">
-          <UISref to="parent.child1">
-            <a>child1</a>
-          </UISref>
-        </UISrefActive>
-      </UIRouter>
-    );
-    let node = wrapper.find(UISrefActive).at(0);
-    const instance = wrapper
-      .find(UISrefActive)
-      .at(0)
-      .find('SrefActive')
-      .at(0)
-      .instance();
-    expect(instance.context.parentUIViewAddress).toBeUndefined();
-    expect(instance.states[0].state.name).toBe('parent.child1');
-  });
-
-  it('works with multiple <UISref> children', () => {
+  it('works with multiple <UISref> children', async () => {
     const wrapper = mount(
       <UIRouter router={router}>
         <UISrefActive class="active">
@@ -225,14 +210,21 @@ describe('<UISrefActive>', () => {
         </UISrefActive>
       </UIRouter>
     );
-    const instance = wrapper
-      .find(UISrefActive)
-      .at(0)
-      .find('SrefActive')
-      .at(0)
-      .instance();
-    expect(instance.context.parentUIViewAddress).toBeUndefined();
-    expect(instance.states.length).toBe(3);
+    await router.stateService.go('parent.child1');
+    wrapper.update();
+    expect(wrapper.find('div.active')).toHaveLength(1);
+
+    await router.stateService.go('parent.child2');
+    wrapper.update();
+    expect(wrapper.find('div.active')).toHaveLength(1);
+
+    await router.stateService.go('parent.child2');
+    wrapper.update();
+    expect(wrapper.find('div.active')).toHaveLength(1);
+
+    await router.stateService.go('parent');
+    wrapper.update();
+    expect(wrapper.find('div.active')).toHaveLength(0);
   });
 
   it('works with nested <UISrefActive>', async () => {
@@ -259,14 +251,6 @@ describe('<UISrefActive>', () => {
         </UISrefActive>
       </UIRouter>
     );
-
-    const instance = wrapper
-      .find(UISrefActive)
-      .at(0)
-      .find('SrefActive')
-      .at(0)
-      .instance();
-    expect(instance.states.length).toBe(3);
 
     router.stateRegistry.register({
       name: 'state1',
@@ -319,32 +303,6 @@ describe('<UISrefActive>', () => {
     expect(wrapper.find('a.active').length).toBe(0);
   });
 
-  it("removes active state of UISref when it's unmounted", () => {
-    const Comp = props => (
-      <UIRouter router={router}>
-        <UISrefActive class="active">
-          {props.show ? (
-            <UISref to="parent.child1">
-              <a>child1</a>
-            </UISref>
-          ) : (
-            <div />
-          )}
-        </UISrefActive>
-      </UIRouter>
-    );
-    const wrapper = mount(<Comp show={true} />);
-    const instance = wrapper
-      .find(UISrefActive)
-      .at(0)
-      .find('SrefActive')
-      .at(0)
-      .instance();
-    expect(instance.states.length).toBe(1);
-    wrapper.setProps({ show: false });
-    expect(instance.states.length).toBe(0);
-  });
-
   it('checks for exact state match when exact prop is provided', async () => {
     const wrapper = mount(
       <UIRouter router={router}>
@@ -377,5 +335,43 @@ describe('<UISrefActive>', () => {
     await router.stateService.go('_parent');
     wrapper.update();
     expect(wrapper.find('a.active').length).toBe(2);
+  });
+
+  describe('createStateInfoAndHash()', () => {
+    it('uses rootContext when no UIViewAddress is provided (not nested in a UIView)', () => {
+      const state = createStateInfoAndHash(router, null, 'parent.child1', {});
+      expect(state.info.state.name).toBe('parent.child1');
+    });
+  });
+
+  describe('addToRegisterWithUnsubscribe()', () => {
+    let states, activeClasses, state, activeClass;
+
+    beforeEach(() => {
+      states = [];
+      activeClasses = {};
+      state = createStateInfoAndHash(router, null, 'parent.child1', {});
+      activeClass = 'active';
+    });
+
+    it('adds the class to the registry correctly', () => {
+      addToRegisterWithUnsubscribe(states, activeClasses, state, activeClass);
+      expect(states[0]).toBe(state.info);
+      expect(activeClasses[state.hash]).toBe(activeClass);
+    });
+
+    it('removes the state and class from the registry correctly with the returned function', () => {
+      const deregister = addToRegisterWithUnsubscribe(
+        states,
+        activeClasses,
+        state,
+        activeClass
+      );
+      expect(states).toHaveLength(1);
+      expect(Object.keys(activeClasses)).toHaveLength(1);
+      deregister();
+      expect(states).toHaveLength(0);
+      expect(Object.keys(activeClasses)).toHaveLength(0);
+    });
   });
 });
