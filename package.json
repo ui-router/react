@@ -1,6 +1,6 @@
 {
   "name": "@uirouter/react",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "State based routing for React",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
