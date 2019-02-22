@@ -7,6 +7,8 @@ import {
   UIView,
   UISref,
   UISrefActive,
+  useUISref,
+  useUISrefActive,
   pushStateLocationPlugin,
   servicesPlugin,
   IncorrectStateNameTypeError,
@@ -14,6 +16,16 @@ import {
   addToRegisterWithUnsubscribe,
 } from '../../index';
 import { ViewContext } from '@uirouter/core';
+
+const Link = ({ to, children }) => {
+  const linkProps = useUISref('parent.child2');
+  const isActive = useUISrefActive('parent.child2');
+  return (
+    <a {...linkProps} className={isActive ? 'active' : null}>
+      {children}
+    </a>
+  );
+};
 
 var states = [
   {
@@ -44,11 +56,7 @@ var states = [
             <a>child1</a>
           </UISref>
         </UISrefActive>
-        <UISrefActive class="active">
-          <UISref to="parent.child2">
-            <a>child2</a>
-          </UISref>
-        </UISrefActive>
+        <Link to="parent.child2">child2</Link>
         <UIView />
       </div>
     ),
@@ -94,6 +102,10 @@ var states = [
 
 describe('<UISrefActive>', () => {
   let router;
+
+  beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
+  afterAll(() => (React.useEffect as any).mockRestore());
+
   beforeEach(() => {
     router = new UIRouterReact();
     router.plugin(servicesPlugin);
