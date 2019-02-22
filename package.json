@@ -47,7 +47,7 @@
     "prop-types": "^15.6.1"
   },
   "peerDependencies": {
-    "react": "^16.3.0"
+    "react": "^16.8.0"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.5",
