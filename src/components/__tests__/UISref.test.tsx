@@ -1,4 +1,4 @@
-declare var jest, describe, it, expect, beforeEach;
+declare var jest, describe, it, expect, beforeEach, beforeAll, afterAll;;
 
 import { mount } from 'enzyme';
 import * as React from 'react';
@@ -33,6 +33,9 @@ const states = [
 ];
 
 describe('<UISref>', () => {
+  beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
+  afterAll(() => (React.useEffect as any).mockRestore());
+
   let router;
   beforeEach(() => {
     router = new UIRouterReact();
@@ -159,7 +162,7 @@ describe('<UISref>', () => {
 
   describe('getTransitionOptions()', () => {
     it('uses the root context for options when no parentUIViewAddress is provided', () => {
-      const options = getTransitionOptions(router, {});
+      const options = getTransitionOptions(router.stateRegistry, {});
       expect((options.relative as ViewContext).name).toBe('');
     });
   });

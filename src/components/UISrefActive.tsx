@@ -104,6 +104,14 @@ export function addToRegisterWithUnsubscribe(
   };
 }
 
+/** @hidden */
+const getChecker = (stateService, exact) => {
+  return exact
+    ? (stateName, params) => stateService.is(stateName, params)
+    : (stateName, params) => stateService.includes(stateName, params);
+};
+
+
 export interface UISrefActiveProps {
   /**
    * The class string to apply when the state is active (i.e. `"menu-item-active"`)
@@ -162,15 +170,11 @@ export function UISrefActive({
 
   const getActiveClasses = useCallback(
     (): string => {
-      const classes = [];
       const { stateService } = router;
-      states.current.forEach(s => {
-        const { state, params, hash } = s;
-        if (!exact && stateService.includes(state.name, params))
-          classes.push(activeClassesMap.current[hash]);
-        if (exact && stateService.is(state.name, params))
-          classes.push(activeClassesMap.current[hash]);
-      });
+      const checker = getChecker(stateService, exact);
+      const classes = states.current
+        .filter(({ state, params }) => checker(state.name, params))
+        .map(({ hash }) => activeClassesMap.current[hash]);
       return classNames(classes);
     },
     [router, states, activeClassesMap, exact]
@@ -260,3 +264,23 @@ export function UISrefActive({
     </UISrefActiveContext.Provider>
   );
 }
+
+export const useUISrefActive = (stateName, params = null, exact = false) => {
+  const { transitionService, stateService } = useContext<UIRouterReact>(UIRouterContext);
+  const check = React.useMemo(() => getChecker(stateService, exact), [stateService, exact]);
+  const [isActive = check(stateName, params), setState] = React.useState(undefined);
+
+  const transitionHook = React.useCallback(() => setState(check(stateName, params)), [
+    setState,
+    check,
+    stateName,
+    params,
+  ]);
+
+  React.useEffect(() => {
+    const deregister = transitionService.onSuccess({}, transitionHook);
+    return () => deregister();
+  }, [transitionService, transitionHook]);
+
+  return isActive;
+};

@@ -3,17 +3,16 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import { useContext, useEffect, useRef, cloneElement } from 'react';
+import { useContext, useEffect, useMemo, useCallback, cloneElement } from 'react';
+import * as PropTypes from 'prop-types';
 
 import * as _classNames from 'classnames';
 
 import { isFunction, TransitionOptions } from '@uirouter/core';
 
-import { UIRouterReact, UIRouterContext } from '../index';
+import { UIRouterReact, UIRouterContext, StateRegistry } from '../index';
 import { UIViewAddress, UIViewContext } from './UIView';
-import { UIRouterInstanceUndefinedError } from './UIRouter';
 import { UISrefActiveContext, AddStateInfoFn } from './UISrefActive';
-import { useFirstRenderEffect } from './hooks';
 
 /** @hidden */
 let classNames = _classNames;
@@ -26,16 +25,55 @@ export interface UISrefProps {
   className?: string;
 }
 
+export interface LinkProps {
+  onClick: React.MouseEventHandler;
+  href?: string;
+}
+
 /** @hidden */
 export function getTransitionOptions(
-  router: UIRouterReact,
+  stateRegistry: StateRegistry,
   options: TransitionOptions,
   parentUIViewAddress?: UIViewAddress
 ) {
   const parentContext =
     (parentUIViewAddress && parentUIViewAddress.context) ||
-    router.stateRegistry.root();
+    stateRegistry.root();
   return { relative: parentContext, inherit: true, ...options };
+}
+
+export function useUISref(
+  to: string,
+  params: { [key: string]: any } = {},
+  options: TransitionOptions = {}
+): LinkProps {
+  const router = useContext<UIRouterReact>(UIRouterContext);
+  const parentUIViewAddress = useContext<UIViewAddress>(UIViewContext);
+  const parentUISrefActiveAddStateInfo = useContext<AddStateInfoFn>(UISrefActiveContext) || (() => {});
+
+  const { stateService, stateRegistry } = router;
+
+  useEffect(() => parentUISrefActiveAddStateInfo(to, params), []);
+
+  const hrefOptions = useMemo(
+    () => getTransitionOptions(stateRegistry, options, parentUIViewAddress),
+    [options, parentUIViewAddress, stateRegistry],
+  );
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (!e.defaultPrevented && !(e.button == 1 || e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        stateService.go(to, params, hrefOptions);
+      }
+    },
+    [hrefOptions, params, stateService, to]
+  );
+
+  return {
+    onClick: handleClick,
+    href: stateService.href(to, params, hrefOptions),
+  };
 }
 
 /**
@@ -66,54 +104,47 @@ export function getTransitionOptions(
  *
  * It will also repect the default behavior when the user Cmd+Click / Ctrl+Click on the link by canceling the transition event and opening a new tab instead.
  */
-export function UISref({
-  children,
-  to,
-  params = {},
-  options = {},
-  className,
-}: UISrefProps) {
-  const router = useContext<UIRouterReact>(UIRouterContext);
-  const parentUIViewAddress = useContext<UIViewAddress>(UIViewContext);
-  const parentUISrefActiveAddStateInfo = useContext<AddStateInfoFn>(
-    UISrefActiveContext
+export const UISref: React.FC<UISrefProps> = ({ children, className, options, params, to }) => {
+  const { onClick, href } = useUISref(to, params, options);
+  const childrenProps = children.props;
+
+  const handleClick = useCallback(
+    e => {
+      const childOnClick = childrenProps.onClick;
+      if (isFunction(childOnClick)) {
+        childOnClick(e);
+      }
+
+      onClick(e);
+    },
+    [childrenProps, onClick]
   );
 
-  useFirstRenderEffect(() => {
-    const deregister =
-      typeof parentUISrefActiveAddStateInfo === 'function'
-        ? parentUISrefActiveAddStateInfo(to, params)
-        : () => {};
-    if (typeof router === 'undefined') {
-      throw UIRouterInstanceUndefinedError;
-    }
+  const props = useMemo(
+    () =>
+      Object.assign({}, childrenProps, {
+        onClick: handleClick,
+        href: href,
+        className: classNames(className, childrenProps.className),
+      }),
+    [childrenProps, handleClick, href, className]
+  );
 
-    return () => {
-      deregister();
-    };
-  });
+  return useMemo(() => cloneElement(children, props), [children, props]);
+};
 
-  const getOptions = () =>
-    getTransitionOptions(router, options, parentUIViewAddress);
+UISref.displayName = 'UISref';
 
-  const handleClick = e => {
-    const childOnClick = children.props.onClick;
-    if (isFunction(childOnClick)) {
-      childOnClick(e);
-    }
+UISref.propTypes = {
+  children: PropTypes.element.isRequired,
+  to: PropTypes.string.isRequired,
+  params: PropTypes.object,
+  options: PropTypes.object,
+  className: PropTypes.string,
+};
 
-    if (!e.defaultPrevented && !(e.button == 1 || e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      router.stateService.go(to, params, getOptions());
-    }
-  };
-
-  const childrenProps = children.props;
-  const props = {
-    ...childrenProps,
-    onClick: handleClick,
-    href: router.stateService.href(to, params, getOptions()),
-    className: classNames(className, childrenProps.className),
-  };
-  return cloneElement(children, props);
-}
+UISref.defaultProps = {
+  params: {},
+  options: {},
+  className: null,
+};
