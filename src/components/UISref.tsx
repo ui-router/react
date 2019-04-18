@@ -3,7 +3,7 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import { Component, createElement, cloneElement, isValidElement, ValidationMap } from 'react';
+import { Component, cloneElement } from 'react';
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
@@ -12,7 +12,7 @@ import { extend, isFunction, TransitionOptions } from '@uirouter/core';
 import { UIRouterReact, UIRouterConsumer } from '../index';
 import { UIViewAddress, UIViewConsumer } from './UIView';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
-import { UISrefActive, UISrefActiveConsumer } from './UISrefActive';
+import { UISrefActiveConsumer } from './UISrefActive';
 
 let classNames = _classNames;
 
