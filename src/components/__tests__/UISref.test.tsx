@@ -139,6 +139,7 @@ describe('<UISref>', () => {
     );
     await router.stateService.go('state');
     wrapper.update();
+    // @ts-ignore
     const stateServiceGoSpy = jest.spyOn(wrapper.instance().router.stateService, 'go');
     const link = wrapper.find('a');
     link.simulate('click');
@@ -162,6 +163,7 @@ describe('<UISref>', () => {
       .find('Sref')
       .at(0);
     expect(uiSref.instance().context.parentUIViewAddress).toBeUndefined();
+    // @ts-ignore
     expect(uiSref.instance().getOptions().relative.name).toBe('');
   });
 });

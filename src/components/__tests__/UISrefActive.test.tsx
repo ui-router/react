@@ -204,6 +204,7 @@ describe('<UISrefActive>', () => {
       .at(0)
       .instance();
     expect(instance.context.parentUIViewAddress).toBeUndefined();
+    // @ts-ignore
     expect(instance.states[0].state.name).toBe('parent.child1');
   });
 
@@ -232,6 +233,7 @@ describe('<UISrefActive>', () => {
       .at(0)
       .instance();
     expect(instance.context.parentUIViewAddress).toBeUndefined();
+    // @ts-ignore
     expect(instance.states.length).toBe(3);
   });
 
@@ -266,6 +268,7 @@ describe('<UISrefActive>', () => {
       .find('SrefActive')
       .at(0)
       .instance();
+    // @ts-ignore
     expect(instance.states.length).toBe(3);
 
     router.stateRegistry.register({
@@ -340,8 +343,10 @@ describe('<UISrefActive>', () => {
       .find('SrefActive')
       .at(0)
       .instance();
+    // @ts-ignore
     expect(instance.states.length).toBe(1);
     wrapper.setProps({ show: false });
+    // @ts-ignore
     expect(instance.states.length).toBe(0);
   });
 
