@@ -55,17 +55,19 @@ const routerConfig = (router: UIRouterReact) => {
 
 let el = document.getElementById('react-app');
 let app = (
-  <UIRouter plugins={[pushStateLocationPlugin]} states={[home, child, nest]} config={routerConfig}>
-    <div>
-      <UISrefActive class="active">
-        <UISref to="home">
-          <a>Home</a>
-        </UISref>
-      </UISrefActive>
-      <UIView render={(Comp, props) => <Comp {...props} foo="bar" />}>
-        <p>Content will load here</p>
-      </UIView>
-    </div>
-  </UIRouter>
+  <React.StrictMode>
+    <UIRouter plugins={[pushStateLocationPlugin]} states={[home, child, nest]} config={routerConfig}>
+      <div>
+        <UISrefActive class="active">
+          <UISref to="home">
+            <a>Home</a>
+          </UISref>
+        </UISrefActive>
+        <UIView render={(Comp, props) => <Comp {...props} foo="bar" />}>
+          <p>Content will load here</p>
+        </UIView>
+      </div>
+    </UIRouter>
+  </React.StrictMode>
 );
 ReactDOM.render(app, el);

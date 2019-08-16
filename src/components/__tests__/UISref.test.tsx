@@ -140,7 +140,7 @@ describe('<UISref>', () => {
     await router.stateService.go('state');
     wrapper.update();
     // @ts-ignore
-    const stateServiceGoSpy = jest.spyOn(wrapper.instance().router.stateService, 'go');
+    const stateServiceGoSpy = jest.spyOn(router.stateService, 'go');
     const link = wrapper.find('a');
     link.simulate('click');
     link.simulate('click', { button: 1 });

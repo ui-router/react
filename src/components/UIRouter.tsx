@@ -44,21 +44,21 @@ export interface UIRouterState {
 
 /** @hidden */
 export const InstanceOrPluginsMissingError = new Error(`Router instance or plugins missing.
-You must either provide a location plugin via the plugins prop:
-
-<UIRouter plugins={[pushStateLocationPlugin]} states={[···]}>
-  <UIView />
-</UIRouter>
-
-or initialize the router yourself and pass the instance via props:
-
-const router = new UIRouterReact();
-router.plugin(pushStateLocationPlugin);
-···
-<UIRouter router={router}>
-  <UIView />
-</UIRouter>
-`);
+ You must either provide a location plugin via the plugins prop:
+ 
+ <UIRouter plugins={[pushStateLocationPlugin]} states={[···]}>
+   <UIView />
+ </UIRouter>
+ 
+ or initialize the router yourself and pass the instance via props:
+ 
+ const router = new UIRouterReact();
+ router.plugin(pushStateLocationPlugin);
+ ···
+ <UIRouter router={router}>
+   <UIView />
+ </UIRouter>
+ `);
 
 /** @hidden */
 export const UIRouterInstanceUndefinedError = new Error(
@@ -76,24 +76,27 @@ export class UIRouter extends Component<UIRouterProps, UIRouterState> {
 
   router: UIRouterReact;
 
-  constructor(props, context) {
-    super(props, context);
-    // check if a router instance is provided
-    if (props.router) {
-      this.router = props.router;
-    } else if (props.plugins) {
-      this.router = new UIRouterReact();
-      this.router.plugin(servicesPlugin);
-      props.plugins.forEach(plugin => this.router.plugin(plugin));
-      if (props.config) props.config(this.router);
-      (props.states || []).forEach(state => this.router.stateRegistry.register(state));
-    } else {
-      throw InstanceOrPluginsMissingError;
+  componentDidMount() {
+    if (!this.router) {
+      // check if a router instance is provided
+      if (this.props.router) {
+        this.router = this.props.router;
+      } else if (this.props.plugins) {
+        this.router = new UIRouterReact();
+        this.router.plugin(servicesPlugin);
+        this.props.plugins.forEach(plugin => this.router.plugin(plugin));
+        if (this.props.config) this.props.config(this.router);
+        (this.props.states || []).forEach(state => this.router.stateRegistry.register(state));
+      } else {
+        throw InstanceOrPluginsMissingError;
+      }
+
+      this.router.start();
+      this.forceUpdate();
     }
-    this.router.start();
   }
 
   render() {
-    return <UIRouterProvider value={this.router}>{this.props.children}</UIRouterProvider>;
+    return this.router ? <UIRouterProvider value={this.router}>{this.props.children}</UIRouterProvider> : null;
   }
 }

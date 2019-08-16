@@ -41,7 +41,7 @@ class Sref extends Component<UISrefProps, any> {
     className: PropTypes.string,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const addStateInfo = this.props.addStateInfoToParentActive;
     this.deregister = typeof addStateInfo === 'function' ? addStateInfo(this.props.to, this.props.params) : () => {};
     const router = this.props.router;
@@ -51,7 +51,9 @@ class Sref extends Component<UISrefProps, any> {
   }
 
   componentWillUnmount() {
-    this.deregister();
+    if (this.deregister) {
+      this.deregister();
+    }
   }
 
   getOptions = () => {
