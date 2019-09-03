@@ -3,7 +3,7 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import { Component, createElement, cloneElement, isValidElement, ValidationMap } from 'react';
+import { Component, cloneElement } from 'react';
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
@@ -12,14 +12,11 @@ import { extend, isFunction, TransitionOptions } from '@uirouter/core';
 import { UIRouterReact, UIRouterConsumer } from '../index';
 import { UIViewAddress, UIViewConsumer } from './UIView';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
-import { UISrefActive, UISrefActiveConsumer } from './UISrefActive';
+import { UISrefActiveConsumer } from './UISrefActive';
 
 let classNames = _classNames;
 
 export interface UISrefProps {
-  router: UIRouterReact;
-  addStateInfoToParentActive: Function;
-  parentUIView: UIViewAddress;
   children?: any;
   to: string;
   params?: { [key: string]: any };
@@ -27,7 +24,13 @@ export interface UISrefProps {
   className?: string;
 }
 
-class Sref extends Component<UISrefProps, any> {
+interface SrefProps extends UISrefProps {
+  router: UIRouterReact;
+  addStateInfoToParentActive: Function;
+  parentUIView: UIViewAddress;
+}
+
+class Sref extends Component<SrefProps, any> {
   // deregister function for parent UISrefActive
   deregister: Function;
   static propTypes = {
@@ -92,7 +95,7 @@ class Sref extends Component<UISrefProps, any> {
   }
 }
 
-export const UISref = props => (
+export const UISref = (props: UISrefProps) => (
   <UIRouterConsumer>
     {router => (
       <UIViewConsumer>
