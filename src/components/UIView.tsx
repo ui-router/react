@@ -8,13 +8,15 @@ import {
   ClassicComponentClass,
   Component,
   ComponentClass,
+  createContext,
   SFC,
+  ReactNode,
   StatelessComponent,
   ValidationMap,
   Validator,
   cloneElement,
   createElement,
-  isValidElement,
+  isValidElement
 } from 'react';
 import * as PropTypes from 'prop-types';
 
@@ -78,6 +80,7 @@ export interface UIViewInjectedProps {
 
 /** Component Props for `UIView` */
 export interface UIViewProps {
+  children?: ReactNode;
   router?: UIRouterReact;
   parentUIView?: UIViewAddress;
   name?: string;
@@ -100,7 +103,7 @@ export const TransitionPropCollisionError = new Error(
 );
 
 /** @internalapi */
-export const { Provider: UIViewProvider, Consumer: UIViewConsumer } = React.createContext<UIViewAddress>(undefined);
+export const { Provider: UIViewProvider, Consumer: UIViewConsumer } = createContext<UIViewAddress>(undefined);
 
 class View extends Component<UIViewProps, UIViewState> {
   // This object contains all the metadata for this UIView
@@ -168,7 +171,7 @@ class View extends Component<UIViewProps, UIViewState> {
     return <UIViewProvider value={this.uiViewAddress}>{ChildOrRenderFunction}</UIViewProvider>;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const router = this.props.router;
     if (typeof router === 'undefined') {
       throw UIRouterInstanceUndefinedError;
@@ -199,7 +202,9 @@ class View extends Component<UIViewProps, UIViewState> {
   }
 
   componentWillUnmount() {
-    this.deregister();
+    if (this.deregister) {
+      this.deregister();
+    }
   }
 
   /**
@@ -262,9 +267,18 @@ class View extends Component<UIViewProps, UIViewState> {
   }
 }
 
-export class UIView extends React.Component<UIViewProps, any> {
+View.propTypes = {
+  router: PropTypes.object.isRequired as Validator<UIRouterReact>,
+  parentUIView: PropTypes.object as Validator<UIViewAddress>,
+  name: PropTypes.string,
+  className: PropTypes.string,
+  style: PropTypes.object,
+  render: PropTypes.func,
+} as ValidationMap<UIViewProps>;
+
+export class UIView extends Component<UIViewProps, any> {
   static displayName = 'UIView';
-  static __internalViewComponent: React.ComponentClass<UIViewProps> = View;
+  static __internalViewComponent: ComponentClass<UIViewProps> = View;
 
   render() {
     return (
