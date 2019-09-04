@@ -59,7 +59,7 @@ class SrefActive extends Component<UISrefActiveProps, any> {
     activeClasses: '',
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const router = this.props.router;
     if (typeof router === 'undefined') {
       throw UIRouterInstanceUndefinedError;
@@ -69,7 +69,9 @@ class SrefActive extends Component<UISrefActiveProps, any> {
   }
 
   componentWillUnmount() {
-    this.deregister();
+    if (this.deregister) {
+      this.deregister();
+    }
   }
 
   addStateInfo = (stateName, stateParams) => {

@@ -106,15 +106,14 @@ describe('<UIView>', () => {
       states.forEach(state => router.stateRegistry.register(state as ReactStateDeclaration));
     });
 
-    it('renders its State Component', () => {
+    it('renders its State Component', async () => {
       const wrapper = mount(
         <UIRouter router={router}>
           <UIView />
         </UIRouter>
       );
-      return router.stateService.go('parent').then(() => {
-        expect(wrapper.html()).toEqual(`<div><span>parent</span><div></div></div>`);
-      });
+      await router.stateService.go('parent');
+      expect(wrapper.update().html()).toEqual(`<div><span>parent</span><div></div></div>`);
     });
 
     it('injects the right props', async () => {
@@ -131,7 +130,9 @@ describe('<UIView>', () => {
       );
       await router.stateService.go('__state');
       wrapper.update();
+      // @ts-ignore
       expect(wrapper.find(Comp).props().myresolve).not.toBeUndefined();
+      // @ts-ignore
       expect(wrapper.find(Comp).props().transition).not.toBeUndefined();
     });
 
@@ -149,6 +150,7 @@ describe('<UIView>', () => {
       );
       await router.stateService.go('__state');
       wrapper.update();
+      // @ts-ignore
       expect(wrapper.find(Comp).props().foo).toBe('bar');
     });
 
@@ -208,9 +210,9 @@ describe('<UIView>', () => {
         </UIRouter>
       );
       await router.stateService.go('parent.child');
-      expect(wrapper.html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
+      expect(wrapper.update().html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
       await router.stateService.go('parent');
-      expect(wrapper.html()).toEqual(`<div><span>parent</span><div></div></div>`);
+      expect(wrapper.update().html()).toEqual(`<div><span>parent</span><div></div></div>`);
     });
 
     it('calls uiCanExit function of its State Component when unmounting', async () => {
@@ -239,9 +241,9 @@ describe('<UIView>', () => {
         </UIRouter>
       );
       await router.stateService.go('__state');
-      expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
+      expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
       await router.stateService.go('exit');
-      expect(wrapper.html()).toEqual('<span>exit</span>');
+      expect(wrapper.update().html()).toEqual('<span>exit</span>');
       expect(uiCanExitSpy).toBeCalled();
     });
 
@@ -273,9 +275,9 @@ describe('<UIView>', () => {
       );
       await router.stateService.go('__state');
       console.log(wrapper.html());
-      expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
+      expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
       await router.stateService.go('exit');
-      expect(wrapper.html()).toEqual('<span>exit</span>');
+      expect(wrapper.update().html()).toEqual('<span>exit</span>');
       expect(uiCanExitSpy).toBeCalled();
     });
 
@@ -300,7 +302,7 @@ describe('<UIView>', () => {
         </UIRouter>
       );
       await router.stateService.go('withrenderprop');
-      expect(wrapper.html()).toEqual(`<div><span>withrenderprop</span><span>bar</span></div>`);
+      expect(wrapper.update().html()).toEqual(`<div><span>withrenderprop</span><span>bar</span></div>`);
     });
 
     it('unmounts the State Component when calling stateService.reload(true)', async () => {
