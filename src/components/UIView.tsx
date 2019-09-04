@@ -9,18 +9,14 @@ import {
   Component,
   ComponentClass,
   createContext,
-  FunctionComponent,
-  ReactElement,
+  SFC,
   ReactNode,
   StatelessComponent,
   ValidationMap,
   Validator,
   cloneElement,
   createElement,
-  isValidElement,
-  useEffect,
-  useRef,
-  useState,
+  isValidElement
 } from 'react';
 import * as PropTypes from 'prop-types';
 
@@ -97,7 +93,7 @@ export interface UIViewProps {
 export interface UIViewState {
   id?: number;
   loaded?: boolean;
-  component?: string | FunctionComponent<any> | ClassType<any, any, any> | ComponentClass<any>;
+  component?: string | SFC<any> | ClassType<any, any, any> | ComponentClass<any>;
   props?: any;
 }
 

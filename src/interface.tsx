@@ -2,9 +2,9 @@
  * @reactapi
  * @module react
  */ /** */
-import { Component, ReactElement, StatelessComponent, ComponentClass, ClassicComponentClass } from 'react';
+import { StatelessComponent, ComponentClass, ClassicComponentClass } from 'react';
 
-import { StateDeclaration, _ViewDeclaration, ParamDeclaration, IInjectable, Transition } from '@uirouter/core';
+import { StateDeclaration, _ViewDeclaration, Transition } from '@uirouter/core';
 
 /**
  * The StateDeclaration object is used to define a state or nested state.

@@ -3,10 +3,10 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import { Component, Children } from 'react';
+import { Component } from 'react';
 import * as PropTypes from 'prop-types';
 
-import { UIRouterPlugin, servicesPlugin } from '@uirouter/core';
+import { servicesPlugin } from '@uirouter/core';
 
 import { UIRouterReact, ReactStateDeclaration } from '../index';
 

@@ -3,11 +3,11 @@
  * @module components
  */ /** */
 import * as React from 'react';
-import { Component, cloneElement, ValidationMap } from 'react';
+import { Component, cloneElement } from 'react';
 import * as PropTypes from 'prop-types';
 import * as _classNames from 'classnames';
 
-import { UIRouterReact, UISref, UIRouterConsumer } from '../index';
+import { UIRouterReact, UIRouterConsumer } from '../index';
 import { UIViewAddress } from './UIView';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
 
