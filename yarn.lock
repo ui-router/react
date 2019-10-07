@@ -79,10 +79,10 @@
   resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.23.tgz#363b4bea635a1b48900dc7e65793a65a3b58a79e"
   integrity sha512-rwFOH++z/KY8y+h0IOpQ5uC8Nim6E0EBCQrIjhVCr+XKYXgpK+VdtuOLFdogvbJ3AAi5Z7ei00qdEr7Did5CAg==
 
-"@uirouter/publish-scripts@^2.3.30":
-  version "2.3.30"
-  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.3.30.tgz#d436cf94cffe95ad510e4ea5e9967aba759ae411"
-  integrity sha512-DNkfmQjLpCGQIwvZts6auABF7fa/+t0ZHqHp21RsP6v+AfszEhXuYjQ1+mfkXeLulxjmW0Kax4dcjZ0fzfIrMw==
+"@uirouter/publish-scripts@^2.3.31":
+  version "2.3.31"
+  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.3.31.tgz#bd0a42ebe188ae7f5a2ad64e3380ce074a16a4ec"
+  integrity sha512-mDkFXsCoK9DyAJuk3+ybiNV1ED14aZoX1YZGd/etNjmZ7qzJuwIXTUb4fSAT7B3NUK/NfR+iPNymoeyL7Sdgrw==
   dependencies:
     conventional-changelog "^3.1.10"
     conventional-changelog-ui-router-core "^1.4.2"
@@ -6566,14 +6566,6 @@ sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
-
-scheduler@^0.15.0:
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.15.0.tgz#6bfcf80ff850b280fed4aeecc6513bc0b4f17f8e"
-  integrity sha512-xAefmSfN6jqAa7Kuq7LIJY0bwAPG3xlCj0HMEBQk1lxYiDKZscY2xJ5U/61ZTrYbmNQbXa+gc7czPkVo11tnCg==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scheduler@^0.16.1:
   version "0.16.1"
