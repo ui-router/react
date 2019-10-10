@@ -88,18 +88,20 @@
       ".(ts|tsx)": "ts-jest"
     },
     "moduleFileExtensions": [
-      "ts",
-      "tsx",
       "js",
-      "json"
+      "json",
+      "ts",
+      "tsx"
     ],
     "testURL": "http://localhost:4000",
     "testRegex": "/__tests__/.*\\.(ts|tsx|js)$",
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "./tsconfig.jest.json"
+        "tsConfig": "./tsconfig.jest.json"
       }
-    }
+    },
+    "preset": "ts-jest",
+    "testMatch": null
   },
   "husky": {
     "hooks": {
