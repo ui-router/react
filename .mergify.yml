@@ -1,0 +1,12 @@
+pull_request_rules:
+  - name: Automatically merge on CI success and review
+    conditions:
+      - status-success=continuous-integration/travis-ci/pr
+      - 'label=automerge'
+    actions:
+      delete_head_branch: {}
+      label:
+        add: ['auto merged']
+      merge:
+        method: squash
+        strict: smart
