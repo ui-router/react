@@ -55,7 +55,7 @@
     "@types/prop-types": "15.7.3",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
-    "@uirouter/publish-scripts": "^2.3.37",
+    "@uirouter/publish-scripts": "^2.3.38",
     "babel-jest": "^24.9.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
