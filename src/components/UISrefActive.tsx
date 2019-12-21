@@ -24,10 +24,7 @@ export interface UISrefActiveState {
 }
 
 /** @hidden */
-export type AddStateInfoFn = (
-  to: string,
-  params: { [key: string]: any }
-) => () => void;
+export type AddStateInfoFn = (to: string, params: { [key: string]: any }) => () => void;
 
 /** @hidden */
 type UISrefActiveStateContainer = {
@@ -36,21 +33,18 @@ type UISrefActiveStateContainer = {
 };
 
 /** @hidden */
-export const IncorrectStateNameTypeError = new Error(
-  'State name provided to <UISref {to}> must be a string.'
-);
+export const IncorrectStateNameTypeError = new Error('State name provided to <UISref {to}> must be a string.');
 
 /** @internalapi */
-export const UISrefActiveContext = React.createContext<AddStateInfoFn>(null);
+const rootAddStateInfoFn: AddStateInfoFn = () => () => undefined;
+export const UISrefActiveContext = React.createContext<AddStateInfoFn>(rootAddStateInfoFn);
 
 /** @hidden */
 function createStateHash(state: string, params: {}) {
   if (typeof state !== 'string') {
     throw IncorrectStateNameTypeError;
   }
-  return params && typeof params === 'object'
-    ? state + JSON.stringify(params)
-    : state;
+  return params && typeof params === 'object' ? state + JSON.stringify(params) : state;
 }
 
 /**
@@ -65,9 +59,7 @@ export function createStateInfoAndHash(
   stateParams: object
 ): UISrefActiveStateContainer {
   const { stateService, stateRegistry } = router;
-  const stateContext =
-    (parentUIViewAddress && parentUIViewAddress.context) ||
-    stateRegistry.root();
+  const stateContext = (parentUIViewAddress && parentUIViewAddress.context) || stateRegistry.root();
   const state = stateService.get(stateName, stateContext);
   const stateHash = createStateHash(stateName, stateParams);
   const stateInfo = {
@@ -111,7 +103,6 @@ const getChecker = (stateService, exact) => {
     : (stateName, params) => stateService.includes(stateName, params);
 };
 
-
 export interface UISrefActiveProps {
   /**
    * The class string to apply when the state is active (i.e. `"menu-item-active"`)
@@ -151,12 +142,7 @@ export interface UISrefActiveProps {
  * <a href="/path/to/homestate" class="menu-item active-item">Home</a>
  * ```
  */
-export function UISrefActive({
-  children,
-  className,
-  class: classToApply,
-  exact,
-}: UISrefActiveProps) {
+export function UISrefActive({ children, className, class: classToApply, exact }: UISrefActiveProps) {
   const router = useContext<UIRouterReact>(UIRouterContext);
   const parentUIViewAddress = useContext<UIViewAddress>(UIViewContext);
   const parentAddStateInfo = useContext<AddStateInfoFn>(UISrefActiveContext);
@@ -168,65 +154,41 @@ export function UISrefActive({
   const activeClassesRef = useRef<string>('');
   const [activeClasses, setActiveClasses] = useState<string>('');
 
-  const getActiveClasses = useCallback(
-    (): string => {
-      const { stateService } = router;
-      const checker = getChecker(stateService, exact);
-      const classes = states.current
-        .filter(({ state, params }) => checker(state.name, params))
-        .map(({ hash }) => activeClassesMap.current[hash]);
-      return classNames(classes);
-    },
-    [router, states, activeClassesMap, exact]
-  );
+  const getActiveClasses = useCallback((): string => {
+    const { stateService } = router;
+    const checker = getChecker(stateService, exact);
+    const classes = states.current
+      .filter(({ state, params }) => checker(state.name, params))
+      .map(({ hash }) => activeClassesMap.current[hash]);
+    return classNames(classes);
+  }, [router, states, activeClassesMap, exact]);
 
-  const updateActiveClasses = useCallback(
-    () => {
-      const newActiveClasses = getActiveClasses();
-      if (activeClassesRef.current !== newActiveClasses) {
-        activeClassesRef.current = newActiveClasses;
-        setActiveClasses(newActiveClasses);
-      }
-    },
-    [activeClassesRef.current, setActiveClasses, getActiveClasses]
-  );
+  const updateActiveClasses = useCallback(() => {
+    const newActiveClasses = getActiveClasses();
+    if (activeClassesRef.current !== newActiveClasses) {
+      activeClassesRef.current = newActiveClasses;
+      setActiveClasses(newActiveClasses);
+    }
+  }, [activeClassesRef.current, setActiveClasses, getActiveClasses]);
 
   const registerStateAndClass = useCallback(
     (stateName, stateParams, activeClass) => {
-      const state = createStateInfoAndHash(
-        router,
-        parentUIViewAddress,
-        stateName,
-        stateParams
-      );
-      return addToRegisterWithUnsubscribe(
-        states.current,
-        activeClassesMap.current,
-        state,
-        activeClass
-      );
+      const state = createStateInfoAndHash(router, parentUIViewAddress, stateName, stateParams);
+      return addToRegisterWithUnsubscribe(states.current, activeClassesMap.current, state, activeClass);
     },
     [router, parentUIViewAddress, activeClassesMap, states.current]
   );
 
   const addStateInfo = useCallback(
     (stateName, stateParams) => {
-      const deregister = registerStateAndClass(
-        stateName,
-        stateParams,
-        classToApply
-      );
+      const deregister = registerStateAndClass(stateName, stateParams, classToApply);
+      const parentDeregister = parentAddStateInfo(stateName, stateParams);
       updateActiveClasses();
 
-      if (typeof parentAddStateInfo === 'function') {
-        const parentDeregister = parentAddStateInfo(stateName, stateParams);
-        return () => {
-          deregister();
-          parentDeregister();
-        };
-      }
-
-      return deregister;
+      return () => {
+        deregister();
+        parentDeregister();
+      };
     },
     [classToApply, parentAddStateInfo, registerStateAndClass]
   );
@@ -250,19 +212,11 @@ export function UISrefActive({
     activeClasses.length > 0
       ? cloneElement(children, {
           ...children.props,
-          className: classNames(
-            className,
-            children.props.className,
-            activeClasses
-          ),
+          className: classNames(className, children.props.className, activeClasses),
         })
       : children;
 
-  return (
-    <UISrefActiveContext.Provider value={addStateInfo}>
-      {childrenWithActiveClasses}
-    </UISrefActiveContext.Provider>
-  );
+  return <UISrefActiveContext.Provider value={addStateInfo}>{childrenWithActiveClasses}</UISrefActiveContext.Provider>;
 }
 
 export const useUISrefActive = (stateName, params = null, exact = false) => {

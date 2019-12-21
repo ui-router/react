@@ -49,7 +49,7 @@ export function useUISref(
 ): LinkProps {
   const router = useContext<UIRouterReact>(UIRouterContext);
   const parentUIViewAddress = useContext<UIViewAddress>(UIViewContext);
-  const parentUISrefActiveAddStateInfo = useContext<AddStateInfoFn>(UISrefActiveContext) || (() => {});
+  const parentUISrefActiveAddStateInfo = useContext<AddStateInfoFn>(UISrefActiveContext);
 
   const { stateService, stateRegistry } = router;
 
