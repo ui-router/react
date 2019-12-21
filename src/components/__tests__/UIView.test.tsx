@@ -1,5 +1,3 @@
-declare var jest, describe, it, expect, beforeEach;
-
 import * as React from 'react';
 import { mount } from 'enzyme';
 
@@ -290,6 +288,7 @@ describe('<UIView>', () => {
         .find('View')
         .at(0)
         .instance();
+      // @ts-ignore
       const deregisterSpy = jest.spyOn(UIViewInstance, 'deregister');
       wrapper.setProps({ show: false });
       expect(deregisterSpy).toHaveBeenCalled();

@@ -1,5 +1,3 @@
-declare var jest, describe, it, expect, beforeEach;
-
 import { mount } from 'enzyme';
 import * as React from 'react';
 
@@ -58,6 +56,7 @@ describe('<UISref>', () => {
       .at(0)
       .find('Sref')
       .at(0);
+    // @ts-ignore
     const deregisterSpy = jest.spyOn(uiSref.instance(), 'deregister');
     await router.stateService.go('state2');
     expect(deregisterSpy).toHaveBeenCalled();
