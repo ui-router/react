@@ -36,17 +36,11 @@ export function getTransitionOptions(
   options: TransitionOptions,
   parentUIViewAddress?: UIViewAddress
 ) {
-  const parentContext =
-    (parentUIViewAddress && parentUIViewAddress.context) ||
-    stateRegistry.root();
+  const parentContext = (parentUIViewAddress && parentUIViewAddress.context) || stateRegistry.root();
   return { relative: parentContext, inherit: true, ...options };
 }
 
-export function useUISref(
-  to: string,
-  params: { [key: string]: any } = {},
-  options: TransitionOptions = {}
-): LinkProps {
+export function useUISref(to: string, params: { [key: string]: any } = {}, options: TransitionOptions = {}): LinkProps {
   const router = useContext<UIRouterReact>(UIRouterContext);
   const parentUIViewAddress = useContext<UIViewAddress>(UIViewContext);
   const parentUISrefActiveAddStateInfo = useContext<AddStateInfoFn>(UISrefActiveContext);
@@ -55,10 +49,11 @@ export function useUISref(
 
   useEffect(() => parentUISrefActiveAddStateInfo(to, params), []);
 
-  const hrefOptions = useMemo(
-    () => getTransitionOptions(stateRegistry, options, parentUIViewAddress),
-    [options, parentUIViewAddress, stateRegistry],
-  );
+  const hrefOptions = useMemo(() => getTransitionOptions(stateRegistry, options, parentUIViewAddress), [
+    options,
+    parentUIViewAddress,
+    stateRegistry,
+  ]);
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
