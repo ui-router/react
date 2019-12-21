@@ -1,5 +1,3 @@
-declare var jest, describe, it, expect, beforeEach, afterEach;
-
 import { servicesPlugin, memoryLocationPlugin } from '@uirouter/core';
 
 import { UIRouterReact, StartMethodCalledMoreThanOnceError } from '../index';
