@@ -16,18 +16,11 @@ import {
   Validator,
   cloneElement,
   createElement,
-  isValidElement
+  isValidElement,
 } from 'react';
 import * as PropTypes from 'prop-types';
 
-import {
-  ActiveUIView,
-  ViewContext,
-  Transition,
-  ResolveContext,
-  StateParams,
-  applyPairs,
-} from '@uirouter/core';
+import { ActiveUIView, ViewContext, Transition, ResolveContext, StateParams, applyPairs } from '@uirouter/core';
 
 import { UIRouterReact, UIRouterContext } from '../index';
 import { ReactViewConfig } from '../reactViews';
@@ -74,10 +67,7 @@ export interface UIViewResolves {
  * @internalapi
  */
 export type RenderPropCallback = (
-  Component:
-    | StatelessComponent<any>
-    | ComponentClass<any>
-    | ClassicComponentClass<any>,
+  Component: StatelessComponent<any> | ComponentClass<any> | ClassicComponentClass<any>,
   Props: any
 ) => JSX.Element | null;
 
@@ -103,11 +93,7 @@ export interface UIViewProps {
 export interface UIViewState {
   id?: number;
   loaded?: boolean;
-  component?:
-    | string
-    | SFC<any>
-    | ClassType<any, any, any>
-    | ComponentClass<any>;
+  component?: string | SFC<any> | ClassType<any, any, any> | ComponentClass<any>;
   props?: any;
 }
 
@@ -155,18 +141,14 @@ class View extends Component<UIViewProps, UIViewState> {
     let { component, props, loaded } = this.state;
     // register reference of child component
     // register new hook right after component has been rendered
-    let stateName: string =
-      this.uiViewAddress &&
-      this.uiViewAddress.context &&
-      this.uiViewAddress.context.name;
+    let stateName: string = this.uiViewAddress && this.uiViewAddress.context && this.uiViewAddress.context.name;
 
     // only class components can implement the
     // uiCanExit hook and ref doesn't work on
     // stateless function components
     if (
       typeof component !== 'string' &&
-      (!!component.render ||
-        (component.prototype && !!component.prototype.render))
+      (!!component.render || (component.prototype && !!component.prototype.render))
     ) {
       props.ref = c => {
         this.componentInstance = c;
@@ -181,21 +163,12 @@ class View extends Component<UIViewProps, UIViewState> {
     const childProps = { ...props, ...styleProps };
 
     let child =
-      !loaded && isValidElement(children)
-        ? cloneElement(children, childProps)
-        : createElement(component, childProps);
+      !loaded && isValidElement(children) ? cloneElement(children, childProps) : createElement(component, childProps);
 
     // if a render function is passed use that,
     // otherwise render the component normally
-    const ChildOrRenderFunction =
-      typeof render !== 'undefined' && loaded
-        ? render(component, childProps)
-        : child;
-    return (
-      <UIViewContext.Provider value={this.uiViewAddress}>
-        {ChildOrRenderFunction}
-      </UIViewContext.Provider>
-    );
+    const ChildOrRenderFunction = typeof render !== 'undefined' && loaded ? render(component, childProps) : child;
+    return <UIViewContext.Provider value={this.uiViewAddress}>{ChildOrRenderFunction}</UIViewContext.Provider>;
   }
 
   componentDidMount() {
@@ -250,8 +223,7 @@ class View extends Component<UIViewProps, UIViewState> {
     let resolves = {};
 
     if (newConfig) {
-      let viewContext: ViewContext =
-        newConfig.viewDecl && newConfig.viewDecl.$context;
+      let viewContext: ViewContext = newConfig.viewDecl && newConfig.viewDecl.$context;
       this.uiViewAddress = {
         fqn: this.uiViewAddress.fqn,
         context: viewContext,
@@ -260,25 +232,20 @@ class View extends Component<UIViewProps, UIViewState> {
       let resolveContext = new ResolveContext(newConfig.path);
       let injector = resolveContext.injector();
 
-      let stringTokens: string[] = resolveContext
-        .getTokens()
-        .filter(x => typeof x === 'string');
+      let stringTokens: string[] = resolveContext.getTokens().filter(x => typeof x === 'string');
       if (stringTokens.indexOf('transition') !== -1) {
         throw TransitionPropCollisionError;
       }
 
       trans = injector.get(Transition);
-      resolves = stringTokens
-        .map(token => [token, injector.get(token)])
-        .reduce(applyPairs, {});
+      resolves = stringTokens.map(token => [token, injector.get(token)]).reduce(applyPairs, {});
     }
 
     this.uiViewData.config = newConfig;
     const key = Date.now();
     let props = { ...resolves, transition: trans, key };
 
-    let newComponent =
-      newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
+    let newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
     this.setState({
       component: newComponent || 'div',
       props: newComponent ? props : {},
@@ -318,13 +285,7 @@ export class UIView extends Component<UIViewProps, any> {
       <UIRouterContext.Consumer>
         {router => (
           <UIViewContext.Consumer>
-            {parentUIView => (
-              <View
-                {...this.props}
-                router={router}
-                parentUIView={parentUIView}
-              />
-            )}
+            {parentUIView => <View {...this.props} router={router} parentUIView={parentUIView} />}
           </UIViewContext.Consumer>
         )}
       </UIRouterContext.Consumer>

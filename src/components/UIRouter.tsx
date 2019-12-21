@@ -84,9 +84,7 @@ export function useUIRouter(
       uiRouter.current.plugin(servicesPlugin); // services plugins is necessary for the router to fuction
       plugins.forEach(plugin => uiRouter.current.plugin(plugin));
       if (configFn) configFn(uiRouter.current);
-      (states || []).forEach(state =>
-        uiRouter.current.stateRegistry.register(state)
-      );
+      (states || []).forEach(state => uiRouter.current.stateRegistry.register(state));
     } else {
       throw InstanceOrPluginsMissingError;
     }
@@ -170,18 +168,8 @@ export function useUIRouter(
  * );
  * ```
  */
-export function UIRouter({
-  config,
-  states,
-  plugins,
-  router,
-  children,
-}: UIRouterProps) {
+export function UIRouter({ config, states, plugins, router, children }: UIRouterProps) {
   const uiRouter = useUIRouter(config, states, plugins, router);
 
-  return (
-    <UIRouterContext.Provider value={uiRouter}>
-      {children}
-    </UIRouterContext.Provider>
-  );
+  return <UIRouterContext.Provider value={uiRouter}>{children}</UIRouterContext.Provider>;
 }
