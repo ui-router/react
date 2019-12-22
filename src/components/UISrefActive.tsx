@@ -7,7 +7,7 @@ import { useState, useCallback, useContext, useRef } from 'react';
 import { cloneElement } from 'react';
 import * as _classNames from 'classnames';
 
-import { useFirstRenderEffect } from './hooks';
+import { useFirstRenderEffect, useUIRouter } from './hooks';
 import { UIRouterReact, UIRouterContext } from '../index';
 import { UIViewAddress } from './UIView';
 import { UIRouterInstanceUndefinedError } from './UIRouter';
@@ -143,7 +143,7 @@ export interface UISrefActiveProps {
  * ```
  */
 export function UISrefActive({ children, className, class: classToApply, exact }: UISrefActiveProps) {
-  const router = useContext(UIRouterContext);
+  const router = useUIRouter();
   const parentUIViewAddress = useContext(UIViewContext);
   const parentAddStateInfo = useContext(UISrefActiveContext);
 
