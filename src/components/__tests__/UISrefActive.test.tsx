@@ -15,11 +15,10 @@ import {
   createStateInfoAndHash,
   addToRegisterWithUnsubscribe,
 } from '../../index';
-import { ViewContext } from '@uirouter/core';
 
 const Link = ({ to, children }) => {
-  const linkProps = useUISref('parent.child2');
-  const isActive = useUISrefActive('parent.child2');
+  const linkProps = useUISref(to);
+  const isActive = useUISrefActive(to);
   return (
     <a {...linkProps} className={isActive ? 'active' : null}>
       {children}
