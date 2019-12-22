@@ -143,9 +143,9 @@ export interface UISrefActiveProps {
  * ```
  */
 export function UISrefActive({ children, className, class: classToApply, exact }: UISrefActiveProps) {
-  const router = useContext<UIRouterReact>(UIRouterContext);
-  const parentUIViewAddress = useContext<UIViewAddress>(UIViewContext);
-  const parentAddStateInfo = useContext<AddStateInfoFn>(UISrefActiveContext);
+  const router = useContext(UIRouterContext);
+  const parentUIViewAddress = useContext(UIViewContext);
+  const parentAddStateInfo = useContext(UISrefActiveContext);
 
   // keep track of states to watch and their activeClasses
   const states = useRef<Array<UISrefActiveState>>([]);
@@ -220,7 +220,7 @@ export function UISrefActive({ children, className, class: classToApply, exact }
 }
 
 export const useUISrefActive = (stateName, params = null, exact = false) => {
-  const { transitionService, stateService } = useContext<UIRouterReact>(UIRouterContext);
+  const { transitionService, stateService } = useContext(UIRouterContext);
   const check = React.useMemo(() => getChecker(stateService, exact), [stateService, exact]);
   const [isActive = check(stateName, params), setState] = React.useState(undefined);
 
