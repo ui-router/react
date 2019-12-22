@@ -26,7 +26,7 @@ export interface UISrefProps {
 }
 
 export interface LinkProps {
-  onClick: React.MouseEventHandler;
+  onClick: React.MouseEventHandler<any>;
   href?: string;
 }
 
