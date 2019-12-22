@@ -41,9 +41,9 @@ export function getTransitionOptions(
 }
 
 export function useUISref(to: string, params: { [key: string]: any } = {}, options: TransitionOptions = {}): LinkProps {
-  const router = useContext<UIRouterReact>(UIRouterContext);
-  const parentUIViewAddress = useContext<UIViewAddress>(UIViewContext);
-  const parentUISrefActiveAddStateInfo = useContext<AddStateInfoFn>(UISrefActiveContext);
+  const router = useContext(UIRouterContext);
+  const parentUIViewAddress = useContext(UIViewContext);
+  const parentUISrefActiveAddStateInfo = useContext(UISrefActiveContext);
 
   const { stateService, stateRegistry } = router;
 
