@@ -261,15 +261,6 @@ describe('<UISrefActive>', () => {
       </UIRouter>
     );
 
-    const instance = wrapper
-      .find(UISrefActive)
-      .at(0)
-      .find('SrefActive')
-      .at(0)
-      .instance();
-    // @ts-ignore
-    expect(instance.states.length).toBe(3);
-
     router.stateRegistry.register({
       name: 'state1',
       component: () => <UIView />,
