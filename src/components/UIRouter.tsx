@@ -68,7 +68,7 @@ export const UIRouterInstanceUndefinedError = new Error(
  * const uiRouter = useUIRouter(config, states, plugins, router);
  * ```
  */
-export function useUIRouter(
+export function useInitializeUIRouter(
   configFn: (router: UIRouterReact) => void,
   states: Array<ReactStateDeclaration>,
   plugins: Array<PluginFactory<UIRouterPlugin>>,
@@ -169,7 +169,7 @@ export function useUIRouter(
  * ```
  */
 export function UIRouter({ config, states, plugins, router, children }: UIRouterProps) {
-  const uiRouter = useUIRouter(config, states, plugins, router);
+  const uiRouter = useInitializeUIRouter(config, states, plugins, router);
 
   return <UIRouterContext.Provider value={uiRouter}>{children}</UIRouterContext.Provider>;
 }

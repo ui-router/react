@@ -11,6 +11,7 @@ import * as _classNames from 'classnames';
 import { isFunction, TransitionOptions } from '@uirouter/core';
 
 import { UIRouterReact, UIRouterContext, StateRegistry } from '../index';
+import { useUIRouter } from './hooks';
 import { UIViewAddress, UIViewContext } from './UIView';
 import { UISrefActiveContext, AddStateInfoFn } from './UISrefActive';
 
@@ -41,7 +42,7 @@ export function getTransitionOptions(
 }
 
 export function useUISref(to: string, params: { [key: string]: any } = {}, options: TransitionOptions = {}): LinkProps {
-  const router = useContext(UIRouterContext);
+  const router = useUIRouter();
   const parentUIViewAddress = useContext(UIViewContext);
   const parentUISrefActiveAddStateInfo = useContext(UISrefActiveContext);
 
