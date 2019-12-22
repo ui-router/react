@@ -9,6 +9,7 @@ import {
   UISref,
   UIView,
   getTransitionOptions,
+  useUISref,
 } from '../../index';
 import { UISrefActiveContext } from '../UISrefActive';
 import { ViewContext } from '@uirouter/core';
@@ -29,6 +30,92 @@ const states = [
     component: () => <span>state2</span>,
   },
 ];
+
+describe('useUiSref', () => {
+  let router;
+  beforeEach(() => {
+    router = new UIRouterReact();
+    router.plugin(servicesPlugin);
+    router.plugin(pushStateLocationPlugin);
+    states.forEach(state => router.stateRegistry.register(state));
+  });
+
+  it('Returns an href for the target state', () => {
+    const spy = jest.fn();
+    const Component = () => {
+      const uiSref = useUISref('state2', {});
+      spy(uiSref.href);
+      return <a {...uiSref} />;
+    };
+
+    mount(
+      <UIRouter router={router}>
+        <Component />
+      </UIRouter>
+    );
+
+    expect(spy).toBeCalledTimes(1);
+    expect(spy).lastCalledWith('/state2');
+  });
+
+  it('Returns an onClick function which activates the target state', () => {
+    const spy = jest.spyOn(router.stateService, 'go');
+    let onClick: Function = null;
+    const Component = () => {
+      const uiSref = useUISref('state', {});
+      onClick = uiSref.onClick;
+      return <a {...uiSref} />;
+    };
+    mount(
+      <UIRouter router={router}>
+        <Component />
+      </UIRouter>
+    );
+    expect(typeof onClick).toBe('function');
+    const event = { preventDefault() {} } as React.MouseEvent<any>;
+    onClick(event);
+    expect(spy).toBeCalledTimes(1);
+    expect(spy).toBeCalledWith('state', expect.anything(), expect.anything());
+  });
+
+  it('Registers itself with the parent UISrefActive addStateInfo callback', () => {
+    const spy = jest.fn();
+    const Component = () => {
+      const uiSref = useUISref('state', {});
+      return <a {...uiSref} />;
+    };
+
+    mount(
+      <UIRouter router={router}>
+        <UISrefActiveContext.Provider value={spy}>
+          <Component />
+        </UISrefActiveContext.Provider>
+      </UIRouter>
+    );
+
+    expect(spy).toBeCalledTimes(1);
+  });
+
+  it('Deregisters itself with the parent UISrefActive addStateInfo callback when unmounted', () => {
+    const spy = jest.fn();
+    const Component = () => {
+      const uiSref = useUISref('state', {});
+      return <a {...uiSref} />;
+    };
+
+    const wrapper = mount(
+      <UIRouter router={router}>
+        <UISrefActiveContext.Provider value={() => spy}>
+          <Component />
+        </UISrefActiveContext.Provider>
+      </UIRouter>
+    );
+
+    expect(spy).toBeCalledTimes(0);
+    wrapper.unmount();
+    expect(spy).toBeCalledTimes(1);
+  });
+});
 
 describe('<UISref>', () => {
   beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
