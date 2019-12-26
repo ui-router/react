@@ -9,3 +9,4 @@ _bundles/
 node_modules/
 _doc
 yarn-error.log
+!.github
