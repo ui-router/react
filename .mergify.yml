@@ -1,12 +1,23 @@
 pull_request_rules:
-  - name: Automatically merge on CI success and review
+  - name: Automatically squash and merge on CI success
     conditions:
-      - status-success=continuous-integration/travis-ci/pr
-      - 'label=automerge'
+      - status-success=CI: Unit Tests
+      - status-success=CI: Docs can be generated
+      - status-success=CI: Downstream projects still work
+      - 'label=ready to squash and merge'
     actions:
       delete_head_branch: {}
-      label:
-        add: ['auto merged']
       merge:
         method: squash
+        strict: smart
+  - name: Automatically rebase and merge on CI success
+    conditions:
+      - status-success=CI: Unit Tests
+      - status-success=CI: Docs can be generated
+      - status-success=CI: Downstream projects still work
+      - 'label=ready to rebase and merge'
+    actions:
+      delete_head_branch: {}
+      merge:
+        method: rebase
         strict: smart
