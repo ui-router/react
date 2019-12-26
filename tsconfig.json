@@ -1,27 +1,18 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
     "moduleResolution": "node",
     "module": "commonjs",
     "target": "es5",
     "lib": ["es2015", "dom"],
     "outDir": "lib",
     "allowSyntheticDefaultImports": true,
-    "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "inlineSources": true,
     "declaration": true,
     "jsx": "react",
-    "typeRoots": ["./node_modules/@types"],
-    "baseUrl": ".",
-    "paths": {
-      "react": ["./node_modules/@types/react"]
-    }
+    "baseUrl": "."
   },
-  "files": ["./src/index.ts"],
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "rules": {
-    "indent": [true, 2]
-  }
+  "files": ["./src/index.ts"]
 }
