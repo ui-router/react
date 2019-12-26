@@ -1,36 +1,26 @@
 /**
  * @reactapi
  * @module components
- */ /** */
+ */
+/** */
+
 import * as React from 'react';
-import { useState, useCallback, useContext, useRef } from 'react';
-import { cloneElement } from 'react';
+import { removeFrom } from '@uirouter/core';
+import { useState, useCallback, useContext, useMemo, cloneElement } from 'react';
 import * as _classNames from 'classnames';
 
-import { useFirstRenderEffect, useUIRouter } from './hooks';
-import { UIRouterReact, UIRouterContext } from '../index';
-import { UIViewAddress } from './UIView';
-import { UIRouterInstanceUndefinedError } from './UIRouter';
-
-import { UIViewContext } from './UIView';
+import { useCurrentStateAndParams, useUIRouter } from './hooks';
 
 /** @hidden */
 let classNames = _classNames;
 
 export interface UISrefActiveState {
-  state: { name?: string; [key: string]: any };
-  params: Object;
-  hash: string;
+  stateName: string;
+  params: object;
 }
 
 /** @hidden */
 export type AddStateInfoFn = (to: string, params: { [key: string]: any }) => () => void;
-
-/** @hidden */
-type UISrefActiveStateContainer = {
-  info: UISrefActiveState;
-  hash: string;
-};
 
 /** @hidden */
 export const IncorrectStateNameTypeError = new Error('State name provided to <UISref {to}> must be a string.');
@@ -38,70 +28,6 @@ export const IncorrectStateNameTypeError = new Error('State name provided to <UI
 /** @internalapi */
 const rootAddStateInfoFn: AddStateInfoFn = () => () => undefined;
 export const UISrefActiveContext = React.createContext<AddStateInfoFn>(rootAddStateInfoFn);
-
-/** @hidden */
-function createStateHash(state: string, params: {}) {
-  if (typeof state !== 'string') {
-    throw IncorrectStateNameTypeError;
-  }
-  return params && typeof params === 'object' ? state + JSON.stringify(params) : state;
-}
-
-/**
- * @hidden
- * Creates a UISrefActiveStateContainer from a state name and its params and an optional parent UIView address.
- * It returns a State Info and its hash to be used to check againts the current state when the component needs to apply active classes.
- */
-export function createStateInfoAndHash(
-  router: UIRouterReact,
-  parentUIViewAddress: UIViewAddress,
-  stateName: string,
-  stateParams: object
-): UISrefActiveStateContainer {
-  const { stateService, stateRegistry } = router;
-  const stateContext = (parentUIViewAddress && parentUIViewAddress.context) || stateRegistry.root();
-  const state = stateService.get(stateName, stateContext);
-  const stateHash = createStateHash(stateName, stateParams);
-  const stateInfo = {
-    state: state || { name: stateName },
-    params: stateParams,
-    hash: stateHash,
-  };
-
-  return {
-    info: stateInfo,
-    hash: stateHash,
-  };
-}
-
-/**
- * @hidden
- * Takes a UISrefActiveStateContainer and adds the state info and the activeClass and registers them in the array and map.
- * It returns a function to remove the state info and the class from the contaners when called.
- */
-export function addToRegisterWithUnsubscribe(
-  states: Array<UISrefActiveState>,
-  classesMap: { [key: string]: string },
-  newState: UISrefActiveStateContainer,
-  newClass: string
-) {
-  states.push(newState.info);
-  classesMap[newState.hash] = newClass;
-  return () => {
-    const idx = states.indexOf(newState.info);
-    if (idx !== -1) {
-      states.splice(idx, 1);
-      delete classesMap[newState.hash];
-    }
-  };
-}
-
-/** @hidden */
-const getChecker = (stateService, exact) => {
-  return exact
-    ? (stateName, params) => stateService.is(stateName, params)
-    : (stateName, params) => stateService.includes(stateName, params);
-};
 
 export interface UISrefActiveProps {
   /**
@@ -143,98 +69,50 @@ export interface UISrefActiveProps {
  * ```
  */
 export function UISrefActive({ children, className, class: classToApply, exact }: UISrefActiveProps) {
-  const router = useUIRouter();
-  const parentUIViewAddress = useContext(UIViewContext);
+  const { stateService } = useUIRouter();
   const parentAddStateInfo = useContext(UISrefActiveContext);
 
   // keep track of states to watch and their activeClasses
-  const states = useRef<Array<UISrefActiveState>>([]);
-  const activeClassesMap = useRef<{ [key: string]: string }>({});
+  const [uiSrefs, setUiSrefs] = useState<UISrefActiveState[]>([]);
+  const currentState = useCurrentStateAndParams();
 
-  const activeClassesRef = useRef<string>('');
-  const [activeClasses, setActiveClasses] = useState<string>('');
-
-  const getActiveClasses = useCallback((): string => {
-    const { stateService } = router;
-    const checker = getChecker(stateService, exact);
-    const classes = states.current
-      .filter(({ state, params }) => checker(state.name, params))
-      .map(({ hash }) => activeClassesMap.current[hash]);
-    return classNames(classes);
-  }, [router, states, activeClassesMap, exact]);
-
-  const updateActiveClasses = useCallback(() => {
-    const newActiveClasses = getActiveClasses();
-    if (activeClassesRef.current !== newActiveClasses) {
-      activeClassesRef.current = newActiveClasses;
-      setActiveClasses(newActiveClasses);
-    }
-  }, [activeClassesRef.current, setActiveClasses, getActiveClasses]);
-
-  const registerStateAndClass = useCallback(
-    (stateName, stateParams, activeClass) => {
-      const state = createStateInfoAndHash(router, parentUIViewAddress, stateName, stateParams);
-      return addToRegisterWithUnsubscribe(states.current, activeClassesMap.current, state, activeClass);
-    },
-    [router, parentUIViewAddress, activeClassesMap, states.current]
-  );
+  const isAnyUiSrefActive = useMemo(() => {
+    return uiSrefs.some(({ stateName, params }) => {
+      return exact ? stateService.is(stateName, params) : stateService.includes(stateName, params);
+    });
+  }, [uiSrefs, exact, stateService, currentState]);
 
   const addStateInfo = useCallback(
-    (stateName, stateParams) => {
-      const deregister = registerStateAndClass(stateName, stateParams, classToApply);
-      const parentDeregister = parentAddStateInfo(stateName, stateParams);
-      updateActiveClasses();
-
+    (stateName: string, params: object) => {
+      const parentDeregister = parentAddStateInfo(stateName, params);
+      const addedUiSref = { stateName, params };
+      setUiSrefs(uiSrefs => uiSrefs.concat(addedUiSref));
       return () => {
-        deregister();
         parentDeregister();
+        setUiSrefs(uiSrefs => removeFrom(uiSrefs, addedUiSref));
       };
     },
-    [classToApply, parentAddStateInfo, registerStateAndClass]
+    [parentAddStateInfo]
   );
 
-  useFirstRenderEffect(() => {
-    if (typeof router === 'undefined') {
-      throw UIRouterInstanceUndefinedError;
-    }
-    // register callback for state change
-    const deregister = router.transitionService.onSuccess({}, () => {
-      updateActiveClasses();
-    });
-
-    return () => {
-      deregister();
-    };
-  });
-
   // If any active class is defined, apply it the children
-  const childrenWithActiveClasses =
-    activeClasses.length > 0
-      ? cloneElement(children, {
-          ...children.props,
-          className: classNames(className, children.props.className, activeClasses),
-        })
-      : children;
+  const childrenWithActiveClasses = isAnyUiSrefActive
+    ? cloneElement(children, {
+        ...children.props,
+        className: classNames(className, children.props.className, classToApply),
+      })
+    : children;
 
   return <UISrefActiveContext.Provider value={addStateInfo}>{childrenWithActiveClasses}</UISrefActiveContext.Provider>;
 }
 
 export const useUISrefActive = (stateName, params = null, exact = false) => {
-  const { transitionService, stateService } = useContext(UIRouterContext);
-  const check = React.useMemo(() => getChecker(stateService, exact), [stateService, exact]);
-  const [isActive = check(stateName, params), setState] = React.useState(undefined);
-
-  const transitionHook = React.useCallback(() => setState(check(stateName, params)), [
-    setState,
-    check,
-    stateName,
-    params,
-  ]);
-
-  React.useEffect(() => {
-    const deregister = transitionService.onSuccess({}, transitionHook);
-    return () => deregister();
-  }, [transitionService, transitionHook]);
+  const { stateService } = useUIRouter();
+  const currentState = useCurrentStateAndParams();
+  const isActive = useMemo(
+    () => (exact ? stateService.is(stateName, params) : stateService.includes(stateName, params)),
+    [exact, stateName, params, currentState]
+  );
 
   return isActive;
 };

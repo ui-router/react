@@ -2,7 +2,7 @@ import { StateParams } from '@uirouter/core';
 import { useEffect, useState } from 'react';
 import { useUIRouter } from './useUIRouter';
 
-export function useCurrentRouterState() {
+export function useCurrentStateAndParams() {
   const uiRouter = useUIRouter();
   const { globals } = uiRouter;
   const [stateData, setStateData] = useState({ state: globals.current, params: globals.params });
