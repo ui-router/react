@@ -21,8 +21,7 @@
     "docs:publish": "generate_docs && publish_docs",
     "prepublishOnly": "npm run build",
     "artifacts": "artifact_tagging",
-    "prettier": "node ./scripts/prettier.js write-changed",
-    "prettier-all": "node ./scripts/prettier.js write"
+    "prettier": "npx prettier --write src/**/*.[jt]s src/**/*.[jt]sx"
   },
   "homepage": "https://ui-router.github.io/react",
   "contributors": [
