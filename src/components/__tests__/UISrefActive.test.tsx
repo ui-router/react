@@ -12,8 +12,6 @@ import {
   pushStateLocationPlugin,
   servicesPlugin,
   IncorrectStateNameTypeError,
-  createStateInfoAndHash,
-  addToRegisterWithUnsubscribe,
 } from '../../index';
 
 const Link = ({ to, children }) => {
@@ -312,32 +310,46 @@ describe('<UISrefActive>', () => {
     expect(wrapper.find('a.active').length).toBe(0);
   });
 
-  it("removes active state of UISref when it's unmounted", () => {
-    const Comp = props => (
-      <UIRouter router={router}>
-        <UISrefActive class="active">
-          {props.show ? (
-            <UISref to="parent.child1">
-              <a>child1</a>
-            </UISref>
-          ) : (
-            <div />
-          )}
-        </UISrefActive>
-      </UIRouter>
-    );
+  it("removes active state of UISref when it's unmounted", async () => {
+    const Comp = props => {
+      React.useEffect(() => {
+        console.log('Comp Mounted');
+        return () => {
+          debugger;
+          console.log('Comp unMounted');
+        };
+      });
+
+      const UISrefComponent = () => {
+        React.useEffect(() => {
+          console.log('UISrefComponent Mounted');
+          return () => {
+            debugger;
+            console.log('UISrefComponent unMounted');
+          };
+        });
+        return (
+          <UISref to="parent.child1">
+            <a>child1</a>
+          </UISref>
+        );
+      };
+      return (
+        <UIRouter router={router}>
+          <UISrefActive class="active">{props.show ? <UISrefComponent /> : <div />}</UISrefActive>
+        </UIRouter>
+      );
+    };
+    await router.stateService.go('parent.child1');
     const wrapper = mount(<Comp show={true} />);
-    const instance = wrapper
-      .find(UISrefActive)
-      .at(0)
-      .find('SrefActive')
-      .at(0)
-      .instance();
-    // @ts-ignore
-    expect(instance.states.length).toBe(1);
+    const activeLink = wrapper.find('a.active');
+    expect(activeLink.length).toBe(1);
+
     wrapper.setProps({ show: false });
-    // @ts-ignore
-    expect(instance.states.length).toBe(0);
+    wrapper.update();
+    const div = wrapper.find('div.active');
+    expect(wrapper.html()).toBe('<div></div>');
+    expect(div.length).toBe(0);
   });
 
   it('checks for exact state match when exact prop is provided', async () => {
@@ -372,43 +384,5 @@ describe('<UISrefActive>', () => {
     await router.stateService.go('_parent');
     wrapper.update();
     expect(wrapper.find('a.active').length).toBe(2);
-  });
-
-  describe('createStateInfoAndHash()', () => {
-    it('uses rootContext when no UIViewAddress is provided (not nested in a UIView)', () => {
-      const state = createStateInfoAndHash(router, null, 'parent.child1', {});
-      expect(state.info.state.name).toBe('parent.child1');
-    });
-  });
-
-  describe('addToRegisterWithUnsubscribe()', () => {
-    let states, activeClasses, state, activeClass;
-
-    beforeEach(() => {
-      states = [];
-      activeClasses = {};
-      state = createStateInfoAndHash(router, null, 'parent.child1', {});
-      activeClass = 'active';
-    });
-
-    it('adds the class to the registry correctly', () => {
-      addToRegisterWithUnsubscribe(states, activeClasses, state, activeClass);
-      expect(states[0]).toBe(state.info);
-      expect(activeClasses[state.hash]).toBe(activeClass);
-    });
-
-    it('removes the state and class from the registry correctly with the returned function', () => {
-      const deregister = addToRegisterWithUnsubscribe(
-        states,
-        activeClasses,
-        state,
-        activeClass
-      );
-      expect(states).toHaveLength(1);
-      expect(Object.keys(activeClasses)).toHaveLength(1);
-      deregister();
-      expect(states).toHaveLength(0);
-      expect(Object.keys(activeClasses)).toHaveLength(0);
-    });
   });
 });
