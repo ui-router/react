@@ -6,11 +6,16 @@ daysUntilClose: 14
 exemptLabels:
   - notstale
   - security
+# Label to use when marking an issue as stale
+staleLabel: stale
 # Comment to post when marking an issue as stale. Set to `false` to disable
-markComment: >
+markComment: |
   This issue has been automatically marked as stale because it has not had
-  recent activity. It will be closed if no further activity occurs. This 
-  does not mean that the issue is invalid.  Valid issues
-  may be reopened.  Thank you for your contributions.
+  recent activity. It will be closed if no further activity occurs.
+
+  This does not mean that the issue is invalid.  Valid issues
+  may be reopened.
+
+  Thank you for your contributions.
 # Comment to post when closing a stale issue. Set to `false` to disable
 closeComment: false
