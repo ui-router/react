@@ -378,10 +378,10 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^24.0.24":
-  version "24.0.24"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.24.tgz#0f2f523dc77cc1bc6bef34eaf287ede887a73f05"
-  integrity sha512-vgaG968EDPSJPMunEDdZvZgvxYSmeH8wKqBlHSkBt1pV2XlLEVDzsj1ZhLuI4iG4Pv841tES61txSBF0obh4CQ==
+"@types/jest@^24.0.25":
+  version "24.0.25"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.25.tgz#2aba377824ce040114aa906ad2cac2c85351360f"
+  integrity sha512-hnP1WpjN4KbGEK4dLayul6lgtys6FPz0UfxMeMQCv0M+sTnzN3ConfiO72jHgLxl119guHgI8gLqDOrRLsyp2g==
   dependencies:
     jest-diff "^24.3.0"
 
@@ -451,13 +451,13 @@
   resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-6.0.1.tgz#93b02a5d178a7ab7313f34b7b3f019a000d23396"
   integrity sha512-mHCutiHtDDRKYmrJ92XPKDoSb2bgqaDyUpHdF4hUE+riwgkCvGdBjL8u+VDTcV3slBAk6B0LBIOIajjWkkObbQ==
 
-"@uirouter/publish-scripts@^2.3.42":
-  version "2.3.42"
-  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.3.42.tgz#790ed9f39d40e51bac1441625c66625aedb13f78"
-  integrity sha512-QLPDiXkn35SFl9nzKexRiObN2/nGZFjiaImBQ3anx0Y7iG/HMzHw4pE082FqXZMQfmULEiuNhBQVCVC7ybCB6w==
+"@uirouter/publish-scripts@^2.3.44":
+  version "2.3.44"
+  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.3.44.tgz#e641cf3995eed1787e98c2e7678fabcc295aefb2"
+  integrity sha512-g+QMWvAlpU4Vda5tZ8eTtHCQCaaixmTDmmIl1+UT3T4kidD/CtFhkdJDLWitfoVVb9hOZDRLZOoRjUB0SNG0KA==
   dependencies:
-    check-peer-dependencies "1.0.7"
-    conventional-changelog "^3.1.15"
+    check-peer-dependencies "1.0.8"
+    conventional-changelog "^3.1.18"
     conventional-changelog-ui-router-core "^1.4.2"
     find-parent-dir "^0.3.0"
     git-semver-tags "^3.0.1"
@@ -470,7 +470,7 @@
     shx "^0.3.1"
     tmp "^0.1.0"
     tweak-sourcemap-paths "0.0.4"
-    typedoc "0.15.3"
+    typedoc "0.15.6"
     typedoc-plugin-external-module-name "2.1.0"
     typedoc-plugin-internal-external "2.0.2"
     typedoc-plugin-ui-router "2.0.0"
@@ -672,6 +672,11 @@ acorn@^6.2.1:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.3.0.tgz#0087509119ffa4fc0a0041d1e93a417e68cb856e"
   integrity sha512-/czfa8BwS88b9gWQVhc8eknunSA2DoJpJyTQkhheIf5E48u1N0R4q/YxxsAeqRrmK9TQ/uYfgLDfZo91UlANIA==
+
+add-stream@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/add-stream/-/add-stream-1.0.0.tgz#6a7990437ca736d5e1288db92bd3266d5f5cb2aa"
+  integrity sha1-anmQQ3ynNtXhKI25K9MmbV9csqo=
 
 airbnb-prop-types@^2.15.0:
   version "2.15.0"
@@ -1824,13 +1829,13 @@ chalk@^3.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-check-peer-dependencies@1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/check-peer-dependencies/-/check-peer-dependencies-1.0.7.tgz#ea7dee098da10c6d33dbd62d0c1414f93bb31f00"
-  integrity sha512-WX+SXRht+SaUI37URSnQxyoKVc7+TbL2mqKal7Xu9gkD+nrPSiRsck+O31R1aMxfIAwP/DqBeVaOKq23hUcANQ==
+check-peer-dependencies@1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/check-peer-dependencies/-/check-peer-dependencies-1.0.8.tgz#963c332606b18953deed887732408d6493077f15"
+  integrity sha512-ScnUImTZnbdijUMIdMAVzx4L+o7IBqpHl8uESmG6wG63de8Gb2r2/ehHssRGPRKnrLarBEyEYqbervFlmlUu8w==
   dependencies:
-    resolve "^1.12.2"
-    semver "^6.3.0"
+    resolve "^1.14.1"
+    semver "^7.1.1"
     shelljs "^0.8.3"
     yargs "^15.0.2"
 
@@ -2113,11 +2118,12 @@ conventional-changelog-conventionalcommits@^4.2.3:
     lodash "^4.17.15"
     q "^1.5.1"
 
-conventional-changelog-core@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/conventional-changelog-core/-/conventional-changelog-core-4.1.1.tgz#956f1a2fb476ef2f66c93f673ac040a4159de167"
-  integrity sha512-fBre5P6U9n914Da6Cj82vIfRU2DhTLGr1eDPXWA7AamxTpd4cd0jgdS7Aieas5Vn5WXOJNFRDNl6PrYLEonImg==
+conventional-changelog-core@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-core/-/conventional-changelog-core-4.1.4.tgz#39be27fca6ef20a0f998d7a3a1e97cfa8a055cb6"
+  integrity sha512-LO58ZbEpp1Ul+y/vOI8rJRsWkovsYkCFbOCVgi6UnVfU8WC0F8K8VQQwaBZWWUpb6JvEiN4GBR5baRP2txZ+Vg==
   dependencies:
+    add-stream "^1.0.0"
     conventional-changelog-writer "^4.0.11"
     conventional-commits-parser "^3.0.8"
     dateformat "^3.0.0"
@@ -2197,16 +2203,16 @@ conventional-changelog-writer@^4.0.11:
     split "^1.0.0"
     through2 "^3.0.0"
 
-conventional-changelog@^3.1.15:
-  version "3.1.15"
-  resolved "https://registry.yarnpkg.com/conventional-changelog/-/conventional-changelog-3.1.15.tgz#103d0b550436cf83e8a59ba88be82ece2613cd9f"
-  integrity sha512-CoWM+Z9bYyF00QzNpTnxkCLiuLAeRocJz3C/foFjvhsdltdtkJgMChp7GytQNjm4pT7JFBVJTpqLHTpxNtOzaA==
+conventional-changelog@^3.1.18:
+  version "3.1.18"
+  resolved "https://registry.yarnpkg.com/conventional-changelog/-/conventional-changelog-3.1.18.tgz#7da0a5ab34a604b920b8bf71c6cf5d952f0e805e"
+  integrity sha512-aN6a3rjgV8qwAJj3sC/Lme2kvswWO7fFSGQc32gREcwIOsaiqBaO6f2p0NomFaPDnTqZ+mMZFLL3hlzvEnZ0mQ==
   dependencies:
     conventional-changelog-angular "^5.0.6"
     conventional-changelog-atom "^2.0.3"
     conventional-changelog-codemirror "^2.0.3"
     conventional-changelog-conventionalcommits "^4.2.3"
-    conventional-changelog-core "^4.1.1"
+    conventional-changelog-core "^4.1.4"
     conventional-changelog-ember "^2.0.4"
     conventional-changelog-eslint "^3.0.4"
     conventional-changelog-express "^2.0.1"
@@ -3725,10 +3731,12 @@ hawk@~6.0.2:
     hoek "4.x.x"
     sntp "2.x.x"
 
-highlight.js@^9.16.2:
-  version "9.16.2"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.16.2.tgz#68368d039ffe1c6211bcc07e483daf95de3e403e"
-  integrity sha512-feMUrVLZvjy0oC7FVJQcSQRqbBq9kwqnYE4+Kj9ZjbHh3g+BisiPgF49NyQbVLNdrL/qqZr3Ca9yOKwgn2i/tw==
+highlight.js@^9.17.1:
+  version "9.17.1"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.17.1.tgz#14a4eded23fd314b05886758bb906e39dd627f9a"
+  integrity sha512-TA2/doAur5Ol8+iM3Ov7qy3jYcr/QiJ2eDTdRF4dfbjG7AaaB99J5G+zSl11ljbl6cIcahgPY6SKb3sC3EJ0fw==
+  dependencies:
+    handlebars "^4.5.3"
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -5133,10 +5141,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-marked@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-0.7.0.tgz#b64201f051d271b1edc10a04d1ae9b74bb8e5c0e"
-  integrity sha512-c+yYdCZJQrsRjTPhUx7VKkApw9bwDkNbHUKo1ovgcfDjb2kc8rLuRbIFyXL5WOEUwzSSKo3IXpph2K6DqB/KZg==
+marked@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-0.8.0.tgz#ec5c0c9b93878dc52dd54be8d0e524097bd81a99"
+  integrity sha512-MyUe+T/Pw4TZufHkzAfDj6HarCBWia2y27/bhuYkTaiUnfDYFnCP3KUN+9oM7Wi6JA2rymtVYbQu3spE0GCmxQ==
 
 md5.js@^1.3.4:
   version "1.3.5"
@@ -6804,10 +6812,17 @@ resolve@1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 
-resolve@1.x, resolve@^1.1.6, resolve@^1.10.0, resolve@^1.12.2, resolve@^1.3.2:
+resolve@1.x, resolve@^1.1.6, resolve@^1.10.0, resolve@^1.3.2:
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.12.2.tgz#08b12496d9aa8659c75f534a8f05f0d892fff594"
   integrity sha512-cAVTI2VLHWYsGOirfeYVVQ7ZDejtQ9fp4YhYckWDEkFfqbVjaT11iM8k6xSAfGFMM+gDpZjMnFssPu8we+mqFw==
+  dependencies:
+    path-parse "^1.0.6"
+
+resolve@^1.14.1:
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.14.1.tgz#9e018c540fcf0c427d678b9931cbf45e984bcaff"
+  integrity sha512-fn5Wobh4cxbLzuHaE+nphztHy43/b++4M6SsGFC2gB8uYwf0C8LcarfCz1un7UTW8OFQg9iNjZ4xpcFVGebDPg==
   dependencies:
     path-parse "^1.0.6"
 
@@ -6946,6 +6961,11 @@ semver@^6.0.0, semver@^6.2.0, semver@^6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.0.tgz#ee0a64c8af5e8ceea67687b133761e1becbd1d3d"
   integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
+
+semver@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.1.1.tgz#29104598a197d6cbe4733eeecbe968f7b43a9667"
+  integrity sha512-WfuG+fl6eh3eZ2qAf6goB7nhiCd7NPXhmyFxigB/TOkQyeLP8w8GsVehvtGNtnNmyboz4TgeK40B1Kbql/8c5A==
 
 send@0.17.1:
   version "0.17.1"
@@ -7838,10 +7858,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typedoc-default-themes@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/typedoc-default-themes/-/typedoc-default-themes-0.6.1.tgz#e2e471188983df995f4f9df49f713044fced6802"
-  integrity sha512-z5AWKqQDz7igl9WkUuafx8cEm4MPVQGMpbWE+3lwVOaq+U4UoLKBMnpFQWh/4fqQ3bGysXpOstMxy2OOzHezyw==
+typedoc-default-themes@^0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/typedoc-default-themes/-/typedoc-default-themes-0.6.3.tgz#c214ce5bbcc6045558448a8fd422b90e3e9b6782"
+  integrity sha512-rouf0TcIA4M2nOQFfC7Zp4NEwoYiEX4vX/ZtudJWU9IHA29MPC+PPgSXYLPESkUo7FuB//GxigO3mk9Qe1xp3Q==
   dependencies:
     backbone "^1.4.0"
     jquery "^3.4.1"
@@ -7863,21 +7883,21 @@ typedoc-plugin-ui-router@2.0.0:
   resolved "https://registry.yarnpkg.com/typedoc-plugin-ui-router/-/typedoc-plugin-ui-router-2.0.0.tgz#e498885d9dfd48cd6d5b819ee35b183dabe16bbd"
   integrity sha512-okp4VXtjE99UszKVALhDeIjWBkMq8ZOuW1mbW51EqbOGi0gw4QBdXiAD6Bu7XT80j5yxy1gpf+2Syi+s3IoiKw==
 
-typedoc@0.15.3:
-  version "0.15.3"
-  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.15.3.tgz#8f5a038cfc1160f70cbc57e37908653483dca689"
-  integrity sha512-RGX+dgnm9fyg5KHj81/ZhMiee0FfvJnjBXedhedhMWlrtM4YRv3pn8sYCWRt5TMi1Jli3/JG224pbFo3/3uaGw==
+typedoc@0.15.6:
+  version "0.15.6"
+  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.15.6.tgz#d99a1c3db8c87a00437a8a89a0df03f9dc1995ad"
+  integrity sha512-TC3j7HXFfyq0/NyUL9oLgEXhgO4U8Kd7iyRgagkG3XxehgTjn6w20uJ/Hif1KPB/65VQZ8uMYYyxFXNj9um5Ow==
   dependencies:
     "@types/minimatch" "3.0.3"
     fs-extra "^8.1.0"
     handlebars "^4.5.3"
-    highlight.js "^9.16.2"
+    highlight.js "^9.17.1"
     lodash "^4.17.15"
-    marked "^0.7.0"
+    marked "^0.8.0"
     minimatch "^3.0.0"
     progress "^2.0.3"
     shelljs "^0.8.3"
-    typedoc-default-themes "^0.6.1"
+    typedoc-default-themes "^0.6.3"
     typescript "3.7.x"
 
 typescript@3.7.x, typescript@^3.7.2:
