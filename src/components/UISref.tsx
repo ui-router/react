@@ -98,7 +98,7 @@ export function useUISref(to: string, params: { [key: string]: any } = {}, optio
  * <a href="#/shop/catalog?productId=103">Product 103</a>
  * ```
  *
- * It will also repect the default behavior when the user Cmd+Click / Ctrl+Click on the link by canceling the transition event and opening a new tab instead.
+ * It will also respect the default behavior when the user Cmd+Click / Ctrl+Click on the link by canceling the transition event and opening a new tab instead.
  */
 export const UISref: React.FC<UISrefProps> = ({ children, className, options, params, to }) => {
   const { onClick, href } = useUISref(to, params, options);
