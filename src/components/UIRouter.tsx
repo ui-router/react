@@ -4,17 +4,15 @@
  */ /** */
 import * as React from 'react';
 import { useRef } from 'react';
-import { Component } from 'react';
-import * as PropTypes from 'prop-types';
 
 import { UIRouterPlugin, servicesPlugin, PluginFactory } from '@uirouter/core';
 
-import { UIRouterReact, ReactStateDeclaration } from '../index';
+import { UIRouterReact } from '../core';
+import { ReactStateDeclaration } from '../interface';
 
 /**
- * This Context component lets you access the UIRouter instance
- * anywhere in the component tree, by simply wrapping your component and
- * using the function-as-child pattern to pass the instance via props.
+ * This React Context component lets you access the UIRouter instance
+ * anywhere in the component tree
  *
  * #### Example:
  * ```jsx
