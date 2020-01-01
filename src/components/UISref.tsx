@@ -8,12 +8,12 @@ import * as PropTypes from 'prop-types';
 
 import * as _classNames from 'classnames';
 
-import { isFunction, TransitionOptions } from '@uirouter/core';
+import { isFunction, isString, TransitionOptions } from '@uirouter/core';
 
-import { UIRouterReact, UIRouterContext, StateRegistry } from '../index';
+import { StateRegistry } from '../index';
 import { useUIRouter } from './hooks';
 import { UIViewAddress, UIViewContext } from './UIView';
-import { UISrefActiveContext, AddStateInfoFn } from './UISrefActive';
+import { UISrefActiveContext } from './UISrefActive';
 
 /** @hidden */
 let classNames = _classNames;
@@ -47,6 +47,9 @@ export function useUISref(to: string, params: { [key: string]: any } = {}, optio
   const parentUISrefActiveAddStateInfo = useContext(UISrefActiveContext);
 
   const { stateService, stateRegistry } = router;
+  if (!isString(to)) {
+    throw new Error(`State name provided to UISref (as 'to') must be a string.`);
+  }
 
   useEffect(() => parentUISrefActiveAddStateInfo(to, params), []);
 

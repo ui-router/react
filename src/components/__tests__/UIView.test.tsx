@@ -10,8 +10,9 @@ import {
   servicesPlugin,
   TransitionPropCollisionError,
 } from '../../index';
+import { makeTestRouter } from './UIRouter.test';
 
-const states = [
+const states: ReactStateDeclaration[] = [
   {
     name: 'parent',
     component: () => (
@@ -38,7 +39,7 @@ const states = [
   {
     name: 'namedParent.namedChild',
     views: {
-      child1: () => <span>child1</span>,
+      child1: (() => <span>child1</span>) as any,
       child2: { component: () => <span>child2</span> },
     },
   },
@@ -56,40 +57,30 @@ const states = [
 describe('<UIView>', () => {
   describe('(unmounted)', () => {
     let router: UIRouterReact;
-    beforeEach(() => {
-      router = new UIRouterReact();
-      router.plugin(memoryLocationPlugin);
-    });
+    let mountInRouter: typeof mount;
+    beforeEach(() => ({ router, mountInRouter } = makeTestRouter([])));
 
     it('renders an empty <div>', () => {
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
+      const wrapper = mountInRouter(<UIView />);
       expect(wrapper.html()).toBe('<div></div>');
     });
 
     it('renders its child if provided', () => {
       expect(
-        mount(
-          <UIRouter router={router}>
-            <UIView>
-              <span />
-            </UIView>
-          </UIRouter>
+        mountInRouter(
+          <UIView>
+            <span />
+          </UIView>
         ).contains(<span />)
       ).toBe(true);
     });
 
     it('injects props correctly', () => {
       expect(
-        mount(
-          <UIRouter router={router}>
-            <UIView className="myClass" style={{ margin: 5 }}>
-              <span />
-            </UIView>
-          </UIRouter>
+        mountInRouter(
+          <UIView className="myClass" style={{ margin: 5 }}>
+            <span />
+          </UIView>
         ).contains(<span className="myClass" style={{ margin: 5 }} />)
       ).toBe(true);
     });
@@ -97,19 +88,11 @@ describe('<UIView>', () => {
 
   describe('(mounted)', () => {
     let router: UIRouterReact;
-    beforeEach(() => {
-      router = new UIRouterReact();
-      router.plugin(servicesPlugin);
-      router.plugin(memoryLocationPlugin);
-      states.forEach(state => router.stateRegistry.register(state as ReactStateDeclaration));
-    });
+    let mountInRouter: typeof mount;
+    beforeEach(() => ({ router, mountInRouter } = makeTestRouter(states)));
 
     it('renders its State Component', async () => {
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
+      const wrapper = mountInRouter(<UIView />);
       await router.stateService.go('parent');
       expect(wrapper.update().html()).toEqual(`<div><span>parent</span><div></div></div>`);
     });
@@ -121,11 +104,8 @@ describe('<UIView>', () => {
         component: Comp,
         resolve: [{ resolveFn: () => true, token: 'myresolve' }],
       } as ReactStateDeclaration);
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
+
+      const wrapper = mountInRouter(<UIView />);
       await router.stateService.go('__state');
       wrapper.update();
       // @ts-ignore
@@ -141,11 +121,8 @@ describe('<UIView>', () => {
         component: Comp,
         resolve: [{ token: 'foo', resolveFn: () => 'bar' }],
       } as ReactStateDeclaration);
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
+
+      const wrapper = mountInRouter(<UIView />);
       await router.stateService.go('__state');
       wrapper.update();
       // @ts-ignore
@@ -162,51 +139,29 @@ describe('<UIView>', () => {
 
       await router.stateService.go('__state');
 
-      expect(() => {
-        const wrapper = mount(
-          <UIRouter router={router}>
-            <UIView />
-          </UIRouter>
-        );
-      }).toThrow(TransitionPropCollisionError);
+      expect(() => mountInRouter(<UIView />)).toThrow(TransitionPropCollisionError);
     });
 
     it('renders nested State Components', async () => {
       await router.stateService.go('parent.child');
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
+      const wrapper = mountInRouter(<UIView />);
       expect(wrapper.html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
     });
 
     it('renders multiple nested unmounted <UIView>', async () => {
       await router.stateService.go('namedParent');
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
+      const wrapper = mountInRouter(<UIView />);
       expect(wrapper.html()).toEqual(`<div><span>namedParent</span><div></div><div></div></div>`);
     });
 
     it('renders multiple nested mounted <UIView>', async () => {
       await router.stateService.go('namedParent.namedChild');
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
+      const wrapper = mountInRouter(<UIView />);
       expect(wrapper.html()).toEqual(`<div><span>namedParent</span><span>child1</span><span>child2</span></div>`);
     });
 
     it('unmounts State Component when changing state', async () => {
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
+      const wrapper = mountInRouter(<UIView />);
       await router.stateService.go('parent.child');
       expect(wrapper.update().html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
       await router.stateService.go('parent');

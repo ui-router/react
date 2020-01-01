@@ -21,9 +21,6 @@ export interface UISrefActiveState {
 /** @hidden */
 export type AddStateInfoFn = (to: string, params: { [key: string]: any }) => () => void;
 
-/** @hidden */
-export const IncorrectStateNameTypeError = new Error('State name provided to <UISref {to}> must be a string.');
-
 /** @internalapi */
 const rootAddStateInfoFn: AddStateInfoFn = () => () => undefined;
 export const UISrefActiveContext = React.createContext<AddStateInfoFn>(rootAddStateInfoFn);
