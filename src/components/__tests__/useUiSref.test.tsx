@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import { UIRouterReact } from '../../core';
 import { UISref, useUISref } from '../UISref';
 import { UISrefActiveContext } from '../UISrefActive';
-import { makeTestRouter } from './UIRouter.test';
+import { makeTestRouter, muteConsoleErrors } from './UIRouter.test';
 
 const states = [
   {
@@ -33,6 +33,7 @@ describe('useUiSref', () => {
       return <a {...sref} />;
     };
 
+    muteConsoleErrors();
     expect(() => mountInRouter(<Component />)).toThrow(/must be a string/);
   });
 
