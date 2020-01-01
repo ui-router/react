@@ -5,7 +5,6 @@
 /** */
 
 import * as React from 'react';
-import { removeFrom } from '@uirouter/core';
 import { useState, useCallback, useContext, useMemo, cloneElement } from 'react';
 import * as _classNames from 'classnames';
 
@@ -89,7 +88,7 @@ export function UISrefActive({ children, className, class: classToApply, exact }
       setUiSrefs(uiSrefs => uiSrefs.concat(addedUiSref));
       return () => {
         parentDeregister();
-        setUiSrefs(uiSrefs => removeFrom(uiSrefs, addedUiSref));
+        setUiSrefs(uiSrefs => uiSrefs.filter(x => x !== addedUiSref));
       };
     },
     [parentAddStateInfo]
