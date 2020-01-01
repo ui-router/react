@@ -22,6 +22,7 @@ class Child extends React.Component<any, any> {
 
 describe('<UIRouter>', () => {
   it('throws an error if no plugin or router instance is passed via prop', () => {
+    muteConsoleErrors();
     expect(() =>
       mount(
         <UIRouter>
@@ -96,3 +97,8 @@ export const makeTestRouter = (states: ReactStateDeclaration[]) => {
 
   return { router, mountInRouter };
 };
+
+// silence console errors that are logged by react-dom or other actors
+export function muteConsoleErrors() {
+  jest.spyOn(console, 'error').mockImplementation(() => undefined);
+}

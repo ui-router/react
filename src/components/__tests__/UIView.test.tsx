@@ -10,7 +10,7 @@ import {
   servicesPlugin,
   TransitionPropCollisionError,
 } from '../../index';
-import { makeTestRouter } from './UIRouter.test';
+import { makeTestRouter, muteConsoleErrors } from './UIRouter.test';
 
 const states: ReactStateDeclaration[] = [
   {
@@ -139,6 +139,7 @@ describe('<UIView>', () => {
 
       await router.stateService.go('__state');
 
+      muteConsoleErrors();
       expect(() => mountInRouter(<UIView />)).toThrow(TransitionPropCollisionError);
     });
 
@@ -227,7 +228,6 @@ describe('<UIView>', () => {
         </UIRouter>
       );
       await router.stateService.go('__state');
-      console.log(wrapper.html());
       expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
       await router.stateService.go('exit');
       expect(wrapper.update().html()).toEqual('<span>exit</span>');
