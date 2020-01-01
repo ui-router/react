@@ -260,15 +260,11 @@ describe('<UIView>', () => {
     });
 
     it('unmounts the State Component when calling stateService.reload(true)', async () => {
-      const componentDidMountWatcher = jest.fn();
-      const componentWillUnmountWatcher = jest.fn();
+      const componentDidMountSpy = jest.fn();
+      const componentWillUnmountSpy = jest.fn();
       class TestUnmountComponent extends React.Component {
-        componentDidMount() {
-          componentDidMountWatcher();
-        }
-        componentWillUnmount() {
-          componentWillUnmountWatcher();
-        }
+        componentDidMount = componentDidMountSpy;
+        componentWillUnmount = componentWillUnmountSpy;
         render() {
           return <div />;
         }
@@ -276,17 +272,17 @@ describe('<UIView>', () => {
       const testState = {
         name: 'testunmount',
         component: TestUnmountComponent,
-      };
+      } as ReactStateDeclaration;
       router.stateRegistry.register(testState);
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
+
       await router.stateService.go('testunmount');
+      const wrapper = mountInRouter(<UIView />);
+      expect(componentDidMountSpy).toHaveBeenCalledTimes(1);
+
       await router.stateService.reload('testunmount');
-      expect(componentDidMountWatcher).toHaveBeenCalledTimes(2);
-      expect(componentWillUnmountWatcher).toHaveBeenCalledTimes(1);
+      expect(componentWillUnmountSpy).toHaveBeenCalledTimes(1);
+      expect(componentDidMountSpy).toHaveBeenCalledTimes(2);
+      wrapper.unmount();
     });
   });
 });
