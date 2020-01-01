@@ -9,10 +9,9 @@ import {
   UISrefActive,
   useUISref,
   useUISrefActive,
-  pushStateLocationPlugin,
-  servicesPlugin,
-  IncorrectStateNameTypeError,
+  ReactStateDeclaration,
 } from '../../index';
+import { makeTestRouter } from './UIRouter.test';
 
 const Link = ({ to, children }) => {
   const linkProps = useUISref(to);
@@ -24,7 +23,7 @@ const Link = ({ to, children }) => {
   );
 };
 
-var states = [
+var states: ReactStateDeclaration[] = [
   {
     name: 'simple',
     url: '',
@@ -71,7 +70,7 @@ var states = [
   {
     name: 'parent.child3',
     url: '/child3',
-    component: (
+    component: () => (
       <UISrefActive class="active">
         <UISref to="parent">
           <a>parent</a>
@@ -98,124 +97,88 @@ var states = [
 ];
 
 describe('<UISrefActive>', () => {
-  let router;
+  let router: UIRouterReact;
+  let mountInRouter: typeof mount;
+  beforeEach(() => ({ router, mountInRouter } = makeTestRouter(states)));
 
   beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
   afterAll(() => (React.useEffect as any).mockRestore());
 
-  beforeEach(() => {
-    router = new UIRouterReact();
-    router.plugin(servicesPlugin);
-    router.plugin(pushStateLocationPlugin);
-    router.stateService.defaultErrorHandler(() => {});
-    states.forEach(state => router.stateRegistry.register(state));
-  });
+  function UISrefActiveTestComponent(props: { to?: string; activeClass?: string; params?: object; exact?: boolean }) {
+    const { to = 'simple', activeClass = 'active', exact = false, params } = props;
+    return (
+      <UISrefActive class={activeClass} exact={exact}>
+        <UISref to={to} params={params}>
+          <a />
+        </UISref>
+      </UISrefActive>
+    );
+  }
 
   it('renders its child', async () => {
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <UIView />
-      </UIRouter>
-    );
-    await router.stateService.go('simple');
-    wrapper.update();
+    const wrapper = mountInRouter(<UISrefActiveTestComponent to="parent.child1" />);
     const props = wrapper.find('a').props();
     expect(typeof props.onClick).toBe('function');
-    expect(props.href.includes('/child1')).toBe(true);
+    expect(props.href).toBe('/child1');
   });
 
   it('updates class for child <UISref>', async () => {
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <UIView />
-      </UIRouter>
-    );
+    const wrapper = mountInRouter(<UISrefActiveTestComponent to="parent.child1" />);
+    expect(wrapper.find('a')).toHaveLength(1);
+    expect(wrapper.find('a').props().className).toBe('');
+
     await router.stateService.go('parent.child1');
     wrapper.update();
-    let activeLink = wrapper.find('a.active');
-    expect(activeLink.length).toBe(1);
-    expect(activeLink.props().href.includes('/child1')).toBe(true);
+    expect(wrapper.find('a')).toHaveLength(1);
+    expect(wrapper.find('a').props().className).toBe('active');
+
     await router.stateService.go('parent.child2');
     wrapper.update();
-    activeLink = wrapper.find('a.active');
-    expect(activeLink.length).toBe(1);
-    expect(activeLink.props().href.includes('/child2')).toBe(true);
+    expect(wrapper.find('a')).toHaveLength(1);
+    expect(wrapper.find('a').props().className).toBe('');
   });
 
-  it('throws if state name is not a string', async () => {
-    await router.stateService.go('throw');
-    expect(() => {
-      const wrapper = mount(
-        <UIRouter router={router}>
-          <UIView />
-        </UIRouter>
-      );
-    }).toThrow(IncorrectStateNameTypeError);
+  it('registers onSuccess transition hook to listen for state changes', async () => {
+    const onSuccessSpy = jest.spyOn(router.transitionService, 'onSuccess');
+    mountInRouter(<UISrefActiveTestComponent />);
+    expect(onSuccessSpy).toHaveBeenCalled();
   });
 
-  it('deregisters transition hook for active class when unmounted', async () => {
-    const currentOnSuccess = router.transitionService.onSuccess;
-    let monkeyPatchedDeregister;
-    router.transitionService.onSuccess = (opts, cb) => {
-      const deregister = currentOnSuccess(opts, cb);
-      monkeyPatchedDeregister = jest.fn(() => {
-        deregister();
-      });
-      return monkeyPatchedDeregister;
-    };
+  it('deregisters the transition hook when unmounted', async () => {
+    const deregisterSpy = jest.fn();
+    jest.spyOn(router.transitionService, 'onSuccess').mockImplementation(() => deregisterSpy);
 
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <UIView />
-      </UIRouter>
-    );
-    await router.stateService.go('simple');
-    wrapper.update();
-    await router.stateService.go('simple2');
-    wrapper.update();
-    expect(monkeyPatchedDeregister).toHaveBeenCalled();
+    const wrapper = mountInRouter(<UISrefActive />);
+    expect(deregisterSpy).not.toHaveBeenCalled();
+    wrapper.unmount();
+    expect(deregisterSpy).toHaveBeenCalled();
   });
 
   it('works with state parameters', async () => {
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <div>
-          <UISrefActive class="active">
-            <UISref to="withParams" params={{ param: 5 }}>
-              <a>child1</a>
-            </UISref>
-          </UISrefActive>
-          <UIView />
-        </div>
-      </UIRouter>
-    );
     await router.stateService.go('withParams', { param: 5 });
-    wrapper.update();
-    let activeLink = wrapper.find('a.active');
-    expect(activeLink.length).toBe(1);
+    const wrapper = mountInRouter(<UISrefActiveTestComponent to="withParams" params={{ param: 5 }} />);
+    expect(wrapper.find('a').props().className).toBe('active');
+
     await router.stateService.go('withParams', { param: 3 });
     wrapper.update();
-    activeLink = wrapper.find('a.active');
-    expect(activeLink.length).toBe(0);
+    expect(wrapper.find('a').props().className).toBe('');
   });
 
-  it('works with multiple <UISref> children', async () => {
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <UISrefActive class="active">
-          <div>
-            <UISref to="parent.child1">
-              <a>child1</a>
-            </UISref>
-            <UISref to="parent.child2">
-              <a>child2</a>
-            </UISref>
-            <UISref to="parent.child3">
-              <a>child3</a>
-            </UISref>
-          </div>
-        </UISrefActive>
-      </UIRouter>
+  it('applies the active class when any nested <UISref> is active', async () => {
+    const wrapper = mountInRouter(
+      <UISrefActive class="active">
+        <div>
+          <UISref to="parent.child1">
+            <a>child1</a>
+          </UISref>
+          <UISref to="parent.child2">
+            <a>child2</a>
+          </UISref>
+          <UISref to="parent.child3">
+            <a>child3</a>
+          </UISref>
+        </div>
+      </UISrefActive>
     );
     await router.stateService.go('parent.child1');
     wrapper.update();
@@ -235,154 +198,102 @@ describe('<UISrefActive>', () => {
   });
 
   it('works with nested <UISrefActive>', async () => {
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <UISrefActive class="active">
-          <div>
-            <UISrefActive class="state1">
-              <UISref to="state1">
-                <a>state1</a>
-              </UISref>
-            </UISrefActive>
-            <UISrefActive class="state2">
-              <UISref to="state2">
-                <a>state2</a>
-              </UISref>
-            </UISrefActive>
-            <UISrefActive class="state3">
-              <UISref to="state3">
-                <a>state3</a>
-              </UISref>
-            </UISrefActive>
-          </div>
-        </UISrefActive>
-      </UIRouter>
+    const wrapper = mountInRouter(
+      <UISrefActive class="active">
+        <div>
+          <UISrefActive class="child1">
+            <UISref to="parent.child1">
+              <a>child1</a>
+            </UISref>
+          </UISrefActive>
+          <UISrefActive class="child2">
+            <UISref to="parent.child2">
+              <a>child2</a>
+            </UISref>
+          </UISrefActive>
+        </div>
+      </UISrefActive>
     );
 
-    router.stateRegistry.register({
-      name: 'state1',
-      component: () => <UIView />,
-    });
-    router.stateRegistry.register({
-      name: 'state2',
-      component: () => <UIView />,
-    });
+    await router.stateService.go('parent');
+    wrapper.update();
+    expect(wrapper.find('div.active')).toHaveLength(0);
+    expect(wrapper.find('a.child1')).toHaveLength(0);
+    expect(wrapper.find('a.child2')).toHaveLength(0);
 
-    await router.stateService.go('state1');
+    await router.stateService.go('parent.child1');
     wrapper.update();
-    expect(wrapper.find('div.active').length).toBe(1);
-    expect(wrapper.find('a.state2').length).toBe(0);
-    expect(wrapper.find('a.state1').length).toBe(1);
-    await router.stateService.go('state2');
+    expect(wrapper.find('div.active')).toHaveLength(1);
+    expect(wrapper.find('a.child1')).toHaveLength(1);
+    expect(wrapper.find('a.child2')).toHaveLength(0);
+
+    await router.stateService.go('parent.child2');
     wrapper.update();
-    expect(wrapper.find('div.active').length).toBe(1);
-    expect(wrapper.find('a.state2').length).toBe(1);
-    expect(wrapper.find('a.state1').length).toBe(0);
+    expect(wrapper.find('div.active')).toHaveLength(1);
+    expect(wrapper.find('a.child1')).toHaveLength(0);
+    expect(wrapper.find('a.child2')).toHaveLength(1);
   });
 
   it('passes down className from parent correctly', async () => {
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <UISrefActive class="active">
-          <UISrefActive class="state1">
-            <UISref to="state1">
-              <a>state1</a>
-            </UISref>
-          </UISrefActive>
-        </UISrefActive>
-      </UIRouter>
-    );
-
-    router.stateRegistry.register({
-      name: 'state1',
-      component: () => <UIView />,
-    });
-    router.stateRegistry.register({
-      name: 'otherstate',
-      component: () => <UIView />,
-    });
-
-    await router.stateService.go('state1');
-    wrapper.update();
-    expect(wrapper.find('a.active.state1').length).toBe(1);
-    await router.stateService.go('otherstate');
-    wrapper.update();
-    expect(wrapper.find('a.active').length).toBe(0);
-  });
-
-  it("removes active state of UISref when it's unmounted", async () => {
-    const Comp = props => {
-      React.useEffect(() => {
-        console.log('Comp Mounted');
-        return () => {
-          debugger;
-          console.log('Comp unMounted');
-        };
-      });
-
-      const UISrefComponent = () => {
-        React.useEffect(() => {
-          console.log('UISrefComponent Mounted');
-          return () => {
-            debugger;
-            console.log('UISrefComponent unMounted');
-          };
-        });
-        return (
+    const wrapper = mountInRouter(
+      <UISrefActive class="active">
+        <UISrefActive class="child1">
           <UISref to="parent.child1">
             <a>child1</a>
           </UISref>
-        );
-      };
+        </UISrefActive>
+      </UISrefActive>
+    );
+
+    await router.stateService.go('parent.child1');
+    wrapper.update();
+    expect(wrapper.find('a.active.child1')).toHaveLength(1);
+
+    await router.stateService.go('parent');
+    wrapper.update();
+    expect(wrapper.find('a.active')).toHaveLength(0);
+    expect(wrapper.find('a.child1')).toHaveLength(0);
+  });
+
+  it('removes active state if underlying UISref is unmounted', async () => {
+    const Comp = ({ show }) => {
+      const sref = (
+        <UISref to="parent.child1">
+          <a>child1</a>
+        </UISref>
+      );
+
       return (
         <UIRouter router={router}>
-          <UISrefActive class="active">{props.show ? <UISrefComponent /> : <div />}</UISrefActive>
+          <UISrefActive class="active">{show ? sref : <div id="test" />}</UISrefActive>
         </UIRouter>
       );
     };
+
     await router.stateService.go('parent.child1');
     const wrapper = mount(<Comp show={true} />);
     const activeLink = wrapper.find('a.active');
-    expect(activeLink.length).toBe(1);
+    expect(activeLink).toHaveLength(1);
 
     wrapper.setProps({ show: false });
-    wrapper.update();
-    const div = wrapper.find('div.active');
-    expect(wrapper.html()).toBe('<div></div>');
-    expect(div.length).toBe(0);
+    expect(wrapper.html()).toBe('<div id="test"></div>');
   });
 
   it('checks for exact state match when exact prop is provided', async () => {
-    const wrapper = mount(
-      <UIRouter router={router}>
-        <div>
-          <UISrefActive class="active">
-            <UISref to="_parent">
-              <a>parent</a>
-            </UISref>
-          </UISrefActive>
-          <UISrefActive class="active" exact={true}>
-            <UISref to="_parent">
-              <a>parent</a>
-            </UISref>
-          </UISrefActive>
-          <UIView />
-        </div>
-      </UIRouter>
+    const wrapper = mountInRouter(
+      <>
+        <UISrefActiveTestComponent activeClass="fuzzy" to="parent" />
+        <UISrefActiveTestComponent activeClass="exact" to="parent" exact={true} />
+      </>
     );
-    router.stateRegistry.register({
-      name: '_parent',
-      component: () => <UIView />,
-    });
-    router.stateRegistry.register({
-      name: '_parent._child',
-      component: () => <span>child1</span>,
-    });
-    await router.stateService.go('_parent._child');
+    await router.stateService.go('parent.child1');
     wrapper.update();
-    expect(wrapper.find('a.active').length).toBe(1);
-    await router.stateService.go('_parent');
+    expect(wrapper.find('a.fuzzy')).toHaveLength(1);
+    expect(wrapper.find('a.exact')).toHaveLength(0);
+
+    await router.stateService.go('parent');
     wrapper.update();
-    expect(wrapper.find('a.active').length).toBe(2);
+    expect(wrapper.find('a.fuzzy')).toHaveLength(1);
+    expect(wrapper.find('a.exact')).toHaveLength(1);
   });
 });
