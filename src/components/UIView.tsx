@@ -97,10 +97,9 @@ export interface UIViewState {
   props?: any;
 }
 
-export const TransitionPropCollisionError = new Error(
+export const TransitionPropCollisionError =
   '`transition` cannot be used as resolve token. ' +
-    'Please rename your resolve to avoid conflicts with the router transition.'
-);
+  'Please rename your resolve to avoid conflicts with the router transition.';
 
 /** @internalapi */
 export const UIViewContext = createContext<UIViewAddress>(undefined);
@@ -174,7 +173,7 @@ class View extends Component<UIViewProps, UIViewState> {
   componentDidMount() {
     const router = this.props.router;
     if (typeof router === 'undefined') {
-      throw UIRouterInstanceUndefinedError;
+      throw new Error(UIRouterInstanceUndefinedError);
     }
 
     // Check the context for the parent UIView's fqn and State
@@ -234,7 +233,7 @@ class View extends Component<UIViewProps, UIViewState> {
 
       let stringTokens: string[] = resolveContext.getTokens().filter(x => typeof x === 'string');
       if (stringTokens.indexOf('transition') !== -1) {
-        throw TransitionPropCollisionError;
+        throw new Error(TransitionPropCollisionError);
       }
 
       trans = injector.get(Transition);

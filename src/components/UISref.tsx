@@ -18,6 +18,9 @@ import { UISrefActiveContext } from './UISrefActive';
 /** @hidden */
 let classNames = _classNames;
 
+/** @hidden */
+export const IncorrectStateNameTypeError = `State name provided to UISref (as 'to') must be a string.`;
+
 export interface UISrefProps {
   children?: any;
   to: string;
@@ -48,7 +51,7 @@ export function useUISref(to: string, params: { [key: string]: any } = {}, optio
 
   const { stateService, stateRegistry } = router;
   if (!isString(to)) {
-    throw new Error(`State name provided to UISref (as 'to') must be a string.`);
+    throw new Error(IncorrectStateNameTypeError);
   }
 
   useEffect(() => parentUISrefActiveAddStateInfo(to, params), []);
