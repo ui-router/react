@@ -8,11 +8,12 @@ export function useCurrentStateAndParams() {
   const [stateData, setStateData] = useState({ state: globals.current, params: globals.params });
 
   useEffect(() => {
-    uiRouter.transitionService.onSuccess({}, transition => {
+    const deregister = uiRouter.transitionService.onSuccess({}, transition => {
       const state = transition.to();
       const params = transition.params('to') as StateParams;
       setStateData({ state, params });
     });
+    return () => deregister();
   }, [uiRouter]);
 
   return stateData;
