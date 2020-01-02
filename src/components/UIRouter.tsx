@@ -11,8 +11,9 @@ import { UIRouterReact } from '../core';
 import { ReactStateDeclaration } from '../interface';
 
 /**
- * This React Context component lets you access the UIRouter instance
- * anywhere in the component tree
+ * This React Context component lets you access the UIRouter instance anywhere in the component tree
+ *
+ * When using hooks, use [[useRouter]] instead.
  *
  * #### Example:
  * ```jsx
@@ -48,48 +49,6 @@ export const InstanceOrPluginsMissingError = `Router instance or plugins missing
    <UIView />
  </UIRouter>
  `;
-
-/** @hidden */
-export const UIRouterInstanceUndefinedError = `UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`;
-
-/**
- * @internalapi
- *
- * This React Hook creates and initialises the UIRouter instance, registering router states,
- * plugins, and running any config provided by the user. It's used internally in by
- * the [[<UIRouter>]] Component.
- *
- * #### Example:
- * ```jsx
- * const uiRouter = useUIRouter(config, states, plugins, router);
- * ```
- */
-export function useInitializeUIRouter(
-  configFn: (router: UIRouterReact) => void,
-  states: Array<ReactStateDeclaration>,
-  plugins: Array<PluginFactory<UIRouterPlugin>>,
-  router?: UIRouterReact
-): UIRouterReact {
-  const uiRouter = useRef<UIRouterReact>(router || null);
-
-  // Router hasn't been initialised yet, this is the first render
-  if (uiRouter.current === null) {
-    if (plugins) {
-      // We need to create a new instance of the Router and register plugins, config and states
-      uiRouter.current = new UIRouterReact();
-      uiRouter.current.plugin(servicesPlugin); // services plugins is necessary for the router to fuction
-      plugins.forEach(plugin => uiRouter.current.plugin(plugin));
-      if (configFn) configFn(uiRouter.current);
-      (states || []).forEach(state => uiRouter.current.stateRegistry.register(state));
-    } else {
-      throw new Error(InstanceOrPluginsMissingError);
-    }
-
-    uiRouter.current.start();
-  }
-
-  return uiRouter.current;
-}
 
 /**
  * This is the root UIRouter component, needed for initialising the router and setting up configuration properly.
@@ -165,7 +124,23 @@ export function useInitializeUIRouter(
  * ```
  */
 export function UIRouter({ config, states, plugins, router, children }: UIRouterProps) {
-  const uiRouter = useInitializeUIRouter(config, states, plugins, router);
+  const uiRouter = useRef<UIRouterReact>(router || null);
 
-  return <UIRouterContext.Provider value={uiRouter}>{children}</UIRouterContext.Provider>;
+  // Router hasn't been initialised yet, this is the first render
+  if (uiRouter.current === null) {
+    if (plugins) {
+      // We need to create a new instance of the Router and register plugins, config and states
+      uiRouter.current = new UIRouterReact();
+      uiRouter.current.plugin(servicesPlugin); // services plugins is necessary for the router to fuction
+      plugins.forEach(plugin => uiRouter.current.plugin(plugin));
+      if (config) config(uiRouter.current);
+      (states || []).forEach(state => uiRouter.current.stateRegistry.register(state));
+    } else {
+      throw new Error(InstanceOrPluginsMissingError);
+    }
+
+    uiRouter.current.start();
+  }
+
+  return <UIRouterContext.Provider value={uiRouter.current}>{children}</UIRouterContext.Provider>;
 }
