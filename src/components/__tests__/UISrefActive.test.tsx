@@ -7,14 +7,14 @@ import {
   UIView,
   UISref,
   UISrefActive,
-  useUISref,
+  useSref,
   useUISrefActive,
   ReactStateDeclaration,
 } from '../../index';
 import { makeTestRouter } from './UIRouter.test';
 
 const Link = ({ to, children }) => {
-  const linkProps = useUISref(to);
+  const linkProps = useSref(to);
   const isActive = useUISrefActive(to);
   return (
     <a {...linkProps} className={isActive ? 'active' : null}>

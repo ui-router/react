@@ -24,7 +24,7 @@ import { ActiveUIView, ViewContext, Transition, ResolveContext, StateParams, app
 
 import { UIRouterReact, UIRouterContext } from '../index';
 import { ReactViewConfig } from '../reactViews';
-import { UIRouterInstanceUndefinedError } from './UIRouter';
+import { UIRouterInstanceUndefinedError } from './hooks';
 
 /** @internalapi */
 let id = 0;

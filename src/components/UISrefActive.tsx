@@ -8,7 +8,7 @@ import * as React from 'react';
 import { useState, useCallback, useContext, useMemo, cloneElement } from 'react';
 import * as _classNames from 'classnames';
 
-import { useCurrentStateAndParams, useUIRouter } from './hooks';
+import { useCurrentStateAndParams, useRouter } from './hooks';
 
 /** @hidden */
 let classNames = _classNames;
@@ -65,7 +65,7 @@ export interface UISrefActiveProps {
  * ```
  */
 export function UISrefActive({ children, className, class: classToApply, exact }: UISrefActiveProps) {
-  const { stateService } = useUIRouter();
+  const { stateService } = useRouter();
   const parentAddStateInfo = useContext(UISrefActiveContext);
 
   // keep track of states to watch and their activeClasses
@@ -103,7 +103,7 @@ export function UISrefActive({ children, className, class: classToApply, exact }
 }
 
 export const useUISrefActive = (stateName, params = null, exact = false) => {
-  const { stateService } = useUIRouter();
+  const { stateService } = useRouter();
   const currentState = useCurrentStateAndParams();
   const isActive = useMemo(
     () => (exact ? stateService.is(stateName, params) : stateService.includes(stateName, params)),
