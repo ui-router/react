@@ -1,32 +1,28 @@
 import * as React from 'react';
-import { mount } from 'enzyme';
-import { UIRouterReact } from '../../core';
-import { useSref } from '../hooks/useSref';
-import { UISref } from '../UISref';
-import { UISrefActiveContext } from '../UISrefActive';
-import { makeTestRouter, muteConsoleErrors } from './UIRouter.test';
+import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
+import { useSref } from '../useSref';
+import { UISref } from '../../UISref';
+import { UISrefActiveContext } from '../../UISrefActive';
 
-const states = [
-  {
-    name: 'state',
-    url: '',
-    component: () => (
-      <UISref to="state2">
-        <a>state2</a>
-      </UISref>
-    ),
-  },
-  {
-    name: 'state2',
-    url: '/state2',
-    component: () => <span>state2</span>,
-  },
-];
+const state = {
+  name: 'state',
+  url: '',
+  component: () => (
+    <UISref to="state2">
+      <a>state2</a>
+    </UISref>
+  ),
+};
+
+const state2 = {
+  name: 'state2',
+  url: '/state2',
+  component: () => <span>state2</span>,
+};
 
 describe('useUiSref', () => {
-  let router: UIRouterReact;
-  let mountInRouter: typeof mount;
-  beforeEach(() => ({ router, mountInRouter } = makeTestRouter(states)));
+  let { router, routerGo, mountInRouter } = makeTestRouter([]);
+  beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter([state, state2])));
 
   it('throws if to is not a string', () => {
     const Component = () => {

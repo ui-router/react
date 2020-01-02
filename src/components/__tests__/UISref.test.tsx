@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { mount } from 'enzyme';
-import { UIRouterReact, UISref, UIView, getTransitionOptions } from '../../index';
+import { UISref, UIView, getTransitionOptions } from '../../index';
 import { UISrefActiveContext } from '../UISrefActive';
 import { ViewContext } from '@uirouter/core';
-import { makeTestRouter, muteConsoleErrors } from './UIRouter.test';
+import { makeTestRouter, muteConsoleErrors } from './util';
 
 const states = [
   {
@@ -26,9 +25,8 @@ describe('<UISref>', () => {
   beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
   afterAll(() => (React.useEffect as any).mockRestore());
 
-  let router: UIRouterReact;
-  let mountInRouter: typeof mount;
-  beforeEach(() => ({ router, mountInRouter } = makeTestRouter(states)));
+  let { router, routerGo, mountInRouter } = makeTestRouter([]);
+  beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter(states)));
 
   it('renders its child with injected props', async () => {
     const wrapper = mountInRouter(

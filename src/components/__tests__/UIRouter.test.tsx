@@ -1,15 +1,8 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { mount } from 'enzyme';
-import { pushStateLocationPlugin } from '@uirouter/core';
-import {
-  UIRouter,
-  UIRouterContext,
-  UIRouterReact,
-  memoryLocationPlugin,
-  ReactStateDeclaration,
-  servicesPlugin,
-} from '../../index';
+import { memoryLocationPlugin, UIRouter, UIRouterContext, UIRouterReact } from '../../index';
+import { muteConsoleErrors } from './util';
 
 class Child extends React.Component<any, any> {
   static propTypes: React.ValidationMap<any> = {
@@ -86,19 +79,3 @@ describe('<UIRouter>', () => {
     });
   });
 });
-
-export const makeTestRouter = (states: ReactStateDeclaration[]) => {
-  const router = new UIRouterReact();
-  router.plugin(servicesPlugin);
-  router.plugin(pushStateLocationPlugin);
-  states.forEach(state => router.stateRegistry.register(state));
-
-  const mountInRouter: typeof mount = (children, opts) => mount(<UIRouter router={router}>{children}</UIRouter>, opts);
-
-  return { router, mountInRouter };
-};
-
-// silence console errors that are logged by react-dom or other actors
-export function muteConsoleErrors() {
-  jest.spyOn(console, 'error').mockImplementation(() => undefined);
-}
