@@ -10,7 +10,7 @@ import {
   servicesPlugin,
   TransitionPropCollisionError,
 } from '../../index';
-import { makeTestRouter, muteConsoleErrors } from './UIRouter.test';
+import { makeTestRouter, muteConsoleErrors } from './util';
 
 const states: ReactStateDeclaration[] = [
   {
@@ -56,9 +56,8 @@ const states: ReactStateDeclaration[] = [
 
 describe('<UIView>', () => {
   describe('(unmounted)', () => {
-    let router: UIRouterReact;
-    let mountInRouter: typeof mount;
-    beforeEach(() => ({ router, mountInRouter } = makeTestRouter([])));
+    let { router, routerGo, mountInRouter } = makeTestRouter([]);
+    beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter(states)));
 
     it('renders an empty <div>', () => {
       const wrapper = mountInRouter(<UIView />);
@@ -87,10 +86,8 @@ describe('<UIView>', () => {
   });
 
   describe('(mounted)', () => {
-    let router: UIRouterReact;
-    let mountInRouter: typeof mount;
-    beforeEach(() => ({ router, mountInRouter } = makeTestRouter(states)));
-
+    let { router, routerGo, mountInRouter } = makeTestRouter([]);
+    beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter(states)));
     it('renders its State Component', async () => {
       const wrapper = mountInRouter(<UIView />);
       await router.stateService.go('parent');

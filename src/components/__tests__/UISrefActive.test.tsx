@@ -1,17 +1,8 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 
-import {
-  UIRouterReact,
-  UIRouter,
-  UIView,
-  UISref,
-  UISrefActive,
-  useSref,
-  useUISrefActive,
-  ReactStateDeclaration,
-} from '../../index';
-import { makeTestRouter } from './UIRouter.test';
+import { UIRouter, UIView, UISref, UISrefActive, useSref, useUISrefActive, ReactStateDeclaration } from '../../index';
+import { makeTestRouter } from './util';
 
 const Link = ({ to, children }) => {
   const linkProps = useSref(to);
@@ -97,10 +88,8 @@ var states: ReactStateDeclaration[] = [
 ];
 
 describe('<UISrefActive>', () => {
-  let router: UIRouterReact;
-  let mountInRouter: typeof mount;
-  beforeEach(() => ({ router, mountInRouter } = makeTestRouter(states)));
-
+  let { router, routerGo, mountInRouter } = makeTestRouter([]);
+  beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter(states)));
   beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
   afterAll(() => (React.useEffect as any).mockRestore());
 
@@ -127,12 +116,12 @@ describe('<UISrefActive>', () => {
     expect(wrapper.find('a')).toHaveLength(1);
     expect(wrapper.find('a').props().className).toBe('');
 
-    await router.stateService.go('parent.child1');
+    await routerGo('parent.child1');
     wrapper.update();
     expect(wrapper.find('a')).toHaveLength(1);
     expect(wrapper.find('a').props().className).toBe('active');
 
-    await router.stateService.go('parent.child2');
+    await routerGo('parent.child2');
     wrapper.update();
     expect(wrapper.find('a')).toHaveLength(1);
     expect(wrapper.find('a').props().className).toBe('');
@@ -155,11 +144,11 @@ describe('<UISrefActive>', () => {
   });
 
   it('works with state parameters', async () => {
-    await router.stateService.go('withParams', { param: 5 });
+    await routerGo('withParams', { param: 5 });
     const wrapper = mountInRouter(<UISrefActiveTestComponent to="withParams" params={{ param: 5 }} />);
     expect(wrapper.find('a').props().className).toBe('active');
 
-    await router.stateService.go('withParams', { param: 3 });
+    await routerGo('withParams', { param: 3 });
     wrapper.update();
     expect(wrapper.find('a').props().className).toBe('');
   });
@@ -180,19 +169,19 @@ describe('<UISrefActive>', () => {
         </div>
       </UISrefActive>
     );
-    await router.stateService.go('parent.child1');
+    await routerGo('parent.child1');
     wrapper.update();
     expect(wrapper.find('div.active')).toHaveLength(1);
 
-    await router.stateService.go('parent.child2');
+    await routerGo('parent.child2');
     wrapper.update();
     expect(wrapper.find('div.active')).toHaveLength(1);
 
-    await router.stateService.go('parent.child2');
+    await routerGo('parent.child2');
     wrapper.update();
     expect(wrapper.find('div.active')).toHaveLength(1);
 
-    await router.stateService.go('parent');
+    await routerGo('parent');
     wrapper.update();
     expect(wrapper.find('div.active')).toHaveLength(0);
   });
@@ -215,19 +204,19 @@ describe('<UISrefActive>', () => {
       </UISrefActive>
     );
 
-    await router.stateService.go('parent');
+    await routerGo('parent');
     wrapper.update();
     expect(wrapper.find('div.active')).toHaveLength(0);
     expect(wrapper.find('a.child1')).toHaveLength(0);
     expect(wrapper.find('a.child2')).toHaveLength(0);
 
-    await router.stateService.go('parent.child1');
+    await routerGo('parent.child1');
     wrapper.update();
     expect(wrapper.find('div.active')).toHaveLength(1);
     expect(wrapper.find('a.child1')).toHaveLength(1);
     expect(wrapper.find('a.child2')).toHaveLength(0);
 
-    await router.stateService.go('parent.child2');
+    await routerGo('parent.child2');
     wrapper.update();
     expect(wrapper.find('div.active')).toHaveLength(1);
     expect(wrapper.find('a.child1')).toHaveLength(0);
@@ -245,11 +234,11 @@ describe('<UISrefActive>', () => {
       </UISrefActive>
     );
 
-    await router.stateService.go('parent.child1');
+    await routerGo('parent.child1');
     wrapper.update();
     expect(wrapper.find('a.active.child1')).toHaveLength(1);
 
-    await router.stateService.go('parent');
+    await routerGo('parent');
     wrapper.update();
     expect(wrapper.find('a.active')).toHaveLength(0);
     expect(wrapper.find('a.child1')).toHaveLength(0);
@@ -270,7 +259,7 @@ describe('<UISrefActive>', () => {
       );
     };
 
-    await router.stateService.go('parent.child1');
+    await routerGo('parent.child1');
     const wrapper = mount(<Comp show={true} />);
     const activeLink = wrapper.find('a.active');
     expect(activeLink).toHaveLength(1);
@@ -286,12 +275,12 @@ describe('<UISrefActive>', () => {
         <UISrefActiveTestComponent activeClass="exact" to="parent" exact={true} />
       </>
     );
-    await router.stateService.go('parent.child1');
+    await routerGo('parent.child1');
     wrapper.update();
     expect(wrapper.find('a.fuzzy')).toHaveLength(1);
     expect(wrapper.find('a.exact')).toHaveLength(0);
 
-    await router.stateService.go('parent');
+    await routerGo('parent');
     wrapper.update();
     expect(wrapper.find('a.fuzzy')).toHaveLength(1);
     expect(wrapper.find('a.exact')).toHaveLength(1);
