@@ -2,80 +2,23 @@
  * @reactapi
  * @module components
  */ /** */
-import * as React from 'react';
-import { useContext, useEffect, useMemo, useCallback, cloneElement } from 'react';
-import * as PropTypes from 'prop-types';
+import { isFunction, TransitionOptions } from '@uirouter/core';
 
 import * as _classNames from 'classnames';
-
-import { isFunction, isString, TransitionOptions } from '@uirouter/core';
-
-import { StateRegistry } from '../index';
-import { useUIRouter } from './hooks';
-import { UIViewAddress, UIViewContext } from './UIView';
-import { UISrefActiveContext } from './UISrefActive';
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
+import { cloneElement, useCallback, useMemo } from 'react';
+import { useSref } from './hooks/useSref';
 
 /** @hidden */
 let classNames = _classNames;
 
-/** @hidden */
-export const IncorrectStateNameTypeError = `State name provided to UISref (as 'to') must be a string.`;
-
 export interface UISrefProps {
   children?: any;
   to: string;
-  params?: { [key: string]: any };
+  params?: object;
   options?: TransitionOptions;
   className?: string;
-}
-
-export interface LinkProps {
-  onClick: React.MouseEventHandler<any>;
-  href?: string;
-}
-
-/** @hidden */
-export function getTransitionOptions(
-  stateRegistry: StateRegistry,
-  options: TransitionOptions,
-  parentUIViewAddress?: UIViewAddress
-) {
-  const parentContext = (parentUIViewAddress && parentUIViewAddress.context) || stateRegistry.root();
-  return { relative: parentContext, inherit: true, ...options };
-}
-
-export function useUISref(to: string, params: { [key: string]: any } = {}, options: TransitionOptions = {}): LinkProps {
-  const router = useUIRouter();
-  const parentUIViewAddress = useContext(UIViewContext);
-  const parentUISrefActiveAddStateInfo = useContext(UISrefActiveContext);
-
-  const { stateService, stateRegistry } = router;
-  if (!isString(to)) {
-    throw new Error(IncorrectStateNameTypeError);
-  }
-
-  useEffect(() => parentUISrefActiveAddStateInfo(to, params), []);
-
-  const hrefOptions = useMemo(() => getTransitionOptions(stateRegistry, options, parentUIViewAddress), [
-    options,
-    parentUIViewAddress,
-    stateRegistry,
-  ]);
-
-  const handleClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (!e.defaultPrevented && !(e.button == 1 || e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        stateService.go(to, params, hrefOptions);
-      }
-    },
-    [hrefOptions, params, stateService, to]
-  );
-
-  return {
-    onClick: handleClick,
-    href: stateService.href(to, params, hrefOptions),
-  };
 }
 
 /**
@@ -107,7 +50,7 @@ export function useUISref(to: string, params: { [key: string]: any } = {}, optio
  * It will also respect the default behavior when the user Cmd+Click / Ctrl+Click on the link by canceling the transition event and opening a new tab instead.
  */
 export const UISref: React.FC<UISrefProps> = ({ children, className, options, params, to }) => {
-  const { onClick, href } = useUISref(to, params, options);
+  const { onClick, href } = useSref(to, params, options);
   const childrenProps = children.props;
 
   const handleClick = useCallback(

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import { UIRouterReact } from '../../core';
-import { UISref, useUISref } from '../UISref';
+import { useSref } from '../hooks/useSref';
+import { UISref } from '../UISref';
 import { UISrefActiveContext } from '../UISrefActive';
 import { makeTestRouter, muteConsoleErrors } from './UIRouter.test';
 
@@ -29,7 +30,7 @@ describe('useUiSref', () => {
 
   it('throws if to is not a string', () => {
     const Component = () => {
-      const sref = useUISref(5 as any, {});
+      const sref = useSref(5 as any, {});
       return <a {...sref} />;
     };
 
@@ -40,7 +41,7 @@ describe('useUiSref', () => {
   it('returns an href for the target state', () => {
     const spy = jest.fn();
     const Component = () => {
-      const uiSref = useUISref('state2', {});
+      const uiSref = useSref('state2', {});
       spy(uiSref.href);
       return <a {...uiSref} />;
     };
@@ -55,7 +56,7 @@ describe('useUiSref', () => {
     const spy = jest.spyOn(router.stateService, 'go');
     let onClick: Function = null;
     const Component = () => {
-      const uiSref = useUISref('state', {});
+      const uiSref = useSref('state', {});
       onClick = uiSref.onClick;
       return <a {...uiSref} />;
     };
@@ -72,7 +73,7 @@ describe('useUiSref', () => {
   it('registers itself with the parent UISrefActive addStateInfo callback', () => {
     const spy = jest.fn();
     const Component = () => {
-      const uiSref = useUISref('state', {});
+      const uiSref = useSref('state', {});
       return <a {...uiSref} />;
     };
 
@@ -88,7 +89,7 @@ describe('useUiSref', () => {
   it('deregisters itself with the parent UISrefActive addStateInfo callback when unmounted', () => {
     const spy = jest.fn();
     const Component = () => {
-      const uiSref = useUISref('state', {});
+      const uiSref = useSref('state', {});
       return <a {...uiSref} />;
     };
 
