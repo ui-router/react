@@ -12,7 +12,13 @@ export const makeTestRouter = (states: ReactStateDeclaration[]) => {
   router.plugin(pushStateLocationPlugin);
   states.forEach(state => router.stateRegistry.register(state));
 
-  const mountInRouter: typeof mount = (children, opts) => mount(<UIRouter router={router}>{children}</UIRouter>, opts);
+  const mountInRouter: typeof mount = (children, opts) => {
+    const WrapperComponent = props => {
+      const cloned = React.cloneElement(children, props);
+      return <UIRouter router={router}>{cloned}</UIRouter>;
+    };
+    return mount(<WrapperComponent />, opts);
+  };
 
   const routerGo = function(to: StateOrName, params?: RawParams, options?: TransitionOptions) {
     return (act(() => router.stateService.go(to, params, options)) as any) as TransitionPromise;
