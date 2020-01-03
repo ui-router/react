@@ -1,7 +1,9 @@
 import { curry, HookFn, StateParams, TransitionService, TransitionStateHookFn } from '@uirouter/core';
 import { HookMatchCriteria, HookRegOptions, TransitionHookFn } from '@uirouter/core/lib/transition/interface';
 import { useEffect, useState } from 'react';
+import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useRouter } from './useRouter';
+import { useStableCallback } from './useStableCallback';
 
 type HookName = 'onBefore' | 'onStart' | 'onSuccess' | 'onError' | 'onSuccess' | 'onFinish';
 type StateHookName = 'onEnter' | 'onRetain' | 'onExit';
@@ -25,8 +27,9 @@ export function useTransitionHook(
   options?: HookRegOptions
 ) {
   const { transitionService } = useRouter();
+  const stableCallback = useStableCallback(callback);
   useEffect(() => {
-    const deregister = transitionService[hookRegistrationFn](criteria, callback as any, options);
+    const deregister = transitionService[hookRegistrationFn](criteria, stableCallback as any, options);
     return () => deregister();
-  }, [transitionService, hookRegistrationFn]);
+  }, [transitionService, hookRegistrationFn, useDeepObjectDiff(criteria), useDeepObjectDiff(options)]);
 }
