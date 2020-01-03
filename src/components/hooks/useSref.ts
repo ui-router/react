@@ -4,6 +4,7 @@ import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { StateRegistry, UIViewAddress } from '../../index';
 import { UISrefActiveContext } from '../UISrefActive';
 import { UIViewContext } from '../UIView';
+import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useRouter } from './useRouter';
 
 export interface LinkProps {
@@ -33,7 +34,7 @@ export function useSref(stateName: string, params: object = {}, options: Transit
     throw new Error(IncorrectStateNameTypeError);
   }
 
-  useEffect(() => parentUISrefActiveAddStateInfo(stateName, params), []);
+  useEffect(() => parentUISrefActiveAddStateInfo(stateName, params), [stateName, useDeepObjectDiff(params)]);
 
   const hrefOptions = useMemo(() => getTransitionOptions(stateRegistry, options, parentUIViewAddress), [
     options,
@@ -41,20 +42,23 @@ export function useSref(stateName: string, params: object = {}, options: Transit
     stateRegistry,
   ]);
 
-  const handleClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (!e.defaultPrevented && !(e.button == 1 || e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        stateService.go(stateName, params, hrefOptions);
-      }
-    },
-    [hrefOptions, params, stateService, stateName]
-  );
+  const href = useMemo(() => stateService.href(stateName, params, hrefOptions), [
+    stateService,
+    stateName,
+    useDeepObjectDiff(params),
+    hrefOptions,
+  ]);
 
-  return {
-    onClick: handleClick,
-    href: stateService.href(stateName, params, hrefOptions),
+  const handleClick = (e: React.MouseEvent) => {
+    if (!e.defaultPrevented && !(e.button == 1 || e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      stateService.go(stateName, params, hrefOptions);
+    }
   };
+
+  const onClick = useCallback(handleClick, [hrefOptions, params, stateService, stateName]);
+
+  return { onClick, href };
 }
 
 /** @hidden */
