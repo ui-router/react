@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 
-import { UIRouter, UIView, UISref, UISrefActive, useSref, useUISrefActive, ReactStateDeclaration } from '../../index';
+import { UIRouter, UIView, UISref, UISrefActive, useSref, ReactStateDeclaration } from '../../index';
+import { useIsActive } from '../hooks/useIsActive';
 import { makeTestRouter } from './util';
 
 const Link = ({ to, children }) => {
   const linkProps = useSref(to);
-  const isActive = useUISrefActive(to);
+  const isActive = useIsActive(to);
   return (
     <a {...linkProps} className={isActive ? 'active' : null}>
       {children}

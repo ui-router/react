@@ -101,14 +101,3 @@ export function UISrefActive({ children, className, class: classToApply, exact }
 
   return <UISrefActiveContext.Provider value={addStateInfo}>{childrenWithActiveClasses}</UISrefActiveContext.Provider>;
 }
-
-export const useUISrefActive = (stateName, params = null, exact = false) => {
-  const { stateService } = useRouter();
-  const currentState = useCurrentStateAndParams();
-  const isActive = useMemo(
-    () => (exact ? stateService.is(stateName, params) : stateService.includes(stateName, params)),
-    [exact, stateName, params, currentState]
-  );
-
-  return isActive;
-};
