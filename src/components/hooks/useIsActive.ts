@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
 import { StateService } from '@uirouter/core';
+import { useEffect, useMemo, useState } from 'react';
+import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useOnStateChanged } from './useOnStateChanged';
 import { useRouter } from './useRouter';
 
@@ -21,8 +22,7 @@ export function useIsActive(stateName: string, params = null, exact = false) {
   };
 
   useOnStateChanged(checkIfActiveChanged);
-  // can't add 'params' to the DependencyList because it will be a new reference every time... hmmm...
-  useEffect(checkIfActiveChanged, [stateService, stateName, exact]);
+  useEffect(checkIfActiveChanged, [stateService, stateName, useDeepObjectDiff(params), exact]);
 
   return isActive;
 }
