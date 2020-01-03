@@ -35,35 +35,39 @@ describe('useUiSref', () => {
   });
 
   it('returns an href for the target state', () => {
-    const spy = jest.fn();
     const Component = () => {
       const uiSref = useSref('state2', {});
-      spy(uiSref.href);
-      return <a {...uiSref} />;
+      return <a {...uiSref}>state2</a>;
     };
-
-    mountInRouter(<Component />);
-
-    expect(spy).toBeCalledTimes(1);
-    expect(spy).lastCalledWith('/state2');
+    const wrapper = mountInRouter(<Component />);
+    expect(wrapper.html()).toBe('<a href="/state2">state2</a>');
   });
 
   it('returns an onClick function which activates the target state', () => {
     const spy = jest.spyOn(router.stateService, 'go');
-    let onClick: Function = null;
     const Component = () => {
-      const uiSref = useSref('state', {});
-      onClick = uiSref.onClick;
-      return <a {...uiSref} />;
+      const uiSref = useSref('state');
+      return <a {...uiSref}>state</a>;
     };
 
-    mountInRouter(<Component />);
+    const wrapper = mountInRouter(<Component />);
+    wrapper.simulate('click');
 
-    expect(typeof onClick).toBe('function');
-    const event = { preventDefault() {} } as React.MouseEvent<any>;
-    onClick(event);
     expect(spy).toBeCalledTimes(1);
     expect(spy).toBeCalledWith('state', expect.anything(), expect.anything());
+  });
+
+  it('returns an onClick function which respects defaultPrevented', () => {
+    const spy = jest.spyOn(router.stateService, 'go');
+    const Component = () => {
+      const uiSref = useSref('state');
+      return <a {...uiSref}>state</a>;
+    };
+
+    const wrapper = mountInRouter(<Component />);
+    wrapper.simulate('click', { defaultPrevented: true });
+
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('registers itself with the parent UISrefActive addStateInfo callback', () => {
