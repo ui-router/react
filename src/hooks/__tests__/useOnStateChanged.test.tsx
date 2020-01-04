@@ -23,25 +23,25 @@ describe('useOnStateChanged', () => {
   });
 
   it('returns the current state', async () => {
-    await router.stateService.go('state1');
+    await routerGo('state1');
     expect(hookSpy).toHaveBeenCalledTimes(1);
     expect(hookSpy.mock.calls[0][0]).toBe(state1);
   });
 
   it('returns the current params', async () => {
-    await router.stateService.go('state1', { param: '123' });
+    await routerGo('state1', { param: '123' });
     expect(hookSpy).toHaveBeenCalledTimes(1);
     expect(hookSpy.mock.calls[0][1]).toEqual(expect.objectContaining({ param: '123' }));
   });
 
   it('returns the previous state until a pending transition is successful', async () => {
-    await router.stateService.go('state1', { param: '123' });
+    await routerGo('state1', { param: '123' });
     expect(hookSpy).toHaveBeenCalledTimes(1);
     expect(hookSpy).toHaveBeenCalledWith(expect.objectContaining({ name: 'state1' }), expect.anything());
 
     const { promise, resolve } = defer();
     router.transitionService.onStart({ to: 'state2' }, transition => promise);
-    const goPromise = router.stateService.go('state2', { param: '456' });
+    const goPromise = routerGo('state2', { param: '456' });
 
     expect(hookSpy).toHaveBeenCalledTimes(1);
     resolve();
@@ -51,13 +51,13 @@ describe('useOnStateChanged', () => {
   });
 
   it('returns the previous state if transition is unsuccessful', async () => {
-    await router.stateService.go('state1', { param: '123' });
+    await routerGo('state1', { param: '123' });
     expect(hookSpy).toHaveBeenCalledTimes(1);
     expect(hookSpy).toHaveBeenCalledWith(expect.objectContaining({ name: 'state1' }), expect.anything());
 
     const { promise, reject } = defer();
     router.transitionService.onStart({ to: 'state2' }, transition => promise);
-    const goPromise = router.stateService.go('state2', { param: '456' });
+    const goPromise = routerGo('state2', { param: '456' });
 
     expect(hookSpy).toHaveBeenCalledTimes(1);
     try {
