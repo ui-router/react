@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { UIRouterReact } from '../../core';
-import { UIRouterContext } from '../UIRouter';
+import { UIRouterReact } from '../core';
+import { UIRouterContext } from '../components/UIRouter';
 
 /** @hidden */
 export const UIRouterInstanceUndefinedError = `UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?`;

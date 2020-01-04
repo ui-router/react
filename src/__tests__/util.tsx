@@ -2,9 +2,9 @@ import * as React from 'react';
 import { TransitionOptions, RawParams, StateOrName, pushStateLocationPlugin, TransitionPromise } from '@uirouter/core';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
-import { UIRouterReact } from '../../core';
-import { servicesPlugin, UIRouter } from '../../index';
-import { ReactStateDeclaration } from '../../interface';
+import { UIRouterReact } from '../core';
+import { servicesPlugin, UIRouter } from '../index';
+import { ReactStateDeclaration } from '../interface';
 
 export const makeTestRouter = (states: ReactStateDeclaration[]) => {
   const router = new UIRouterReact();

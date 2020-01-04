@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
 import { useSref } from '../useSref';
-import { UISrefActive, UISrefActiveContext } from '../../UISrefActive';
+import { UISrefActive, UISrefActiveContext } from '../../components/UISrefActive';
 
 const state = { name: 'state', url: '/state' };
 const state2 = { name: 'state2', url: '/state2' };
