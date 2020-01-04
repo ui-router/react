@@ -82,28 +82,16 @@
     "webpack-dev-server": "^3.9.0"
   },
   "jest": {
-    "setupFiles": [
-      "../jest.setup.js"
-    ],
+    "setupFiles": [ "../jest.setup.js" ],
     "rootDir": "src",
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts",
-      "tsx"
-    ],
-    "testURL": "http://localhost:4000",
-    "testRegex": "/__tests__/.*\\.(ts|tsx|js)$",
+    "transform": { ".(ts|tsx)": "ts-jest" },
+    "moduleFileExtensions": [ "js", "json", "ts", "tsx" ],
     "globals": {
       "ts-jest": {
         "tsConfig": "./tsconfig.jest.json"
       }
     },
     "preset": "ts-jest",
-    "testMatch": null,
     "restoreMocks": true
   },
   "husky": {
