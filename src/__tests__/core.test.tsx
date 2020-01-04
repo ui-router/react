@@ -3,8 +3,7 @@ import { servicesPlugin, memoryLocationPlugin } from '@uirouter/core';
 import { UIRouterReact, StartMethodCalledMoreThanOnceError } from '../index';
 
 describe('UIRouterReact class', () => {
-  let router;
-  let sandbox;
+  let router: UIRouterReact;
 
   beforeEach(() => {
     router = new UIRouterReact();
