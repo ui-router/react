@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TransitionOptions, RawParams, StateOrName, pushStateLocationPlugin, TransitionPromise } from '@uirouter/core';
+import { TransitionOptions, RawParams, StateOrName, TransitionPromise, memoryLocationPlugin } from '@uirouter/core';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import { UIRouterReact } from '../core';
@@ -9,7 +9,8 @@ import { ReactStateDeclaration } from '../interface';
 export const makeTestRouter = (states: ReactStateDeclaration[]) => {
   const router = new UIRouterReact();
   router.plugin(servicesPlugin);
-  router.plugin(pushStateLocationPlugin);
+  router.plugin(memoryLocationPlugin);
+  router.locationConfig.html5Mode = () => true;
   states.forEach(state => router.stateRegistry.register(state));
 
   const mountInRouter: typeof mount = (children, opts) => {
