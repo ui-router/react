@@ -123,12 +123,15 @@ export const InstanceOrPluginsMissingError = `Router instance or plugins missing
  * );
  * ```
  */
-export function UIRouter({ config, states, plugins, router, children }: UIRouterProps) {
-  const uiRouter = useRef<UIRouterReact>(router || null);
+export function UIRouter(props: UIRouterProps) {
+  const uiRouter = useRef<UIRouterReact>();
 
   // Router hasn't been initialised yet, this is the first render
-  if (uiRouter.current === null) {
-    if (plugins) {
+  if (!uiRouter.current) {
+    const { config, states, plugins, router } = props;
+    if (router) {
+      uiRouter.current = router;
+    } else if (plugins) {
       // We need to create a new instance of the Router and register plugins, config and states
       uiRouter.current = new UIRouterReact();
       uiRouter.current.plugin(servicesPlugin); // services plugins is necessary for the router to fuction
@@ -142,5 +145,5 @@ export function UIRouter({ config, states, plugins, router, children }: UIRouter
     uiRouter.current.start();
   }
 
-  return <UIRouterContext.Provider value={uiRouter.current}>{children}</UIRouterContext.Provider>;
+  return <UIRouterContext.Provider value={uiRouter.current}>{props.children}</UIRouterContext.Provider>;
 }
