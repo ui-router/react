@@ -7,7 +7,7 @@ import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
 const states = [
   {
     name: 'state',
-    url: '',
+    url: '/state',
     component: () => (
       <UISref to="state2">
         <a>state2</a>

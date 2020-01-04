@@ -45,6 +45,18 @@ describe('<UIRouter>', () => {
     expect(wrapper.find(Child).props().router).toBe(router);
   });
 
+  it('starts the router', () => {
+    const router = new UIRouterReact();
+    router.plugin(memoryLocationPlugin);
+    spyOn(router, 'start');
+    mount(
+      <UIRouter router={router}>
+        <UIRouterContext.Consumer>{router => <Child router={router} />}</UIRouterContext.Consumer>
+      </UIRouter>
+    );
+    expect(router.start).toHaveBeenCalledTimes(1);
+  });
+
   describe('<UIRouterCosumer>', () => {
     it('passes down the router instance', () => {
       let router;
