@@ -1,91 +1,13 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-
-import { UIRouter, UIView, UISref, UISrefActive, useSref, ReactStateDeclaration } from '../../index';
-import { useIsActive } from '../../hooks/useIsActive';
 import { makeTestRouter } from '../../__tests__/util';
+import { ReactStateDeclaration, UIRouter, UISref, UISrefActive } from '../../index';
 
-const Link = ({ to, children }) => {
-  const linkProps = useSref(to);
-  const isActive = useIsActive(to);
-  return (
-    <a {...linkProps} className={isActive ? 'active' : null}>
-      {children}
-    </a>
-  );
-};
-
-var states: ReactStateDeclaration[] = [
-  {
-    name: 'simple',
-    url: '',
-    component: () => (
-      <div>
-        <UISrefActive class="active">
-          <UISref to="parent.child1">
-            <a>child1</a>
-          </UISref>
-        </UISrefActive>
-      </div>
-    ),
-  },
-  {
-    name: 'simple2',
-    url: '',
-    component: () => <div>Simple2</div>,
-  },
-  {
-    name: 'parent',
-    url: '',
-    component: () => (
-      <div>
-        <UISrefActive class="active">
-          <UISref to="parent.child1">
-            <a>child1</a>
-          </UISref>
-        </UISrefActive>
-        <Link to="parent.child2">child2</Link>
-        <UIView />
-      </div>
-    ),
-  },
-  {
-    name: 'parent.child1',
-    url: '/child1',
-    component: () => <span>child1</span>,
-  },
-  {
-    name: 'parent.child2',
-    url: '/child2',
-    component: () => <span>child2</span>,
-  },
-  {
-    name: 'parent.child3',
-    url: '/child3',
-    component: () => (
-      <UISrefActive class="active">
-        <UISref to="parent">
-          <a>parent</a>
-        </UISref>
-      </UISrefActive>
-    ),
-  },
-  {
-    name: 'throw',
-    url: '/throw',
-    component: () => (
-      <UISrefActive class="active">
-        <UISref to={5 as any}>
-          <a>child1</a>
-        </UISref>
-      </UISrefActive>
-    ),
-  },
-  {
-    name: 'withParams',
-    url: '/with?param',
-    component: () => <span>with params</span>,
-  },
+const states: ReactStateDeclaration[] = [
+  { name: 'parent', url: '/parent' },
+  { name: 'parent.child1', url: '/child1' },
+  { name: 'parent.child2', url: '/child2' },
+  { name: 'withParams', url: '/with?param' },
 ];
 
 describe('<UISrefActive>', () => {
@@ -95,7 +17,7 @@ describe('<UISrefActive>', () => {
   afterAll(() => (React.useEffect as any).mockRestore());
 
   function UISrefActiveTestComponent(props: { to?: string; activeClass?: string; params?: object; exact?: boolean }) {
-    const { to = 'simple', activeClass = 'active', exact = false, params } = props;
+    const { to = 'parent', activeClass = 'active', exact = false, params } = props;
     return (
       <UISrefActive class={activeClass} exact={exact}>
         <UISref to={to} params={params}>
@@ -109,7 +31,7 @@ describe('<UISrefActive>', () => {
     const wrapper = mountInRouter(<UISrefActiveTestComponent to="parent.child1" />);
     const props = wrapper.find('a').props();
     expect(typeof props.onClick).toBe('function');
-    expect(props.href).toBe('/child1');
+    expect(props.href).toBe('/parent/child1');
   });
 
   it('updates class for child <UISref>', async () => {
@@ -163,9 +85,6 @@ describe('<UISrefActive>', () => {
           </UISref>
           <UISref to="parent.child2">
             <a>child2</a>
-          </UISref>
-          <UISref to="parent.child3">
-            <a>child3</a>
           </UISref>
         </div>
       </UISrefActive>
