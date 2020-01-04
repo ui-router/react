@@ -90,7 +90,7 @@ describe('<UIView>', () => {
     beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter(states)));
     it('renders its State Component', async () => {
       const wrapper = mountInRouter(<UIView />);
-      await router.stateService.go('parent');
+      await routerGo('parent');
       expect(wrapper.update().html()).toEqual(`<div><span>parent</span><div></div></div>`);
     });
 
@@ -103,7 +103,7 @@ describe('<UIView>', () => {
       } as ReactStateDeclaration);
 
       const wrapper = mountInRouter(<UIView />);
-      await router.stateService.go('__state');
+      await routerGo('__state');
       wrapper.update();
       // @ts-ignore
       expect(wrapper.find(Comp).props().myresolve).not.toBeUndefined();
@@ -120,7 +120,7 @@ describe('<UIView>', () => {
       } as ReactStateDeclaration);
 
       const wrapper = mountInRouter(<UIView />);
-      await router.stateService.go('__state');
+      await routerGo('__state');
       wrapper.update();
       // @ts-ignore
       expect(wrapper.find(Comp).props().foo).toBe('bar');
@@ -134,35 +134,35 @@ describe('<UIView>', () => {
         resolve: [{ token: 'transition', resolveFn: () => null }],
       } as ReactStateDeclaration);
 
-      await router.stateService.go('__state');
+      await routerGo('__state');
 
       muteConsoleErrors();
       expect(() => mountInRouter(<UIView />)).toThrow(TransitionPropCollisionError);
     });
 
     it('renders nested State Components', async () => {
-      await router.stateService.go('parent.child');
+      await routerGo('parent.child');
       const wrapper = mountInRouter(<UIView />);
       expect(wrapper.html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
     });
 
     it('renders multiple nested unmounted <UIView>', async () => {
-      await router.stateService.go('namedParent');
+      await routerGo('namedParent');
       const wrapper = mountInRouter(<UIView />);
       expect(wrapper.html()).toEqual(`<div><span>namedParent</span><div></div><div></div></div>`);
     });
 
     it('renders multiple nested mounted <UIView>', async () => {
-      await router.stateService.go('namedParent.namedChild');
+      await routerGo('namedParent.namedChild');
       const wrapper = mountInRouter(<UIView />);
       expect(wrapper.html()).toEqual(`<div><span>namedParent</span><span>child1</span><span>child2</span></div>`);
     });
 
     it('unmounts State Component when changing state', async () => {
       const wrapper = mountInRouter(<UIView />);
-      await router.stateService.go('parent.child');
+      await routerGo('parent.child');
       expect(wrapper.update().html()).toEqual(`<div><span>parent</span><span>child</span></div>`);
-      await router.stateService.go('parent');
+      await routerGo('parent');
       expect(wrapper.update().html()).toEqual(`<div><span>parent</span><div></div></div>`);
     });
 
@@ -184,10 +184,10 @@ describe('<UIView>', () => {
         router.stateRegistry.register({ name: '__state', component: makeSpyComponent(uiCanExitSpy) } as any);
         const wrapper = mountInRouter(<UIView />);
 
-        await router.stateService.go('__state');
+        await routerGo('__state');
         expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
 
-        await router.stateService.go('parent');
+        await routerGo('parent');
         expect(wrapper.update().html()).toContain('parent');
         expect(uiCanExitSpy).toBeCalled();
       });
@@ -199,10 +199,10 @@ describe('<UIView>', () => {
         router.stateRegistry.register({ name: '__state', component: ForwardRef } as ReactStateDeclaration);
         const wrapper = mountInRouter(<UIView />);
 
-        await router.stateService.go('__state');
+        await routerGo('__state');
         expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
 
-        await router.stateService.go('parent');
+        await routerGo('parent');
         expect(wrapper.update().html()).toContain('parent');
         expect(uiCanExitSpy).toBeCalled();
       });
@@ -212,11 +212,11 @@ describe('<UIView>', () => {
         router.stateRegistry.register({ name: '__state', component: makeSpyComponent(uiCanExitSpy) } as any);
         const wrapper = mountInRouter(<UIView />);
 
-        await router.stateService.go('__state');
+        await routerGo('__state');
         expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
 
         try {
-          await router.stateService.go('parent');
+          await routerGo('parent');
         } catch (error) {}
         expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
         expect(uiCanExitSpy).toBeCalled();
@@ -244,7 +244,7 @@ describe('<UIView>', () => {
           <UIView render={(Comp, props) => <Comp {...props} foo={<span>bar</span>} />} />
         </UIRouter>
       );
-      await router.stateService.go('withrenderprop');
+      await routerGo('withrenderprop');
       expect(wrapper.update().html()).toEqual(`<div><span>withrenderprop</span><span>bar</span></div>`);
     });
 
@@ -264,7 +264,7 @@ describe('<UIView>', () => {
       } as ReactStateDeclaration;
       router.stateRegistry.register(testState);
 
-      await router.stateService.go('testunmount');
+      await routerGo('testunmount');
       const wrapper = mountInRouter(<UIView />);
       expect(componentDidMountSpy).toHaveBeenCalledTimes(1);
 

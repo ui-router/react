@@ -34,7 +34,7 @@ describe('<UISref>', () => {
         <a>state2</a>
       </UISref>
     );
-    await router.stateService.go('state');
+    await routerGo('state');
     const props = wrapper.find('a').props();
     expect(typeof props.onClick).toBe('function');
     expect(props.href.includes('/state2')).toBe(true);
@@ -46,7 +46,7 @@ describe('<UISref>', () => {
   });
 
   it('registers and deregisters active state from parent UISrefActive when mounting/unmounting', async () => {
-    await router.stateService.go('state');
+    await routerGo('state');
 
     const deregisterFn = jest.fn();
     const parentUISrefActiveAddStateFn = jest.fn(() => deregisterFn);
@@ -59,7 +59,7 @@ describe('<UISref>', () => {
 
     expect(wrapper.html()).toBe('<a href="/state2" class="">state2</a>');
     expect(parentUISrefActiveAddStateFn).toHaveBeenCalled();
-    await router.stateService.go('state2');
+    await routerGo('state2');
     expect(deregisterFn).toHaveBeenCalled();
   });
 
