@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RawParams, StateDeclaration, StateService } from '@uirouter/core';
-import { UIRouterReact } from '../../../core';
+import { UIRouterReact } from '../../core';
 import { defer, makeTestRouter } from '../../__tests__/util';
 import { useCurrentStateAndParams } from '../useCurrentStateAndParams';
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
+import { ViewContext } from '@uirouter/core';
 import { UISref, UIView, getTransitionOptions } from '../../index';
 import { UISrefActiveContext } from '../UISrefActive';
-import { ViewContext } from '@uirouter/core';
-import { makeTestRouter, muteConsoleErrors } from './util';
+import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
 
 const states = [
   {

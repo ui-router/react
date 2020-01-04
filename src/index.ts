@@ -13,7 +13,8 @@
 export * from '@uirouter/core';
 export * from './interface';
 export * from './reactViews';
-export * from './components/components';
+export * from './components';
+export * from './hooks';
 
 export { UIRouterReact, StartMethodCalledMoreThanOnceError } from './core';
-export { UIRouter } from './components/components';
+export { UIRouter } from './components';

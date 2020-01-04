@@ -10,7 +10,7 @@ import {
   servicesPlugin,
   TransitionPropCollisionError,
 } from '../../index';
-import { makeTestRouter, muteConsoleErrors } from './util';
+import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
 
 const states: ReactStateDeclaration[] = [
   {

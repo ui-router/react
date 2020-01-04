@@ -2,8 +2,8 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 
 import { UIRouter, UIView, UISref, UISrefActive, useSref, ReactStateDeclaration } from '../../index';
-import { useIsActive } from '../hooks/useIsActive';
-import { makeTestRouter } from './util';
+import { useIsActive } from '../../hooks/useIsActive';
+import { makeTestRouter } from '../../__tests__/util';
 
 const Link = ({ to, children }) => {
   const linkProps = useSref(to);

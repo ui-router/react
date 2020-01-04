@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { isString, TransitionOptions } from '@uirouter/core';
 import { useCallback, useContext, useEffect, useMemo } from 'react';
-import { StateRegistry, UIViewAddress } from '../../index';
-import { UISrefActiveContext } from '../UISrefActive';
-import { UIViewContext } from '../UIView';
+import { StateRegistry, UIViewAddress } from '../index';
+import { UISrefActiveContext } from '../components/UISrefActive';
+import { UIViewContext } from '../components/UIView';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useRouter } from './useRouter';
 
