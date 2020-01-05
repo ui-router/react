@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { ViewContext } from '@uirouter/core';
-import { UISref, UIView, getTransitionOptions } from '../../index';
+import { UISref, UIView } from '../../index';
 import { UISrefActiveContext } from '../UISrefActive';
 import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
 
@@ -124,12 +123,5 @@ describe('<UISref>', () => {
     link.simulate('click', { ctrlKey: true });
 
     expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
-  });
-
-  describe('getTransitionOptions()', () => {
-    it('uses the root context for options when no parentUIViewAddress is provided', () => {
-      const options = getTransitionOptions(router.stateRegistry, {});
-      expect((options.relative as ViewContext).name).toBe('');
-    });
   });
 });
