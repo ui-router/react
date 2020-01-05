@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { act } from 'react-dom/test-utils';
 import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
 import { useSref } from '../useSref';
 import { UISrefActive, UISrefActiveContext } from '../../components/UISrefActive';
@@ -81,6 +82,47 @@ describe('useUiSref', () => {
 
     wrapper.setProps({ param: '456' });
     expect(wrapper.html()).toBe('<a href="/state3/456"></a>');
+  });
+
+  it('updates href when the registered state is swapped out', async () => {
+    const State2Link = () => {
+      const sref = useSref('state2');
+      return <a {...sref} />;
+    };
+
+    const wrapper = mountInRouter(<State2Link />);
+    expect(wrapper.html()).toBe('<a href="/state2"></a>');
+    act(() => {
+      router.stateRegistry.deregister('state2');
+    });
+
+    expect(wrapper.update().html()).toBe('<a></a>');
+    act(() => {
+      router.stateRegistry.register({ name: 'state2', url: '/asdfasdf' });
+    });
+    expect(wrapper.update().html()).toBe('<a href="/asdfasdf"></a>');
+  });
+
+  it('updates future state hrefs when the list of registered states changes', async () => {
+    const lazyLoadFutureStates = () =>
+      Promise.resolve({
+        states: [
+          { name: 'future', url: '/future' },
+          { name: 'future.child', url: '/child' },
+        ],
+      });
+    router.stateRegistry.register({ name: 'future.**', url: '/future', lazyLoad: lazyLoadFutureStates });
+
+    const Link = props => {
+      const sref = useSref('future.child', { param: props.param });
+      return <a {...sref} />;
+    };
+
+    const wrapper = mountInRouter(<Link />);
+    expect(wrapper.html()).toBe('<a href="/future"></a>');
+
+    await routerGo('future.child');
+    expect(wrapper.update().html()).toBe('<a href="/future/child"></a>');
   });
 
   it('participates in parent UISrefActive component active state', async () => {
