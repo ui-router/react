@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import { makeTestRouter } from '../../__tests__/util';
-import { ReactStateDeclaration, UIRouter, UISref, UISrefActive } from '../../index';
+import { ReactStateDeclaration } from '../../index';
+import { UISref, UISrefActive, UIRouter } from '../../components';
 
 const states: ReactStateDeclaration[] = [
   { name: 'parent', url: '/parent' },

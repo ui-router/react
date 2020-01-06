@@ -1,6 +1,5 @@
-import { curry, HookFn, StateParams, TransitionService, TransitionStateHookFn } from '@uirouter/core';
-import { HookMatchCriteria, HookRegOptions, TransitionHookFn } from '@uirouter/core/lib/transition/interface';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { TransitionStateHookFn, HookMatchCriteria, HookRegOptions, TransitionHookFn } from '@uirouter/core';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useRouter } from './useRouter';
 import { useStableCallback } from './useStableCallback';

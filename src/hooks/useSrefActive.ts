@@ -1,5 +1,5 @@
 import { TransitionOptions } from '@uirouter/core';
-import { LinkProps, useSref } from '../index';
+import { LinkProps, useSref } from './useSref';
 import { useIsActive } from './useIsActive';
 
 interface ActiveLinkProps extends LinkProps {

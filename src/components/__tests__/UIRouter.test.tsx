@@ -1,7 +1,9 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { mount } from 'enzyme';
-import { memoryLocationPlugin, UIRouter, UIRouterContext, UIRouterReact } from '../../index';
+import { UIRouterContext, UIRouter } from '../UIRouter';
+import { UIRouterReact } from '../../core';
+import { memoryLocationPlugin } from '../../index';
 import { muteConsoleErrors } from '../../__tests__/util';
 
 class Child extends React.Component<any, any> {
