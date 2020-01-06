@@ -1,15 +1,8 @@
-import * as React from 'react';
 import { mount } from 'enzyme';
+import * as React from 'react';
+import { UIRouter, UIView, TransitionPropCollisionError } from '../../components';
+import { ReactStateDeclaration } from '../../interface';
 
-import {
-  UIRouterReact,
-  UIRouter,
-  UIView,
-  ReactStateDeclaration,
-  memoryLocationPlugin,
-  servicesPlugin,
-  TransitionPropCollisionError,
-} from '../../index';
 import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
 
 const states: ReactStateDeclaration[] = [

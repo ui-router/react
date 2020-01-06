@@ -22,7 +22,8 @@ import * as PropTypes from 'prop-types';
 
 import { ActiveUIView, ViewContext, Transition, ResolveContext, StateParams, applyPairs } from '@uirouter/core';
 
-import { UIRouterReact, UIRouterContext } from '../index';
+import { UIRouterContext } from './UIRouter';
+import { UIRouterReact } from '../core';
 import { ReactViewConfig } from '../reactViews';
 import { UIRouterInstanceUndefinedError } from '../hooks';
 

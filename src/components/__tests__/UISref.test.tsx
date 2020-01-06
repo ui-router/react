@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { UISref, UIView } from '../../index';
+import { UISref, UIView } from '../../components';
 import { UISrefActiveContext } from '../UISrefActive';
 import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
 
