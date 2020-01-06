@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { isString, StateDeclaration, TransitionOptions } from '@uirouter/core';
+import { isString, RawParams, StateDeclaration, TransitionOptions } from '@uirouter/core';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { StateRegistry, UIRouterReact, UIViewAddress } from '../index';
 import { UISrefActiveContext, UIViewContext } from '../components';
@@ -14,6 +14,7 @@ export interface LinkProps {
 /** @hidden */
 export const IncorrectStateNameTypeError = `The state name passed to useSref must be a string.`;
 
+/** Gets all StateDeclarations that are registered in the StateRegistry. */
 function useListOfAllStates(router: UIRouterReact) {
   const initial = useMemo(() => router.stateRegistry.get(), []);
   const [states, setStates] = useState(initial);
@@ -21,7 +22,7 @@ function useListOfAllStates(router: UIRouterReact) {
   return states;
 }
 
-// The state the sref was defined in. Used to resolve relative srefs.
+/** Gets the StateDeclaration that this sref was defined in.  Used to resolve relative refs. */
 function useSrefContextState(router: UIRouterReact): StateDeclaration {
   const parentUIViewAddress = useContext(UIViewContext);
   return useMemo(() => {
@@ -29,11 +30,13 @@ function useSrefContextState(router: UIRouterReact): StateDeclaration {
   }, [parentUIViewAddress, router]);
 }
 
-// returns the StateDeclaration that this sref targets, or undefined
+/** Gets the StateDeclaration that this sref targets */
 function useTargetState(router: UIRouterReact, stateName: string, context: StateDeclaration): StateDeclaration {
-  // Whenever allStates changes, get the target state again
+  // Whenever any states are added/removed from the registry, get the target state again
   const allStates = useListOfAllStates(router);
-  return useMemo(() => router.stateRegistry.get(stateName, context), [stateName, context, allStates]);
+  return useMemo(() => {
+    return router.stateRegistry.get(stateName, context);
+  }, [router, stateName, context, allStates]);
 }
 
 /**
@@ -45,28 +48,23 @@ function useTargetState(router: UIRouterReact, stateName: string, context: State
  * @param params Any parameter values
  * @param options Transition options
  */
-export function useSref(relativeStateName: string, params: object = {}, options: TransitionOptions = {}): LinkProps {
-  if (!isString(relativeStateName)) {
+export function useSref(stateName: string, params: object = {}, options: TransitionOptions = {}): LinkProps {
+  if (!isString(stateName)) {
     throw new Error(IncorrectStateNameTypeError);
   }
 
   const router = useRouter();
-  const parentUISrefActiveAddStateInfo = useContext(UISrefActiveContext);
-  const { stateService } = router;
-
-  const contextState: StateDeclaration = useSrefContextState(router);
-  const targetState: StateDeclaration = useTargetState(router, relativeStateName, contextState);
-  const stateName = targetState && targetState.name;
-  // Keep a memoized reference to the initial params object until the nested values actually change
+  // memoize the params object until the nested values actually change so they can be used as deps
   const paramsMemo = useMemo(() => params, [useDeepObjectDiff(params)]);
 
-  const optionsMemo = useMemo(() => {
-    return { relative: contextState, inherit: true, ...options };
-  }, [contextState, options]);
-
+  const contextState: StateDeclaration = useSrefContextState(router);
+  const optionsMemo = useMemo(() => ({ relative: contextState, inherit: true, ...options }), [contextState, options]);
+  const targetState = useTargetState(router, stateName, contextState);
+  // Update href when the target StateDeclaration changes (in case the the state definition itself changes)
+  // This is necessary to handle things like future states
   const href = useMemo(() => {
-    return router.stateService.href(stateName, paramsMemo, optionsMemo);
-  }, [router, stateName, paramsMemo, optionsMemo]);
+    return router.stateService.href(stateName, params, options);
+  }, [router, stateName, params, options, targetState]);
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
@@ -78,7 +76,11 @@ export function useSref(relativeStateName: string, params: object = {}, options:
     [router, stateName, paramsMemo, optionsMemo]
   );
 
-  useEffect(() => parentUISrefActiveAddStateInfo(stateName, paramsMemo), [stateName, paramsMemo]);
+  // Participate in any parent UISrefActive
+  const parentUISrefActiveAddStateInfo = useContext(UISrefActiveContext);
+  useEffect(() => {
+    return parentUISrefActiveAddStateInfo(targetState && targetState.name, paramsMemo);
+  }, [targetState, paramsMemo]);
 
   return { onClick, href };
 }
