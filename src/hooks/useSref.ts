@@ -63,8 +63,8 @@ export function useSref(stateName: string, params: object = {}, options: Transit
   // Update href when the target StateDeclaration changes (in case the the state definition itself changes)
   // This is necessary to handle things like future states
   const href = useMemo(() => {
-    return router.stateService.href(stateName, params, options);
-  }, [router, stateName, params, options, targetState]);
+    return router.stateService.href(stateName, paramsMemo, optionsMemo);
+  }, [router, stateName, paramsMemo, optionsMemo, targetState]);
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
