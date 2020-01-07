@@ -3,6 +3,7 @@
  * @module components
  */ /** */
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import {
   ClassType,
   ClassicComponentClass,
@@ -18,14 +19,13 @@ import {
   createElement,
   isValidElement,
 } from 'react';
-import * as PropTypes from 'prop-types';
 
 import { ActiveUIView, ViewContext, Transition, ResolveContext, StateParams, applyPairs } from '@uirouter/core';
 
 import { UIRouterContext } from './UIRouter';
 import { UIRouterReact } from '../core';
 import { ReactViewConfig } from '../reactViews';
-import { UIRouterInstanceUndefinedError } from '../hooks';
+import { UIRouterInstanceUndefinedError } from '../hooks/useRouter';
 
 /** @internalapi */
 let id = 0;
