@@ -1,3 +1,83 @@
+# 1.0.0 (2020-01-07)
+[Compare `@uirouter/react` versions 0.8.10 and 1.0.0](https://github.com/ui-router/react/compare/0.8.10...1.0.0)
+
+This is a long overdue release of UI-Router for React version 1.0.
+This release adds a react hooks API.
+
+### Bug Fixes
+
+* **errors:** Always throw a new Error() so stacktraces are usable ([26f6989](https://github.com/ui-router/react/commit/26f6989))
+* **typescript:** Type onClick as MouseEventHandler<any>. ([7512f14](https://github.com/ui-router/react/commit/7512f14))
+* **UISrefActive:** Avoid reusing the same array reference during setState() call ([b9064cd](https://github.com/ui-router/react/commit/b9064cd))
+
+
+## Features
+
+Add hooks: 
+
+### `useRouter`
+
+```js
+function GoHome() {
+  const { stateService } = useRouter();
+  return <button onClick={() => stateService.go('home')}>Home</a>
+}
+```
+
+### `useSref`
+
+```js
+function LinkHome() {
+  const sref = useSref('home')
+  return <a {...sref}>Home</a>
+}
+```
+`<a href="/home" onClick=...>Home</a>`
+
+### `useSrefActive` and `uiSrefActiveExact`
+```js
+function LinkHome() {
+  const sref = useSrefActive('home', {}, 'active')
+  return <a {...sref}>Home</a>
+}
+```
+`<a href="/home" onClick=... className="active">Home</a>`
+
+### `useTransitionHook`
+```js
+function CanExit() {
+  const isDirty = useIsFormDirty();
+  useTransitionHook("onBefore", { exiting: 'forms' }, () => isDirty ? false : true)
+}
+```
+
+### `useCurrentStateAndParams`
+```js
+function CurrentState() {
+  const { state, params } = useCurrentStateAndParams();
+  return <div>{state.name} {JSON.stringify(params)}</div>
+}
+```
+
+### `useOnStateChanged`
+This is a callback style hook that `useCurrentStateAndParams` and `isActive` is built on top of, used to avoid excessive renders in `isActive`
+```js
+function CurrentState() {
+  const [stateName, setStateName] = useState();
+  useOnStateChanged((state, params) => setStateName(state.name));
+  return <div>{stateName}</div>
+}
+```
+
+### `useIsActive`
+```js
+function CurrentState() {
+  const isHomeActive = useIsActive('home');
+  return <div>{isHomeActive ? 'You are home!' : 'try to find your way back'}</div>
+}
+```
+
+
 ## 0.8.10 (2019-10-10)
 [Compare `@uirouter/react` versions 0.8.9 and 0.8.10](https://github.com/ui-router/react/compare/0.8.9...0.8.10)
 

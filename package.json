@@ -1,6 +1,6 @@
 {
   "name": "@uirouter/react",
-  "version": "0.8.10",
+  "version": "1.0.0",
   "description": "State based routing for React",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -82,10 +82,19 @@
     "webpack-dev-server": "^3.9.0"
   },
   "jest": {
-    "setupFiles": [ "../jest.setup.js" ],
+    "setupFiles": [
+      "../jest.setup.js"
+    ],
     "rootDir": "src",
-    "transform": { ".(ts|tsx)": "ts-jest" },
-    "moduleFileExtensions": [ "js", "json", "ts", "tsx" ],
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts",
+      "tsx"
+    ],
     "globals": {
       "ts-jest": {
         "tsConfig": "./tsconfig.jest.json"
