@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { isString, StateDeclaration, TransitionOptions } from '@uirouter/core';
-import { UISrefActiveContext, UIViewContext } from '../components';
+import { UISrefActiveContext } from '../components';
 import { UIRouterReact } from '../core';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useRouter } from './useRouter';
+import { useViewContextState } from './useViewContextState';
 
 export interface LinkProps {
   onClick: React.MouseEventHandler<any>;
@@ -20,14 +21,6 @@ function useListOfAllStates(router: UIRouterReact) {
   const [states, setStates] = useState(initial);
   useEffect(() => router.stateRegistry.onStatesChanged(() => setStates(router.stateRegistry.get())), []);
   return states;
-}
-
-/** Gets the StateDeclaration that this sref was defined in.  Used to resolve relative refs. */
-function useSrefContextState(router: UIRouterReact): StateDeclaration {
-  const parentUIViewAddress = useContext(UIViewContext);
-  return useMemo(() => {
-    return parentUIViewAddress ? parentUIViewAddress.context : router.stateRegistry.root();
-  }, [parentUIViewAddress, router]);
 }
 
 /** Gets the StateDeclaration that this sref targets */
@@ -57,7 +50,7 @@ export function useSref(stateName: string, params: object = {}, options: Transit
   // memoize the params object until the nested values actually change so they can be used as deps
   const paramsMemo = useMemo(() => params, [useDeepObjectDiff(params)]);
 
-  const contextState: StateDeclaration = useSrefContextState(router);
+  const contextState: StateDeclaration = useViewContextState(router);
   const optionsMemo = useMemo(() => ({ relative: contextState, inherit: true, ...options }), [contextState, options]);
   const targetState = useTargetState(router, stateName, contextState);
   // Update href when the target StateDeclaration changes (in case the the state definition itself changes)
