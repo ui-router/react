@@ -88,4 +88,18 @@ describe('useIsActive', () => {
     wrapper.setProps({ params: { param: 'bar' } }).update();
     expect(wrapper.find('div').props().className).toBe('yesactive');
   });
+
+  it('updates when the active state changes', async () => {
+    await routerGo('state2');
+    const wrapper = mountInRouter(<TestComponent state="state1" params={null} exact={false} />);
+    expect(wrapper.find('div').props().className).toBe('notactive');
+
+    await routerGo('state1');
+    wrapper.update();
+    expect(wrapper.find('div').props().className).toBe('yesactive');
+
+    await routerGo('state2');
+    wrapper.update();
+    expect(wrapper.find('div').props().className).toBe('notactive');
+  });
 });
