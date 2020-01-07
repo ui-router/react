@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { RawParams } from '@uirouter/core';
 import { makeTestRouter } from '../../__tests__/util';
+import { UIView } from '../../components';
 import { useIsActive } from '../useIsActive';
 
 const state1 = { name: 'state1', url: '/state1' };
@@ -50,6 +51,24 @@ describe('useIsActive', () => {
     const wrapper = mountInRouter(<TestComponent state="state1" params={null} exact={true} />);
     await routerGo('state1.child');
     expect(wrapper.find('div').props().className).toBe('notactive');
+  });
+
+  it('works with relative states', async () => {
+    const parent = { name: 'parent', component: () => <TestComponent state=".child" params={null} exact={false} /> };
+    const child = { name: 'parent.child', component: () => <div /> };
+    router.stateRegistry.register(parent);
+    router.stateRegistry.register(child);
+    await routerGo('parent');
+    const wrapper = mountInRouter(<UIView />);
+    expect(wrapper.find('div').props().className).toBe('notactive');
+
+    await routerGo('parent.child');
+    expect(
+      wrapper
+        .update()
+        .find('div')
+        .props().className
+    ).toBe('yesactive');
   });
 
   it('updates when the desired state changes', async () => {
