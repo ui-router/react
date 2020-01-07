@@ -1,3 +1,5 @@
+/** @packageDocumentation @reactapi @module react_hooks */
+
 import * as React from 'react';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { isString, StateDeclaration, TransitionOptions } from '@uirouter/core';
@@ -15,7 +17,7 @@ export interface LinkProps {
 /** @hidden */
 export const IncorrectStateNameTypeError = `The state name passed to useSref must be a string.`;
 
-/** Gets all StateDeclarations that are registered in the StateRegistry. */
+/** @hidden Gets all StateDeclarations that are registered in the StateRegistry. */
 function useListOfAllStates(router: UIRouterReact) {
   const initial = useMemo(() => router.stateRegistry.get(), []);
   const [states, setStates] = useState(initial);
@@ -23,7 +25,7 @@ function useListOfAllStates(router: UIRouterReact) {
   return states;
 }
 
-/** Gets the StateDeclaration that this sref targets */
+/** @hidden Gets the StateDeclaration that this sref targets */
 function useTargetState(router: UIRouterReact, stateName: string, context: StateDeclaration): StateDeclaration {
   // Whenever any states are added/removed from the registry, get the target state again
   const allStates = useListOfAllStates(router);
@@ -33,13 +35,35 @@ function useTargetState(router: UIRouterReact, stateName: string, context: State
 }
 
 /**
- * A hook that helps create link to a state.
+ * A hook to create a link to a state.
  *
- * This hook returns data for an sref (short for state reference)
+ * This hook returns link (anchor tag) props for a given state reference.
+ * The resulting props can be spread onto an anchor tag.
+ *
+ * The props returned from this hook are:
+ *
+ * - `href`: the browser URL of the referenced state
+ * - `onClick`: a mouse event handler that will active the referenced state
+ *
+ * Example:
+ * ```jsx
+ * function HomeLink() {
+ *   const sref = useSref('home');
+ *   return <a {...sref}>Home</a>
+ * }
+ * ```
+ *
+ * Example:
+ * ```jsx
+ * function UserLink({ userId, username }) {
+ *   const sref = useSref('users.user', { userId: userId });
+ *   return <a {...sref}>{username}</a>
+ * }
+ * ```
  *
  * @param stateName The name of the state to link to
  * @param params Any parameter values
- * @param options Transition options
+ * @param options Transition options used when the onClick handler fires.
  */
 export function useSref(stateName: string, params: object = {}, options: TransitionOptions = {}): LinkProps {
   if (!isString(stateName)) {

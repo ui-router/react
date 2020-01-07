@@ -1,3 +1,5 @@
+/** @packageDocumentation @internalapi @module react_hooks */
+
 import { useCallback, useRef } from 'react';
 
 /**
@@ -7,7 +9,7 @@ import { useCallback, useRef } from 'react';
  * This can be useful if the callback is being stored long term, such as in the Transition Hook registry.
  *
  * Example:
- * ```
+ * ```jsx
  * const latestValueFromProps = props.value
  * const transitionHook = useStableCallback(() => console.log(latestValueFromProps));
  * useEffect(() => {

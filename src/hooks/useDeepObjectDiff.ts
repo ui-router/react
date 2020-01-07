@@ -1,3 +1,4 @@
+/** @packageDocumentation @internalapi @module react_hooks */
 import { equals } from '@uirouter/core';
 import { useRef } from 'react';
 
