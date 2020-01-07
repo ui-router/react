@@ -49,11 +49,11 @@ describe('useStableCallback', () => {
   it('allows a stable callback reference to access the latest render closure values', async () => {
     const spy = jest.fn();
     const wrapper = mount(<TestComponent spy={spy} />);
-    wrapper.setProps({ prop: 'newvalue' });
+    wrapper.setProps({ prop: 'firstvalue' });
     wrapper.setProps({ prop: 'nextvalue' });
     expect(spy).toHaveBeenCalledTimes(3);
 
-    const stableArg3 = spy.mock.calls[2][0];
+    const stableArg3 = spy.mock.calls[2][1];
     expect(stableArg3()).toBe('nextvalue');
   });
 });
