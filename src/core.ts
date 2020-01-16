@@ -1,7 +1,4 @@
-/**
- * @reactapi
- * @module react
- */ /** */
+/** @packageDocumentation @reactapi @module react */
 import { UIRouter, PathNode } from '@uirouter/core';
 import { ReactViewDeclaration } from './interface';
 import { ReactViewConfig, reactViewsBuilder } from './reactViews';

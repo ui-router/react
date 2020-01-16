@@ -1,9 +1,4 @@
-/**
- * @reactapi
- * @module components
- */
-/** */
-
+/** @packageDocumentation @reactapi @module components */
 import * as React from 'react';
 import { useState, useCallback, useContext, useMemo, cloneElement } from 'react';
 import * as _classNames from 'classnames';

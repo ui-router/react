@@ -7,10 +7,8 @@
  * - [[UISref]]: A state ref to a target state; navigates when clicked
  * - [[UISrefActive]]: Adds a css class when a UISref's target state (or a child state) is active
  *
- * @preferred
- * @reactapi
- * @module components
- */ /** */
+ * @packageDocumentation @preferred @reactapi @module components
+ */
 
 export * from './UIRouter';
 export * from './UIView';

@@ -1,9 +1,5 @@
-/**
- * @reactapi
- * @module react
- */ /** */
+/** @packageDocumentation  @reactapi @module react */
 import { services, forEach, map, pick, PathNode, ViewConfig, ViewService, StateObject } from '@uirouter/core';
-
 import { ReactViewDeclaration } from './interface';
 
 /**

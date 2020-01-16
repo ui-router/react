@@ -1,7 +1,4 @@
-/**
- * @reactapi
- * @module components
- */ /** */
+/** @packageDocumentation @reactapi @module components */
 import { isFunction, TransitionOptions } from '@uirouter/core';
 
 import * as _classNames from 'classnames';

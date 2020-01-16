@@ -1,7 +1,4 @@
-/**
- * @reactapi
- * @module components
- */ /** */
+/** @packageDocumentation @reactapi @module components */
 import * as React from 'react';
 import { useRef } from 'react';
 
