@@ -56,7 +56,7 @@
     "@types/lodash": "^4.14.149",
     "@types/prop-types": "15.7.3",
     "@types/react": "16.9.17",
-    "@types/react-dom": "16.9.4",
+    "@types/react-dom": "16.9.5",
     "@uirouter/publish-scripts": "^2.3.44",
     "babel-jest": "^24.9.0",
     "babel-polyfill": "^6.26.0",
