@@ -6,8 +6,8 @@ import { isString, StateDeclaration, TransitionOptions } from '@uirouter/core';
 import { UISrefActiveContext } from '../components';
 import { UIRouterReact } from '../core';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
+import { useParentView } from './useParentView';
 import { useRouter } from './useRouter';
-import { useViewContextState } from './useViewContextState';
 
 export interface LinkProps {
   onClick: React.MouseEventHandler<any>;
@@ -26,12 +26,12 @@ function useListOfAllStates(router: UIRouterReact) {
 }
 
 /** @hidden Gets the StateDeclaration that this sref targets */
-function useTargetState(router: UIRouterReact, stateName: string, context: StateDeclaration): StateDeclaration {
+function useTargetState(router: UIRouterReact, stateName: string, relative: string): StateDeclaration {
   // Whenever any states are added/removed from the registry, get the target state again
   const allStates = useListOfAllStates(router);
   return useMemo(() => {
-    return router.stateRegistry.get(stateName, context);
-  }, [router, stateName, context, allStates]);
+    return router.stateRegistry.get(stateName, relative);
+  }, [router, stateName, relative, allStates]);
 }
 
 /**
@@ -74,9 +74,9 @@ export function useSref(stateName: string, params: object = {}, options: Transit
   // memoize the params object until the nested values actually change so they can be used as deps
   const paramsMemo = useMemo(() => params, [useDeepObjectDiff(params)]);
 
-  const contextState: StateDeclaration = useViewContextState(router);
-  const optionsMemo = useMemo(() => ({ relative: contextState, inherit: true, ...options }), [contextState, options]);
-  const targetState = useTargetState(router, stateName, contextState);
+  const relative: string = useParentView().context.name;
+  const optionsMemo = useMemo(() => ({ relative, inherit: true, ...options }), [relative, options]);
+  const targetState = useTargetState(router, stateName, relative);
   // Update href when the target StateDeclaration changes (in case the the state definition itself changes)
   // This is necessary to handle things like future states
   const href = useMemo(() => {
