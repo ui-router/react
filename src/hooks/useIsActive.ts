@@ -1,21 +1,14 @@
 /** @packageDocumentation @reactapi @module react_hooks */
 
-import { StateDeclaration } from '@uirouter/core';
 import { useEffect, useMemo, useState } from 'react';
 import { UIRouterReact } from '../core';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useOnStateChanged } from './useOnStateChanged';
+import { useParentView } from './useParentView';
 import { useRouter } from './useRouter';
-import { useViewContextState } from './useViewContextState';
 
 /** @hidden */
-function checkIfActive(
-  router: UIRouterReact,
-  stateName: string,
-  params: object,
-  relative: StateDeclaration,
-  exact: boolean
-) {
+function checkIfActive(router: UIRouterReact, stateName: string, params: object, relative: string, exact: boolean) {
   return exact
     ? router.stateService.is(stateName, params, { relative })
     : router.stateService.includes(stateName, params, { relative });
@@ -49,7 +42,7 @@ function checkIfActive(
  */
 export function useIsActive(stateName: string, params = null, exact = false) {
   const router = useRouter();
-  const relative = useViewContextState(router);
+  const relative = useParentView().context.name;
   // Don't re-compute initialIsActive on every render
   const initialIsActive = useMemo(() => checkIfActive(router, stateName, params, relative, exact), []);
   const [isActive, setIsActive] = useState(initialIsActive);
