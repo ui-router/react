@@ -1,9 +1,11 @@
-import { mount } from 'enzyme';
 import * as React from 'react';
-import { UIRouter, UIView, TransitionPropCollisionError } from '../../components';
-import { ReactStateDeclaration } from '../../interface';
+import { act } from 'react-dom/test-utils';
+import { mount } from 'enzyme';
+import { Transition } from '@uirouter/core';
 
 import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
+import { TransitionPropCollisionError, UIRouter, UIView } from '../../components';
+import { ReactStateDeclaration } from '../../interface';
 
 const states: ReactStateDeclaration[] = [
   {
@@ -87,36 +89,65 @@ describe('<UIView>', () => {
       expect(wrapper.update().html()).toEqual(`<div><span>parent</span><div></div></div>`);
     });
 
-    it('injects the right props', async () => {
-      const Comp = () => <span>component</span>;
-      router.stateRegistry.register({
-        name: '__state',
-        component: Comp,
-        resolve: [{ resolveFn: () => true, token: 'myresolve' }],
-      } as ReactStateDeclaration);
+    describe('injects the right props:', () => {
+      let lastProps = undefined;
+      const Comp = props => {
+        lastProps = props;
+        return <span>component</span>;
+      };
 
-      const wrapper = mountInRouter(<UIView />);
-      await routerGo('__state');
-      wrapper.update();
-      // @ts-ignore
-      expect(wrapper.find(Comp).props().myresolve).not.toBeUndefined();
-      // @ts-ignore
-      expect(wrapper.find(Comp).props().transition).not.toBeUndefined();
-    });
+      beforeEach(() => {
+        lastProps = undefined;
+        router.stateRegistry.register({
+          name: '__state',
+          component: Comp,
+          resolve: [
+            { resolveFn: () => 'resolveval', token: 'myresolve' },
+            { resolveFn: () => true, token: 'otherresolve' },
+            { resolveFn: () => true, token: {} },
+          ],
+        } as ReactStateDeclaration);
+      });
 
-    it('injects custom resolves', async () => {
-      const Comp = () => <span>component</span>;
-      router.stateRegistry.register({
-        name: '__state',
-        component: Comp,
-        resolve: [{ token: 'foo', resolveFn: () => 'bar' }],
-      } as ReactStateDeclaration);
+      it('injects the transition', async () => {
+        await routerGo('__state');
+        mountInRouter(<UIView />);
+        expect(lastProps.transition).toEqual(expect.any(Transition));
+      });
 
-      const wrapper = mountInRouter(<UIView />);
-      await routerGo('__state');
-      wrapper.update();
-      // @ts-ignore
-      expect(wrapper.find(Comp).props().foo).toBe('bar');
+      it('injects custom resolves if the token is a string', async () => {
+        await routerGo('__state');
+        mountInRouter(<UIView />);
+        expect(lastProps.myresolve).toBe('resolveval');
+        expect(lastProps.otherresolve).toBe(true);
+      });
+
+      it('injects className and style props', async () => {
+        await routerGo('__state');
+        mountInRouter(<UIView className="foo" style={{ color: 'red' }} />);
+        expect(lastProps.className).toBe('foo');
+        expect(lastProps.style).toEqual({ color: 'red' });
+      });
+
+      it('provides a stable key prop', async () => {
+        await routerGo('__state');
+        const wrapper = mountInRouter(<UIView />);
+        const initialKey = wrapper.find(Comp).key();
+        wrapper.setProps({ otherProp: 123 });
+        wrapper.update();
+        expect(wrapper.find(Comp).key()).toBe(initialKey);
+      });
+
+      it('updates the key prop on reload', async () => {
+        await routerGo('__state');
+        const wrapper = mountInRouter(<UIView />);
+        const initialKey = wrapper.find(Comp).key();
+        wrapper.setProps({ otherProp: 123 });
+        expect(wrapper.find(Comp).key()).toBe(initialKey);
+        await act(() => router.stateService.reload());
+        wrapper.update();
+        expect(wrapper.find(Comp).key()).not.toBe(initialKey);
+      });
     });
 
     it('throws if a resolve uses the token `transition`', async () => {
@@ -171,29 +202,28 @@ describe('<UIView>', () => {
         };
       }
 
-      it('calls uiCanExit function of its State Component when unmounting', async () => {
+      it('calls the uiCanExit function of a Class Component when unmounting', async () => {
         const uiCanExitSpy = jest.fn();
-
         router.stateRegistry.register({ name: '__state', component: makeSpyComponent(uiCanExitSpy) } as any);
-        const wrapper = mountInRouter(<UIView />);
 
         await routerGo('__state');
-        expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
+        const wrapper = mountInRouter(<UIView />);
+        expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
 
         await routerGo('parent');
         expect(wrapper.update().html()).toContain('parent');
         expect(uiCanExitSpy).toBeCalled();
       });
 
-      it('calls uiCanExit function of a React.forwardRef() State Component when unmounting', async () => {
+      it('calls uiCanExit function of a React.forwardRef() Class Component when unmounting', async () => {
         const uiCanExitSpy = jest.fn();
         const Comp = makeSpyComponent(uiCanExitSpy);
         const ForwardRef = React.forwardRef((props, ref: any) => <Comp {...props} ref={ref} />);
         router.stateRegistry.register({ name: '__state', component: ForwardRef } as ReactStateDeclaration);
-        const wrapper = mountInRouter(<UIView />);
-
         await routerGo('__state');
-        expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
+
+        const wrapper = mountInRouter(<UIView />);
+        expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
 
         await routerGo('parent');
         expect(wrapper.update().html()).toContain('parent');
@@ -203,10 +233,9 @@ describe('<UIView>', () => {
       it('does not transition if uiCanExit function of its State Component returns false', async () => {
         let uiCanExitSpy = jest.fn().mockImplementation(() => false);
         router.stateRegistry.register({ name: '__state', component: makeSpyComponent(uiCanExitSpy) } as any);
-        const wrapper = mountInRouter(<UIView />);
-
         await routerGo('__state');
-        expect(wrapper.update().html()).toEqual('<span>UiCanExitHookComponent</span>');
+        const wrapper = mountInRouter(<UIView />);
+        expect(wrapper.html()).toEqual('<span>UiCanExitHookComponent</span>');
 
         try {
           await routerGo('parent');
@@ -218,15 +247,9 @@ describe('<UIView>', () => {
 
     it('deregisters the UIView when unmounted', () => {
       const Component = props => <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>;
+      const deregisterSpy = jest.fn();
+      jest.spyOn(router.viewService, 'registerUIView').mockImplementation(() => deregisterSpy);
       const wrapper = mount(<Component show={true} />);
-      const UIViewInstance = wrapper
-        .find(UIView)
-        .at(0)
-        .find('View')
-        .at(0)
-        .instance();
-      // @ts-ignore
-      const deregisterSpy = jest.spyOn(UIViewInstance, 'deregister');
       wrapper.setProps({ show: false });
       expect(deregisterSpy).toHaveBeenCalled();
     });
@@ -261,7 +284,7 @@ describe('<UIView>', () => {
       const wrapper = mountInRouter(<UIView />);
       expect(componentDidMountSpy).toHaveBeenCalledTimes(1);
 
-      await router.stateService.reload('testunmount');
+      await act(() => router.stateService.reload('testunmount'));
       expect(componentWillUnmountSpy).toHaveBeenCalledTimes(1);
       expect(componentDidMountSpy).toHaveBeenCalledTimes(2);
       wrapper.unmount();

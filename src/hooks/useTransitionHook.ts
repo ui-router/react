@@ -55,7 +55,7 @@ export function useTransitionHook(
   options?: HookRegOptions
 );
 export function useTransitionHook(
-  hookRegistrationFn: HookName | StateHookName,
+  hookRegistrationFnName: HookName | StateHookName,
   criteria: HookMatchCriteria,
   callback: TransitionHookFn | TransitionStateHookFn,
   options?: HookRegOptions
@@ -63,7 +63,11 @@ export function useTransitionHook(
   const { transitionService } = useRouter();
   const stableCallback = useStableCallback(callback);
   useEffect(() => {
-    const deregister = transitionService[hookRegistrationFn](criteria, stableCallback as any, options);
-    return () => deregister();
-  }, [transitionService, hookRegistrationFn, useDeepObjectDiff(criteria), useDeepObjectDiff(options)]);
+    if (!!criteria) {
+      const deregister = transitionService[hookRegistrationFnName](criteria, stableCallback as any, options);
+      return () => deregister();
+    } else {
+      return () => {};
+    }
+  }, [transitionService, hookRegistrationFnName, useDeepObjectDiff(criteria), useDeepObjectDiff(options)]);
 }
