@@ -151,6 +151,7 @@ function useRoutedComponentProps(
   return useMemo(() => ({ ...baseChildProps, ...maybeRefProp }), [baseChildProps, maybeRefProp]);
 }
 
+/** @hidden */
 function useViewConfig() {
   const [viewConfig, setViewConfig] = useState<ReactViewConfig>();
   const viewConfigRef = useRef(viewConfig);
@@ -163,6 +164,7 @@ function useViewConfig() {
   return { viewConfig, configUpdated };
 }
 
+/** @hidden */
 function useReactHybridApi(ref: React.Ref<unknown>, uiViewData: ActiveUIView, uiViewAddress: UIViewAddress) {
   const reactHybridApi = useRef({ uiViewData, uiViewAddress });
   reactHybridApi.current.uiViewData = uiViewData;
@@ -170,26 +172,41 @@ function useReactHybridApi(ref: React.Ref<unknown>, uiViewData: ActiveUIView, ui
   useImperativeHandle(ref, () => reactHybridApi.current);
 }
 
-// If a class component is being rendered, wire up its uiCanExit method
-// Return a { ref: Ref<ClassComponentInstance> } if passed a component class
-// Return an empty object {} if passed anything else
-// The returned object should be spread as props onto the child component
+/**
+ * If a class component is being rendered, wire up its uiCanExit method
+ * Return a { ref: Ref<ClassComponentInstance> } if passed a component class
+ * Return an empty object {} if passed anything else
+ * The returned object should be spread as props onto the child component
+ * @hidden
+ */
 function useUiCanExitClassComponentHook(router: UIRouter, stateName: string, maybeComponentClass: any) {
-  const ref = useRef<any>();
-  const isComponentClass = maybeComponentClass?.prototype?.render || maybeComponentClass?.render;
-  const componentInstance = isComponentClass && ref.current;
-  const uiCanExit = componentInstance?.uiCanExit;
+  // Use refs and run the callback outside of any render pass
+  const componentInstanceRef = useRef<any>();
+  const deregisterRef = useRef<Function>(() => undefined);
 
-  useEffect(() => {
-    if (uiCanExit) {
-      const deregister = router.transitionService.onBefore({ exiting: stateName }, uiCanExit.bind(ref.current));
-      return () => deregister();
-    } else {
-      return () => undefined;
+  function callbackRef(componentInstance) {
+    // Use refs
+    const previous = componentInstanceRef.current;
+    const deregisterPreviousTransitionHook = deregisterRef.current;
+
+    if (previous !== componentInstance) {
+      componentInstanceRef.current = componentInstance;
+      deregisterPreviousTransitionHook();
+
+      const uiCanExit = componentInstance?.uiCanExit;
+      if (uiCanExit) {
+        const boundCallback = uiCanExit.bind(componentInstance);
+        deregisterRef.current = router.transitionService.onBefore({ exiting: stateName }, boundCallback);
+      } else {
+        deregisterRef.current = () => undefined;
+      }
     }
-  }, [uiCanExit]);
+  }
 
-  return useMemo(() => (isComponentClass ? { ref } : undefined), [isComponentClass, ref]);
+  return useMemo(() => {
+    const isComponentClass = maybeComponentClass?.prototype?.render || maybeComponentClass?.render;
+    return isComponentClass ? { ref: callbackRef } : undefined;
+  }, [maybeComponentClass]);
 }
 
 const View = forwardRef(function View(props: UIViewProps, forwardedRef) {
