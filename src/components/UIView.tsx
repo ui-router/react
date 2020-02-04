@@ -95,6 +95,8 @@ export const TransitionPropCollisionError =
 
 /** @internalapi */
 export const UIViewContext = createContext<UIViewAddress>(undefined);
+/** @deprecated use [[useParentView]] or React.useContext(UIViewContext) */
+export const UIViewConsumer = UIViewContext.Consumer;
 
 /** @hidden */
 function useResolvesWithStringTokens(resolveContext: ResolveContext, injector: UIInjector) {

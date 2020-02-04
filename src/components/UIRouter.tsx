@@ -20,6 +20,8 @@ import { ReactStateDeclaration } from '../interface';
  * ```
  */
 export const UIRouterContext = React.createContext<UIRouterReact>(undefined);
+/** @deprecated use [[useRouter]] or React.useContext(UIRouterContext) */
+export const UIRouterConsumer = UIRouterContext.Consumer;
 
 export interface UIRouterProps {
   plugins?: Array<PluginFactory<UIRouterPlugin>>;
