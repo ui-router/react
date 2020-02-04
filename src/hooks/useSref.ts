@@ -2,9 +2,8 @@
 
 import * as React from 'react';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { isString, StateDeclaration, TransitionOptions } from '@uirouter/core';
+import { isString, StateDeclaration, TransitionOptions, UIRouter } from '@uirouter/core';
 import { UISrefActiveContext } from '../components';
-import { UIRouterReact } from '../core';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useParentView } from './useParentView';
 import { useRouter } from './useRouter';
@@ -18,7 +17,7 @@ export interface LinkProps {
 export const IncorrectStateNameTypeError = `The state name passed to useSref must be a string.`;
 
 /** @hidden Gets all StateDeclarations that are registered in the StateRegistry. */
-function useListOfAllStates(router: UIRouterReact) {
+function useListOfAllStates(router: UIRouter) {
   const initial = useMemo(() => router.stateRegistry.get(), []);
   const [states, setStates] = useState(initial);
   useEffect(() => router.stateRegistry.onStatesChanged(() => setStates(router.stateRegistry.get())), []);
@@ -26,7 +25,7 @@ function useListOfAllStates(router: UIRouterReact) {
 }
 
 /** @hidden Gets the StateDeclaration that this sref targets */
-function useTargetState(router: UIRouterReact, stateName: string, relative: string): StateDeclaration {
+function useTargetState(router: UIRouter, stateName: string, relative: string): StateDeclaration {
   // Whenever any states are added/removed from the registry, get the target state again
   const allStates = useListOfAllStates(router);
   return useMemo(() => {

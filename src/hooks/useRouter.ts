@@ -1,7 +1,7 @@
 /** @packageDocumentation @reactapi @module react_hooks */
 
 import { useContext } from 'react';
-import { UIRouterReact } from '../core';
+import { UIRouter } from '@uirouter/core';
 import { UIRouterContext } from '../components/UIRouter';
 
 /** @hidden */
@@ -25,7 +25,7 @@ export const UIRouterInstanceUndefinedError = `UIRouter instance is undefined. D
  * }
  * ```
  */
-export function useRouter(): UIRouterReact {
+export function useRouter(): UIRouter {
   const router = useContext(UIRouterContext);
   if (!router) {
     throw new Error(UIRouterInstanceUndefinedError);
