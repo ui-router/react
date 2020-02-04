@@ -627,10 +627,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@uirouter/core@6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-6.0.1.tgz#93b02a5d178a7ab7313f34b7b3f019a000d23396"
-  integrity sha512-mHCutiHtDDRKYmrJ92XPKDoSb2bgqaDyUpHdF4hUE+riwgkCvGdBjL8u+VDTcV3slBAk6B0LBIOIajjWkkObbQ==
+"@uirouter/core@6.0.4":
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-6.0.4.tgz#fcdc75ab10f1035176acf87a27d9d27a0101ecf9"
+  integrity sha512-TQ9XOzZY+jmWKkU4993MAEBIy7Bs3kijDzj+A6RHR8gq/3UoQm3Q/l1igfao5GZyBjid7eRVeipPK14ovCYQ3g==
 
 "@uirouter/publish-scripts@^2.3.44":
   version "2.3.44"
