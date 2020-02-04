@@ -12,6 +12,10 @@ import {
   useEffect,
   useMemo,
   useState,
+  Component,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
 } from 'react';
 import {
   ActiveUIView,
@@ -23,16 +27,14 @@ import {
   ViewConfig,
   ViewContext,
   applyPairs,
+  UIRouter,
 } from '@uirouter/core';
 import { useParentView } from '../hooks/useParentView';
 import { useRouter } from '../hooks/useRouter';
-import { useTransitionHook } from '../hooks/useTransitionHook';
 import { ReactViewConfig } from '../reactViews';
 
 /** @internalapi */
-let id = 0;
-/** @hidden */
-let keyCounter = 0;
+let viewIdCounter = 0;
 
 /** @internalapi */
 export interface UIViewAddress {
@@ -114,17 +116,22 @@ function useResolvesWithStringTokens(resolveContext: ResolveContext, injector: U
 }
 
 /* @hidden These are the props are passed to the routed component. */
-function useChildProps(
+function useRoutedComponentProps(
+  router: UIRouter,
+  stateName: string,
+  viewConfig: ViewConfig,
   component: React.FunctionComponent<any> | React.ComponentClass<any> | React.ClassicComponentClass<any>,
   resolves: TypedMap<any> | {},
   className: string,
   style: Object,
-  transition: any,
-  key: string,
-  setComponentInstance: (instance: any) => void
-): UIViewInjectedProps {
-  return useMemo(() => {
-    const componentProps: UIViewInjectedProps & { key: string } = {
+  transition: any
+): UIViewInjectedProps & { key: string } {
+  const keyCounterRef = useRef(0);
+  // Always re-mount if the viewConfig changes
+  const key = useMemo(() => (++keyCounterRef.current).toString(), [viewConfig]);
+
+  const baseChildProps = useMemo(
+    () => ({
       // spread each string resolve as a separate prop
       ...resolves,
       // if a className prop was passed to the UIView, forward it
@@ -135,62 +142,98 @@ function useChildProps(
       transition,
       // this key updates whenever the state is reloaded, causing the component to remount
       key,
-    };
+    }),
+    [component, resolves, className, style, transition, key]
+  );
 
-    const maybeComponent = component as any;
-    if (maybeComponent?.prototype?.render || !!maybeComponent?.render) {
-      // for class components, add a ref to grab the component instance
-      return { ...componentProps, ref: setComponentInstance };
-    } else {
-      setComponentInstance(undefined);
-      return componentProps;
-    }
-  }, [component, resolves, className, style, transition, key]);
+  const maybeRefProp = useUiCanExitClassComponentHook(router, stateName, component);
+
+  return useMemo(() => ({ ...baseChildProps, ...maybeRefProp }), [baseChildProps, maybeRefProp]);
 }
 
-export function UIView(props: UIViewProps) {
+function useViewConfig() {
+  const [viewConfig, setViewConfig] = useState<ReactViewConfig>();
+  const viewConfigRef = useRef(viewConfig);
+  viewConfigRef.current = viewConfig;
+  const configUpdated = (newConfig: ViewConfig) => {
+    if (newConfig !== viewConfigRef.current) {
+      setViewConfig(newConfig as ReactViewConfig);
+    }
+  };
+  return { viewConfig, configUpdated };
+}
+
+function useReactHybridApi(ref: React.Ref<unknown>, uiViewData: ActiveUIView, uiViewAddress: UIViewAddress) {
+  const reactHybridApi = useRef({ uiViewData, uiViewAddress });
+  reactHybridApi.current.uiViewData = uiViewData;
+  reactHybridApi.current.uiViewAddress = uiViewAddress;
+  useImperativeHandle(ref, () => reactHybridApi.current);
+}
+
+// If a class component is being rendered, wire up its uiCanExit method
+// Return a { ref: Ref<ClassComponentInstance> } if passed a component class
+// Return an empty object {} if passed anything else
+// The returned object should be spread as props onto the child component
+function useUiCanExitClassComponentHook(router: UIRouter, stateName: string, maybeComponentClass: any) {
+  const ref = useRef<any>();
+  const isComponentClass = maybeComponentClass?.prototype?.render || maybeComponentClass?.render;
+  const componentInstance = isComponentClass && ref.current;
+  const uiCanExit = componentInstance?.uiCanExit;
+
+  useEffect(() => {
+    if (uiCanExit) {
+      const deregister = router.transitionService.onBefore({ exiting: stateName }, uiCanExit.bind(ref.current));
+      return () => deregister();
+    } else {
+      return () => undefined;
+    }
+  }, [uiCanExit]);
+
+  return useMemo(() => (isComponentClass ? { ref } : undefined), [isComponentClass, ref]);
+}
+
+const View = forwardRef(function View(props: UIViewProps, forwardedRef) {
   const { children, render, className, style } = props;
 
   const router = useRouter();
   const parent = useParentView();
+  const creationContext = parent.context;
 
-  // If a class component is being rendered, this is the component instance
-  const [componentInstance, setComponentInstance] = useState();
-  const [viewConfig, setViewConfig] = useState<ReactViewConfig>();
+  const { viewConfig, configUpdated } = useViewConfig();
   const component = useMemo(() => viewConfig?.viewDecl?.component, [viewConfig]);
 
   const name = props.name || '$default';
+  const fqn = parent.fqn ? parent.fqn + '.' + name : name;
+  const id = useMemo(() => ++viewIdCounter, []);
 
   // This object contains all the metadata for this UIView
   const uiViewData: ActiveUIView = useMemo(() => {
-    return {
-      $type: 'react',
-      id: ++id,
-      name,
-      fqn: parent.fqn ? parent.fqn + '.' + name : name,
-      creationContext: parent.context,
-      configUpdated: config => setViewConfig(config as ReactViewConfig),
-      config: viewConfig as ViewConfig,
-    };
-  }, [name, parent, viewConfig]);
-
-  const viewContext: ViewContext = uiViewData?.config?.viewDecl?.$context;
-  const uiViewAddress: UIViewAddress = { fqn: uiViewData.fqn, context: viewContext };
-  const stateName: string = uiViewAddress?.context?.name;
+    return { $type: 'react', id, name, fqn, creationContext, configUpdated, config: viewConfig as ViewConfig };
+  }, [id, name, fqn, parent, creationContext, viewConfig]);
+  const viewContext: ViewContext = viewConfig?.viewDecl?.$context;
+  const stateName: string = viewContext?.name;
+  const uiViewAddress: UIViewAddress = { fqn, context: viewContext };
   const resolveContext = useMemo(() => (viewConfig ? new ResolveContext(viewConfig.path) : undefined), [viewConfig]);
   const injector = useMemo(() => resolveContext?.injector(), [resolveContext]);
   const transition = useMemo(() => injector?.get(Transition), [injector]);
   const resolves = useResolvesWithStringTokens(resolveContext, injector);
-  const key = useMemo(() => (++keyCounter).toString(), [viewConfig]);
-  const childProps = useChildProps(component, resolves, className, style, transition, key, setComponentInstance);
+
+  const childProps = useRoutedComponentProps(
+    router,
+    stateName,
+    viewConfig,
+    component,
+    resolves,
+    className,
+    style,
+    transition
+  );
+
+  // temporarily expose a ref with an API on it for @uirouter/react-hybrid to use
+  useReactHybridApi(forwardedRef, uiViewData, uiViewAddress);
 
   // Register/deregister any time the uiViewData changes
   useEffect(() => router.viewService.registerUIView(uiViewData), [uiViewData]);
-
-  // Handle component class with a 'uiCanExit()' method
-  const canExitCallback = componentInstance?.uiCanExit;
-  const hookMatchCriteria = canExitCallback ? { exiting: stateName } : undefined;
-  useTransitionHook('onBefore', hookMatchCriteria, canExitCallback);
 
   const childElement =
     !component && isValidElement(children)
@@ -201,13 +244,22 @@ export function UIView(props: UIViewProps) {
   const ChildOrRenderFunction =
     typeof render !== 'undefined' && component ? render(component, childProps) : childElement;
   return <UIViewContext.Provider value={uiViewAddress}>{ChildOrRenderFunction}</UIViewContext.Provider>;
-}
+});
 
-UIView.displayName = 'UIView';
-UIView.__internalViewComponent = UIView;
-UIView.propTypes = {
+View.displayName = 'UIView';
+View.propTypes = {
   name: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.object,
   render: PropTypes.func,
 } as ValidationMap<UIViewProps>;
+
+// A wrapper class for react-hybrid to monkey patch
+export class UIView extends Component<UIViewProps> {
+  static displayName = 'UIView';
+  static propTypes = View.propTypes;
+  static __internalViewComponent: ComponentType<UIViewProps> = View;
+  render() {
+    return <View {...this.props} />;
+  }
+}

@@ -1,14 +1,14 @@
 /** @packageDocumentation @reactapi @module react_hooks */
 
 import { useEffect, useMemo, useState } from 'react';
-import { UIRouterReact } from '../core';
+import { UIRouter } from '@uirouter/core';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useOnStateChanged } from './useOnStateChanged';
 import { useParentView } from './useParentView';
 import { useRouter } from './useRouter';
 
 /** @hidden */
-function checkIfActive(router: UIRouterReact, stateName: string, params: object, relative: string, exact: boolean) {
+function checkIfActive(router: UIRouter, stateName: string, params: object, relative: string, exact: boolean) {
   return exact
     ? router.stateService.is(stateName, params, { relative })
     : router.stateService.includes(stateName, params, { relative });

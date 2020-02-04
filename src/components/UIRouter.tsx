@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useRef } from 'react';
 
-import { UIRouterPlugin, servicesPlugin, PluginFactory } from '@uirouter/core';
+import { UIRouter as _UIRouter, UIRouterPlugin, servicesPlugin, PluginFactory } from '@uirouter/core';
 
 import { UIRouterReact } from '../core';
 import { ReactStateDeclaration } from '../interface';
@@ -19,8 +19,8 @@ import { ReactStateDeclaration } from '../interface';
  * </UIRouterContext.Consumer>
  * ```
  */
-export const UIRouterContext = React.createContext<UIRouterReact>(undefined);
-/** @deprecated use [[useRouter]] or React.useContext(UIRouterContext) */
+export const UIRouterContext = React.createContext<_UIRouter>(undefined);
+  /** @deprecated use [[useRouter]] or React.useContext(UIRouterContext) */
 export const UIRouterConsumer = UIRouterContext.Consumer;
 
 export interface UIRouterProps {
