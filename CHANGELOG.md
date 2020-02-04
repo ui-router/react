@@ -1,3 +1,46 @@
+## 1.0.1 (2020-02-04)
+[Compare `@uirouter/react` versions 1.0.0 and 1.0.1](https://github.com/ui-router/react/compare/1.0.0...1.0.1)
+
+### Bug Fixes
+
+* Refactor UIView for compatibility with [@uirouter](https://github.com/uirouter)/react-hybrid. ([55d4c98](https://github.com/ui-router/react/commit/55d4c98))
+* Restore UIRouterConsumer and UIViewConsumer context consumer components. ([3ed8ce1](https://github.com/ui-router/react/commit/3ed8ce1))
+* **uiCanExit:** fix uiCanExit logic and use refs so hook de/registration happens outside any render ([e73daa7](https://github.com/ui-router/react/commit/e73daa7))
+
+
+### Features
+
+* **hooks:** Add useCanExit hook to block transitions from exiting a state ([29d080c](https://github.com/ui-router/react/commit/29d080c))
+* **hooks:** export useParentView for use in uirouter/react-hybrid ([b5a2e80](https://github.com/ui-router/react/commit/b5a2e80))
+
+
+### BREAKING CHANGES
+
+* UIRouterConsumer now is of type `import { UIRouter } from '@uirouter/core'` instead of `import { UIRouterReact } from '@uirouter/react'`
+
+
+---
+
+
+### Updated `@uirouter/core` from 6.0.1 to 6.0.4
+
+
+Changelog for `@uirouter/core`:
+
+
+[Compare `@uirouter/core` versions 6.0.1 and 6.0.4](https://github.com/ui-router/core/compare/6.0.1...6.0.4)
+
+### Bug Fixes
+
+* **hof:** Rewrite curry from scratch ([fc324c6](https://github.com/ui-router/core/commit/fc324c6)), closes [#350](https://github.com/ui-router/core/issues/350)
+* **IE9:** Add safeConsole so IE9 doesn't break ([9c8579d](https://github.com/ui-router/core/commit/9c8579d))
+* **safeConsole:** check if document is defined to avoid issues in node environments ([da29d88](https://github.com/ui-router/core/commit/da29d88))
+
+
+### Features
+
+* **stateService:** add transition option 'supercede' so transition can be ignored if one is pending ([6e5a56f](https://github.com/ui-router/core/commit/6e5a56f))
+
 # 1.0.0 (2020-01-07)
 [Compare `@uirouter/react` versions 0.8.10 and 1.0.0](https://github.com/ui-router/react/compare/0.8.10...1.0.0)
 
