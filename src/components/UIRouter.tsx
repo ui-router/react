@@ -124,11 +124,11 @@ export const InstanceOrPluginsMissingError = `Router instance or plugins missing
  */
 export function UIRouter(props: UIRouterProps) {
   const uiRouter = useRef<UIRouterReact>();
-  const [_hasStarted, start] = useState<boolean>(false);
+  const [started, setStarted] = useState<boolean>(false);
 
   useEffect(() => {
-    // Router hasn't been initialised yet, this is the first render
     if (!uiRouter.current) {
+      // Router hasn't been initialised yet, this is the first render
       const { config, states, plugins, router } = props;
       if (router) {
         uiRouter.current = router;
@@ -144,9 +144,9 @@ export function UIRouter(props: UIRouterProps) {
       }
 
       uiRouter.current.start();
-      start(true);
+      setStarted(true);
     }
-  });
+  }, []);
 
   return uiRouter.current ? (
     <UIRouterContext.Provider value={uiRouter.current}>{props.children}</UIRouterContext.Provider>
