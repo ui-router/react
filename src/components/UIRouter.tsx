@@ -1,6 +1,6 @@
 /** @packageDocumentation @reactapi @module components */
 import * as React from 'react';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { UIRouter as _UIRouter, UIRouterPlugin, servicesPlugin, PluginFactory } from '@uirouter/core';
 
@@ -20,7 +20,7 @@ import { ReactStateDeclaration } from '../interface';
  * ```
  */
 export const UIRouterContext = React.createContext<_UIRouter>(undefined);
-  /** @deprecated use [[useRouter]] or React.useContext(UIRouterContext) */
+/** @deprecated use [[useRouter]] or React.useContext(UIRouterContext) */
 export const UIRouterConsumer = UIRouterContext.Consumer;
 
 export interface UIRouterProps {
@@ -124,25 +124,31 @@ export const InstanceOrPluginsMissingError = `Router instance or plugins missing
  */
 export function UIRouter(props: UIRouterProps) {
   const uiRouter = useRef<UIRouterReact>();
+  const [_hasStarted, start] = useState<boolean>(false);
 
-  // Router hasn't been initialised yet, this is the first render
-  if (!uiRouter.current) {
-    const { config, states, plugins, router } = props;
-    if (router) {
-      uiRouter.current = router;
-    } else if (plugins) {
-      // We need to create a new instance of the Router and register plugins, config and states
-      uiRouter.current = new UIRouterReact();
-      uiRouter.current.plugin(servicesPlugin); // services plugins is necessary for the router to fuction
-      plugins.forEach(plugin => uiRouter.current.plugin(plugin));
-      if (config) config(uiRouter.current);
-      (states || []).forEach(state => uiRouter.current.stateRegistry.register(state));
-    } else {
-      throw new Error(InstanceOrPluginsMissingError);
+  useEffect(() => {
+    // Router hasn't been initialised yet, this is the first render
+    if (!uiRouter.current) {
+      const { config, states, plugins, router } = props;
+      if (router) {
+        uiRouter.current = router;
+      } else if (plugins) {
+        // We need to create a new instance of the Router and register plugins, config and states
+        uiRouter.current = new UIRouterReact();
+        uiRouter.current.plugin(servicesPlugin); // services plugins is necessary for the router to fuction
+        plugins.forEach(plugin => uiRouter.current.plugin(plugin));
+        if (config) config(uiRouter.current);
+        (states || []).forEach(state => uiRouter.current.stateRegistry.register(state));
+      } else {
+        throw new Error(InstanceOrPluginsMissingError);
+      }
+
+      uiRouter.current.start();
+      start(true);
     }
+  });
 
-    uiRouter.current.start();
-  }
-
-  return <UIRouterContext.Provider value={uiRouter.current}>{props.children}</UIRouterContext.Provider>;
+  return uiRouter.current ? (
+    <UIRouterContext.Provider value={uiRouter.current}>{props.children}</UIRouterContext.Provider>
+  ) : null;
 }
