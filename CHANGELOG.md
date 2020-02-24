@@ -1,3 +1,10 @@
+## 1.0.2 (2020-02-24)
+[Compare `@uirouter/react` versions 1.0.1 and 1.0.2](https://github.com/ui-router/react/compare/1.0.1...1.0.2)
+
+### Bug Fixes
+
+* Only run initialization effect on first render ([7788a98](https://github.com/ui-router/react/commit/7788a98))
+
 ## 1.0.1 (2020-02-04)
 [Compare `@uirouter/react` versions 1.0.0 and 1.0.1](https://github.com/ui-router/react/compare/1.0.0...1.0.1)
 
