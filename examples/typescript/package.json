@@ -6,17 +6,17 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --history-api-fallback"
   },
   "dependencies": {
-    "@uirouter/react": "^0.8.10",
+    "@uirouter/react": "^1.0.2",
     "react": "16.12.0",
     "react-dom": "16.12.0"
   },
   "devDependencies": {
-    "cross-env": "^6.0.3",
+    "cross-env": "^7.0.0",
     "prop-types": "^15.7.2",
     "ts-loader": "^6.2.1",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "typescript": "3.7.4",
-    "webpack": "^4.41.4",
-    "webpack-dev-server": "3.10.1"
+    "typescript": "3.8.2",
+    "webpack": "^4.41.6",
+    "webpack-dev-server": "3.10.3"
   }
 }
