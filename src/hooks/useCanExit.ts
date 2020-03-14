@@ -1,7 +1,7 @@
 /** @packageDocumentation @reactapi @module react_hooks */
 
 import { HookRegOptions, TransitionHookFn } from '@uirouter/core';
-import { useParentView } from './useParentView';
+import { useStateContext } from './useStateContext';
 import { useTransitionHook } from './useTransitionHook';
 
 /**
@@ -43,6 +43,7 @@ import { useTransitionHook } from './useTransitionHook';
  * @param options transition hook registration options
  */
 export function useCanExit(canExitCallback: TransitionHookFn, options?: HookRegOptions) {
-  const stateName = useParentView().context.name;
+  const { routedState } = useStateContext();
+  const stateName = routedState?.name;
   useTransitionHook('onBefore', { exiting: stateName }, canExitCallback, options);
 }
