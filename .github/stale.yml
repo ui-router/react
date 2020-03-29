@@ -13,9 +13,10 @@ markComment: |
   This issue has been automatically marked as stale because it has not had
   recent activity. It will be closed if no further activity occurs.
 
-  This does not mean that the issue is invalid.  Valid issues
-  may be reopened.
+  This does not mean that the issue is invalid.  Valid issues may be reopened.
 
-  Thank you for your contributions.
+
+  Thank you for your contributions!
 # Comment to post when closing a stale issue. Set to `false` to disable
-closeComment: false
+closeComment: |
+  This issue has been automatically closed.
