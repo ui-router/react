@@ -23,13 +23,12 @@ import {
   TypedMap,
   UIInjector,
   ViewConfig,
-  ViewContext,
   applyPairs,
   UIRouter,
-  StateObject,
+  PortalContent,
 } from '@uirouter/core';
 import { useStableCallback } from '../hooks';
-import { useIsMountedRef } from '../hooks/useIsMountedRef';
+import { useMountedStatusRef } from '../hooks/useMountedStatusRef';
 import { useRouter } from '../hooks/useRouter';
 import { ReactViewConfig } from '../reactViews';
 
@@ -159,18 +158,46 @@ function useRoutedComponentProps(
   return useMemo(() => ({ ...baseChildProps, ...maybeRefProp }), [baseChildProps, maybeRefProp]);
 }
 
-/** @hidden */
-function useViewConfig() {
-  const isMountedRef = useIsMountedRef();
-  const [viewConfig, setViewConfig] = useState<ReactViewConfig>();
+interface ReactViewState {
+  portalContent: PortalContent;
+  contentComponent: React.ComponentType;
+  viewConfig: ReactViewConfig;
+}
 
-  const updateConfig = useStableCallback((newConfig: ViewConfig) => {
-    if (viewConfig !== newConfig && isMountedRef.current) {
-      setViewConfig(newConfig as ReactViewConfig);
+/** @hidden */
+function useViewConfig(DefaultContentComponent: React.ComponentType) {
+  const initialViewState: ReactViewState = {
+    portalContent: 'DEFAULT_CONTENT',
+    contentComponent: DefaultContentComponent,
+    viewConfig: null,
+  };
+
+  const mountedStatusRef = useMountedStatusRef();
+  const [reactViewState, setReactViewState] = useState(initialViewState);
+
+  const renderContentCallback = useStableCallback((portalContent: PortalContent, newConfig?: ViewConfig) => {
+    if (mountedStatusRef.current === 'UNMOUNTED') {
+      return;
+    }
+
+    if (portalContent === 'ROUTED_COMPONENT') {
+      const viewConfig = newConfig as ReactViewConfig;
+      setReactViewState({ portalContent, viewConfig, contentComponent: viewConfig.viewDecl.component });
+    } else if (portalContent === 'DEFAULT_CONTENT') {
+      setReactViewState({ portalContent, viewConfig: null, contentComponent: DefaultContentComponent });
+    } else if (portalContent === 'INTEROP_DIV') {
+      let InteropDivComponent: React.ComponentType = () => null;
+      const refPromise = new Promise<HTMLDivElement>(resolve => {
+        InteropDivComponent = () => <div ref={resolve} />;
+      });
+      setReactViewState({ portalContent, viewConfig: null, contentComponent: InteropDivComponent });
+      return refPromise;
+    } else {
+      throw new Error(`React UIView does not support the requested PortalContent: ${status}`);
     }
   });
 
-  return { viewConfig, updateConfig };
+  return { reactViewState, renderContentCallback };
 }
 
 /**
@@ -216,26 +243,24 @@ const View = forwardRef(function View(props: UIViewProps, forwardedRef) {
   const router = useRouter();
   const parentId = useContext(ViewIdContext);
   const name = props.name || '$default';
-  const { viewConfig, updateConfig } = useViewConfig();
-  const component = useMemo(() => viewConfig?.viewDecl?.component, [viewConfig]);
+
+  const DefaultContentComponent: React.ComponentType = useStableCallback(() => {
+    return isValidElement(children) ? cloneElement(children, childProps) : createElement('div', childProps);
+  });
+  const { reactViewState, renderContentCallback } = useViewConfig(DefaultContentComponent);
+  const { contentComponent, viewConfig } = reactViewState;
   const idRef = useRef(null as string);
 
   // Register/deregister any time the uiViewData changes
   useEffect(() => {
-    if (idRef.current) {
-      router.viewService.deregisterView(idRef.current);
-    }
-    idRef.current = router.viewService.registerView('react', parentId, name, updateConfig);
-  }, [name, parentId, updateConfig]);
+    idRef.current = router.viewService.registerView('react', parentId, name, renderContentCallback);
 
-  // Deregister on unmount
-  useEffect(() => {
     return () => {
       if (idRef.current) {
         router.viewService.deregisterView(idRef.current);
       }
     };
-  }, []);
+  }, [name, parentId, renderContentCallback]);
 
   const stateName: string = viewConfig?.viewDecl?.$context?.name;
   const resolveContext = useMemo(() => (viewConfig ? new ResolveContext(viewConfig.path) : undefined), [viewConfig]);
@@ -247,25 +272,22 @@ const View = forwardRef(function View(props: UIViewProps, forwardedRef) {
     router,
     stateName,
     viewConfig,
-    component,
+    contentComponent,
     resolves,
     className,
     style,
     transition
   );
 
-  const childElement =
-    !component && isValidElement(children)
-      ? cloneElement(children, childProps)
-      : createElement(component || 'div', childProps);
-
-  // if a render function is passed, use that. otherwise render the component normally
-  const ChildOrRenderFunction =
-    typeof render !== 'undefined' && component ? render(component, childProps) : childElement;
+  if (!idRef.current) {
+    return null;
+  }
 
   return (
     <ViewIdContext.Provider value={idRef.current}>
-      {idRef.current ? ChildOrRenderFunction : null}
+      {typeof render === 'function'
+        ? render(contentComponent, childProps)
+        : createElement(contentComponent, childProps)}
     </ViewIdContext.Provider>
   );
 });

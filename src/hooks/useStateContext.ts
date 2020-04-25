@@ -1,6 +1,6 @@
 /** @packageDocumentation @internalapi @module react_hooks */
 
-import { RegisteredView, StateObject } from '@uirouter/core';
+import { StateObject } from '@uirouter/core';
 import { useContext } from 'react';
 import { ViewIdContext } from '../components';
 import { useRouter } from './useRouter';
@@ -15,7 +15,7 @@ export function useStateContext(): { portalState: StateObject; contentState?: St
     };
   }
 
-  const view: RegisteredView = router.viewService._pluginapi._registeredUIView(viewId);
+  const view = router.viewService._pluginapi._registeredUIView(viewId);
   if (!view) {
     throw new Error(`Could not find a registered view matching ${viewId}`);
   }
