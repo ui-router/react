@@ -29,7 +29,7 @@ function checkIfActive(router: UIRouter, stateName: string, params: object, rela
  * ```jsx
  * function JoeLabel() {
  *  const isActive = useIsActive('contacts.contact', { contactId: 'joe' });
- *  return <span className={isActive ? 'active' : 'inactive'}>Joe></span>
+ *  return <span className={isActive ? 'active' : 'inactive'}>Joe</span>
  * }
  * ```
  *
