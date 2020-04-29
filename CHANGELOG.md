@@ -1,3 +1,36 @@
+## 1.0.3 (2020-04-29)
+[Compare `@uirouter/react` versions 1.0.2 and 1.0.3](https://github.com/ui-router/react/compare/1.0.2...1.0.3)
+
+### Bug Fixes
+
+* **examples:** update animating-transitions example ([3520596](https://github.com/ui-router/react/commit/3520596))
+
+
+### Features
+
+* export useIsActive hook ([#659](https://github.com/ui-router/react/issues/659)) ([a45ce38](https://github.com/ui-router/react/commit/a45ce38))
+
+
+---
+
+
+### Updated `@uirouter/core` from 6.0.4 to 6.0.5
+
+
+Changelog for `@uirouter/core`:
+
+
+[Compare `@uirouter/core` versions 6.0.4 and 6.0.5](https://github.com/ui-router/core/compare/6.0.4...6.0.5)
+
+### Bug Fixes
+
+* **TargetState:** make isDef check more thorough ([e657cfe](https://github.com/ui-router/core/commit/e657cfe))
+
+
+### Features
+
+* **urlRuleFactory:** Add support for StateDeclarations in UrlRuleFactory.fromState() ([539d33a](https://github.com/ui-router/core/commit/539d33a))
+
 ## 1.0.2 (2020-02-24)
 [Compare `@uirouter/react` versions 1.0.1 and 1.0.2](https://github.com/ui-router/react/compare/1.0.1...1.0.2)
 
