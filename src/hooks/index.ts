@@ -7,6 +7,7 @@
  * @packageDocumentation @preferred @module react_hooks
  */
 export { useCurrentStateAndParams } from './useCurrentStateAndParams';
+export { useIsActive } from './useIsActive';
 export { useOnStateChanged } from './useOnStateChanged';
 export { useParentView } from './useParentView';
 export { useRouter } from './useRouter';
