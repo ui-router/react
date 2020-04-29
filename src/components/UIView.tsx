@@ -28,7 +28,7 @@ import {
   PortalContent,
 } from '@uirouter/core';
 import { useStableCallback } from '../hooks';
-import { useMountedStatusRef } from '../hooks/useMountedStatusRef';
+import { useMountStatusRef } from '../hooks/useMountStatusRef';
 import { useRouter } from '../hooks/useRouter';
 import { ReactViewConfig } from '../reactViews';
 
@@ -172,7 +172,7 @@ function useViewConfig(DefaultContentComponent: React.ComponentType) {
     viewConfig: null,
   };
 
-  const mountedStatusRef = useMountedStatusRef();
+  const mountedStatusRef = useMountStatusRef();
   const [reactViewState, setReactViewState] = useState(initialViewState);
 
   const renderContentCallback = useStableCallback((portalContent: PortalContent, newConfig?: ViewConfig) => {
