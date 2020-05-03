@@ -41,7 +41,7 @@ import { useTransitionHook } from './useTransitionHook';
  * @param options transition hook registration options
  */
 export function useCanExit(canExitCallback: TransitionHookFn, options?: HookRegOptions) {
-  const { routedState } = useStateContext();
-  const stateName = routedState?.name;
+  const { contentState } = useStateContext();
+  const stateName = contentState?.name;
   useTransitionHook('onBefore', { exiting: stateName }, canExitCallback, options);
 }
