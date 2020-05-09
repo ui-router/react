@@ -1,5 +1,16 @@
 /** @packageDocumentation  @reactapi @module react */
-import { services, forEach, map, pick, PathNode, ViewConfig, ViewService, StateObject } from '@uirouter/core';
+import {
+  PathNode,
+  StateObject,
+  UIRouter,
+  UIRouterViewPlugin,
+  ViewConfig,
+  ViewService,
+  forEach,
+  map,
+  pick,
+  services,
+} from '@uirouter/core';
 import { ReactViewDeclaration } from './interface';
 
 /**
@@ -55,4 +66,18 @@ export class ReactViewConfig implements ViewConfig {
   load() {
     return services.$q.when(this);
   }
+}
+
+const reactPlugin = () => {
+  const plugin: ReactViewPlugin = {
+    type: 'view',
+    name: 'react',
+    dispose: () => null,
+    renderUIViewIntoDivElement(router: UIRouter, divElement: HTMLDivElement, parentViewObject: any) {},
+  };
+  return plugin;
+};
+
+export interface ReactViewPlugin extends UIRouterViewPlugin {
+  name: 'react';
 }
