@@ -1,6 +1,6 @@
 name: 'CI: UIRouter for React'
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test:
