@@ -683,9 +683,9 @@
   integrity sha512-WN2HyELsxvqLaCMYCWojGW/QLRBgFBfwyERp5jC3Vn1njo/FLI5hplVqWMu6LIGp6Hpz3pbdtSaiFb1iY7iTVw==
 
 "@uirouter/publish-scripts@^2.3.45":
-  version "2.3.47"
-  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.3.47.tgz#f666b7682ca1a06d926cd56e68d4f51ea186e780"
-  integrity sha512-N2c7j/A3uE2Ie1v7aBG/HSTmBUg0ktvYvAbB8Pr1aaGJOFIxNRk36gphIjfx7qJkDxBlVF7KnmjQJzftXDNYtw==
+  version "2.3.48"
+  resolved "https://registry.yarnpkg.com/@uirouter/publish-scripts/-/publish-scripts-2.3.48.tgz#e730fc3998bcf1e22b2e57f58349c055cb2dc4de"
+  integrity sha512-vcMlfwWtmPySxt3WRVsmGDghTkgrheiN1f2NhK3aWnyG5ETYkem5j1HrU+6e+A5kGBl69Xj7Kok6TNieD0l4eg==
   dependencies:
     check-peer-dependencies "2.0.1"
     conventional-changelog "^3.1.18"
