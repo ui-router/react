@@ -227,7 +227,6 @@ const View = forwardRef(function View(props: UIViewProps, forwardedRef) {
     if (mountedStatusRef.current === 'UNMOUNTED') {
       return;
     }
-    console.log('renderContentCallback', cmd);
 
     function getContentComponent() {
       if (cmd.command === 'RENDER_ROUTED_VIEW') {
