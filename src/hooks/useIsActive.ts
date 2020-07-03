@@ -1,5 +1,3 @@
-/** @packageDocumentation @reactapi @module react_hooks */
-
 import { useEffect, useMemo, useState } from 'react';
 import { UIRouter } from '@uirouter/core';
 import { useDeepObjectDiff } from './useDeepObjectDiff';

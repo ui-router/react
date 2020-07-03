@@ -1,5 +1,3 @@
-/** @packageDocumentation @reactapi @module react_hooks */
-
 import { HookRegOptions, TransitionHookFn } from '@uirouter/core';
 import { useParentView } from './useParentView';
 import { useTransitionHook } from './useTransitionHook';

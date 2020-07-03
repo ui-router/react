@@ -11,7 +11,7 @@
     "test:debug": "node --inspect ./node_modules/.bin/jest --runInBand --watch",
     "test:downstream": "npm run build && test_downstream_projects",
     "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config ./examples/typescript/webpack.config.js --history-api-fallback --content-base examples/typescript",
-    "clean": "shx rm -rf _bundles lib lib-esm build",
+    "clean": "shx rm -rf _bundles lib lib-esm build _doc",
     "compile": "npm run clean && tsc && tsc -m es6 --outDir lib-esm",
     "bundle": "cross-env NODE_ENV=production webpack",
     "build": "run-s compile bundle fixmaps:*",
@@ -110,5 +110,52 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "docgen": {
+    "publishDir": "_react_docs",
+    "navigation": {
+      "": [
+        "UIRouterReact"
+      ],
+      "Services": [
+        "StateService",
+        "StateRegistry",
+        "TransitionService",
+        "UrlService",
+        "UrlConfig",
+        "UrlRules"
+      ],
+      "Interfaces": [
+        "ReactStateDeclaration"
+      ],
+      "Components": [
+        "UIRouter",
+        "UIView",
+        "UISref",
+        "UISrefActive"
+      ],
+      "React Hooks": [
+        "useRouter",
+        "useSref",
+        "useSrefActive",
+        "useSrefActiveExact",
+        "useTransitionHook",
+        "useCanExit",
+        "useCurrentStateAndParams",
+        "useOnStateChanged",
+        "useIsActive"
+      ],
+      "Other": [
+        "Transition",
+        "Trace"
+      ]
+    },
+    "include": [
+      {
+        "pkg": "@uirouter/core",
+        "repo": "https://github.com/ui-router/core",
+        "branch": "master"
+      }
+    ]
   }
 }

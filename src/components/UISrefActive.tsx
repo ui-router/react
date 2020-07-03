@@ -1,4 +1,3 @@
-/** @packageDocumentation @reactapi @module components */
 import * as React from 'react';
 import { useState, useCallback, useContext, useMemo, cloneElement } from 'react';
 import * as _classNames from 'classnames';
@@ -16,7 +15,7 @@ export interface UISrefActiveState {
 /** @hidden */
 export type AddStateInfoFn = (to: string, params: { [key: string]: any }) => () => void;
 
-/** @internalapi */
+/** @internal */
 const rootAddStateInfoFn: AddStateInfoFn = () => () => undefined;
 export const UISrefActiveContext = React.createContext<AddStateInfoFn>(rootAddStateInfoFn);
 
@@ -77,10 +76,10 @@ export function UISrefActive({ children, className, class: classToApply, exact }
     (stateName: string, params: object) => {
       const parentDeregister = parentAddStateInfo(stateName, params);
       const addedUiSref = { stateName, params };
-      setUiSrefs(uiSrefs => uiSrefs.concat(addedUiSref));
+      setUiSrefs((uiSrefs) => uiSrefs.concat(addedUiSref));
       return () => {
         parentDeregister();
-        setUiSrefs(uiSrefs => uiSrefs.filter(x => x !== addedUiSref));
+        setUiSrefs((uiSrefs) => uiSrefs.filter((x) => x !== addedUiSref));
       };
     },
     [parentAddStateInfo]

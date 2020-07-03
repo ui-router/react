@@ -1,4 +1,3 @@
-/** @packageDocumentation @reactapi @module react_hooks */
 import { useState } from 'react';
 import { RawParams, StateDeclaration } from '@uirouter/core';
 import { useOnStateChanged } from './useOnStateChanged';

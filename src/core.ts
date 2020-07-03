@@ -1,4 +1,3 @@
-/** @packageDocumentation @reactapi @module react */
 import { UIRouter, PathNode } from '@uirouter/core';
 import { ReactViewDeclaration } from './interface';
 import { ReactViewConfig, reactViewsBuilder } from './reactViews';
@@ -14,7 +13,7 @@ import { ReactViewConfig, reactViewsBuilder } from './reactViews';
  * which will be provided to the matching `UIView` Component's
  * [[UIView.viewConfigUpdated]] function.
  *
- * @internalapi
+ * @internal
  */
 let viewConfigFactory = (node: [PathNode], config: ReactViewDeclaration) => new ReactViewConfig(node, config);
 

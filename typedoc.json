@@ -1,0 +1,8 @@
+{
+  "readme": "DOCS.md",
+  "name": "@uirouter/react",
+  "out": "_doc",
+  "excludePrivate": true,
+  "excludeNotExported": true,
+  "stripInternal": true
+}

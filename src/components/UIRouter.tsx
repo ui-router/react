@@ -1,4 +1,3 @@
-/** @packageDocumentation @reactapi @module components */
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -24,11 +23,21 @@ export const UIRouterContext = React.createContext<_UIRouter>(undefined);
 export const UIRouterConsumer = UIRouterContext.Consumer;
 
 export interface UIRouterProps {
-  plugins?: Array<PluginFactory<UIRouterPlugin>>;
-  states?: Array<ReactStateDeclaration>;
-  config?: (router: UIRouterReact) => void;
-  router?: UIRouterReact;
+  /**
+   * The root application content.
+   * Typically this will render a [[UIView]] viewport component */
   children: any;
+  /** UIRouter Plugins (used with "Component Setup" bootstrapping, see [[UIRouter]]) */
+  plugins?: Array<PluginFactory<UIRouterPlugin>>;
+  /** The application states (used with "Component Setup" bootstrapping, see [[UIRouter]]) */
+  states?: Array<ReactStateDeclaration>;
+  /**
+   * A callback function to do imperative configuration after the [[UIRouterReact]] object is created
+   * (used with "Component Setup" bootstrapping, see [[UIRouter]])
+   */
+  config?: (router: UIRouterReact) => void;
+  /** The pre-configured UIRouterReact instance (used with "Manual Setup", see [[UIRouter]]) */
+  router?: UIRouterReact;
 }
 
 /** @hidden */
@@ -136,9 +145,9 @@ export function UIRouter(props: UIRouterProps) {
         // We need to create a new instance of the Router and register plugins, config and states
         uiRouter.current = new UIRouterReact();
         uiRouter.current.plugin(servicesPlugin); // services plugins is necessary for the router to fuction
-        plugins.forEach(plugin => uiRouter.current.plugin(plugin));
+        plugins.forEach((plugin) => uiRouter.current.plugin(plugin));
         if (config) config(uiRouter.current);
-        (states || []).forEach(state => uiRouter.current.stateRegistry.register(state));
+        (states || []).forEach((state) => uiRouter.current.stateRegistry.register(state));
       } else {
         throw new Error(InstanceOrPluginsMissingError);
       }

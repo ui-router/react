@@ -1,5 +1,3 @@
-/** @packageDocumentation @reactapi @module react_hooks */
-
 import { RawParams, StateDeclaration } from '@uirouter/core';
 import { useTransitionHook } from './useTransitionHook';
 
@@ -20,5 +18,5 @@ import { useTransitionHook } from './useTransitionHook';
  * @param onStateChangedCallback a callback that receives the new current state and parameter values
  */
 export function useOnStateChanged(onStateChangedCallback: (state: StateDeclaration, params: RawParams) => void) {
-  useTransitionHook('onSuccess', {}, trans => onStateChangedCallback(trans.to(), trans.params('to')));
+  useTransitionHook('onSuccess', {}, (trans) => onStateChangedCallback(trans.to(), trans.params('to')));
 }

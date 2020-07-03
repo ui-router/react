@@ -1,4 +1,3 @@
-/** @packageDocumentation @reactapi @module components */
 import { isFunction, TransitionOptions } from '@uirouter/core';
 
 import * as _classNames from 'classnames';
@@ -51,7 +50,7 @@ export const UISref: React.FC<UISrefProps> = ({ children, className, options, pa
   const childrenProps = children.props;
 
   const handleClick = useCallback(
-    e => {
+    (e) => {
       const childOnClick = childrenProps.onClick;
       if (isFunction(childOnClick)) {
         childOnClick(e);

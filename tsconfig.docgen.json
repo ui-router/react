@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@uirouter/core": ["./includes/@uirouter/core/src"],
+      "@uirouter/core/lib/globals": ["./includes/@uirouter/core/src/globals"]
+    }
+  }
+}
