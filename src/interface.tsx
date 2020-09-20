@@ -1,4 +1,3 @@
-/** @packageDocumentation @reactapi @module react */
 import { StatelessComponent, ComponentClass, ClassicComponentClass } from 'react';
 import { StateDeclaration, _ViewDeclaration, Transition } from '@uirouter/core';
 

@@ -1,8 +1,7 @@
-/** @packageDocumentation @internalapi @module react_hooks */
 import { equals } from '@uirouter/core';
 import { useRef } from 'react';
 
-/** Internal hook to support deep diffing in hook dependencies */
+/** @internal Internal hook to support deep diffing in hook dependencies */
 export function useDeepObjectDiff(obj: object): number {
   const ref = useRef(obj);
   const version = useRef(1);

@@ -3,8 +3,6 @@
  *
  * This is a collection of [react hooks](https://reactjs.org/docs/hooks-intro.html)
  * that can be used in functional components.
- *
- * @packageDocumentation @preferred @module react_hooks
  */
 export { useCurrentStateAndParams } from './useCurrentStateAndParams';
 export { useIsActive } from './useIsActive';

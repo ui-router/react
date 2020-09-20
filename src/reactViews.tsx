@@ -11,7 +11,7 @@ import { ReactViewDeclaration } from './interface';
  * If no `views: {}` property exists on the [[StateDeclaration]], then it creates the `views` object and
  * applies the state-level configuration to a view named `$default`.
  *
- * @internalapi
+ * @internal
  */
 export function reactViewsBuilder(state: StateObject) {
   let views = {},
@@ -25,7 +25,7 @@ export function reactViewsBuilder(state: StateObject) {
     });
   }
 
-  forEach(viewsDefinitionObject, function(config, name) {
+  forEach(viewsDefinitionObject, function (config, name) {
     name = name || '$default'; // Account for views: { "": { template... } }
     if (Object.keys(config).length == 0) return;
 
@@ -42,10 +42,10 @@ export function reactViewsBuilder(state: StateObject) {
   return views;
 }
 
-/** @internalapi */
+/** @internal */
 let id = 0;
 
-/** @internalapi */
+/** @internal */
 export class ReactViewConfig implements ViewConfig {
   loaded: boolean = true;
   $id: number = id++;

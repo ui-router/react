@@ -1,4 +1,3 @@
-/** @packageDocumentation @reactapi @module components */
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import {
@@ -33,10 +32,10 @@ import { useParentView } from '../hooks/useParentView';
 import { useRouter } from '../hooks/useRouter';
 import { ReactViewConfig } from '../reactViews';
 
-/** @internalapi */
+/** @internal */
 let viewIdCounter = 0;
 
-/** @internalapi */
+/** @internal */
 export interface UIViewAddress {
   context: ViewContext;
   fqn: string;
@@ -71,7 +70,7 @@ export interface UIViewResolves {
  * Function type for [[UIViewProps.render]]
  *
  * If the `render` function prop is provided, the `UIView` will use it instead of rendering the component by itself.
- * @internalapi
+ * @internal
  */
 export type RenderPropCallback = (Component: ComponentType<any>, Props: any) => JSX.Element | null;
 
@@ -82,12 +81,22 @@ export interface UIViewInjectedProps {
   style?: Object;
 }
 
-/** Component Props for `UIView` */
+/** React Props for the [[UIView]] component */
 export interface UIViewProps {
+  /** default content that will be rendered when no child component is loaded into the UIView viewport */
   children?: ReactNode;
+  /**
+   * The name of the [[UIView]].
+   *
+   * Assigns a name to this [[UIView]] Portal.
+   * see: [Multiple Named Views](https://ui-router.github.io/guide/views#multiple-named-uiviews)
+   */
   name?: string;
+  /** This prop will be applied to the routed component. */
   className?: string;
+  /** This prop will be applied to the routed component. */
   style?: Object;
+  /** This render prop can be used to customize the rendering of  routed components. */
   render?: RenderPropCallback;
 }
 
@@ -95,7 +104,7 @@ export const TransitionPropCollisionError =
   '`transition` cannot be used as resolve token. ' +
   'Please rename your resolve to avoid conflicts with the router transition.';
 
-/** @internalapi */
+/** @internal */
 export const UIViewContext = createContext<UIViewAddress>(undefined);
 /** @deprecated use [[useParentView]] or React.useContext(UIViewContext) */
 export const UIViewConsumer = UIViewContext.Consumer;
@@ -104,11 +113,11 @@ export const UIViewConsumer = UIViewContext.Consumer;
 function useResolvesWithStringTokens(resolveContext: ResolveContext, injector: UIInjector) {
   return useMemo(() => {
     if (resolveContext && injector) {
-      const stringTokens: string[] = resolveContext.getTokens().filter(x => typeof x === 'string');
+      const stringTokens: string[] = resolveContext.getTokens().filter((x) => typeof x === 'string');
       if (stringTokens.indexOf('transition') !== -1) {
         throw new Error(TransitionPropCollisionError);
       }
-      return stringTokens.map(token => [token, injector.get(token)]).reduce(applyPairs, {});
+      return stringTokens.map((token) => [token, injector.get(token)]).reduce(applyPairs, {});
     } else {
       return {};
     }
@@ -271,11 +280,35 @@ View.propTypes = {
   render: PropTypes.func,
 } as ValidationMap<UIViewProps>;
 
-// A wrapper class for react-hybrid to monkey patch
+/**
+ * UIView Viewport
+ *
+ * The UIView component is a viewport for a routed components.
+ * Routed components will be rendered inside the UIView viewport.
+ *
+ * ### Example
+ * ```
+ * function MyApp() {
+ *   return (
+ *     <div className="MyApp">
+ *       <UIView />
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * See [[UIViewProps]] for details on the props this component takes.
+ *
+ * @noInheritDoc
+ */
 export class UIView extends Component<UIViewProps> {
+  /** @internal */
   static displayName = 'UIView';
+  /** @internal */
   static propTypes = View.propTypes;
+  /** @internal */
   static __internalViewComponent: ComponentType<UIViewProps> = View;
+  /** @internal */
   render() {
     return <View {...this.props} />;
   }
