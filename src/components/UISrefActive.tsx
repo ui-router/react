@@ -40,15 +40,18 @@ export interface UISrefActiveProps {
 }
 
 /**
- * A component working alongside `[[UISref]]` to add classes to its child element when one of the included `[[UISref]]`'s state is active, and removing them when it is inactive.
+ * A component that applies an 'active' class when a [[UISref]] component's state is active.
  *
- * The primary use-case is to simplify the special appearance of navigation menus relying on `[[<UISref>]]`, by having the "active" state's menu button appear different, distinguishing it from the inactive menu items.
+ * If you are using functional components, consider using the [[useSrefActive]] hook instead.
  *
- * It will register **every** nested `[[<UISref>]]` and add the class to its child every time one of the states is active.
+ * This component works together with `[[UISref]]` child components.
+ * It adds an active class to its child element when any of its children `[[UISref]]`'s state is active.
+ *
+ * This component can be used to highlight the active state in a navigation menu.
  *
  * ```jsx
  * <UISrefActive class="active-item">
- *   <UISref to="homestate"><a class="menu-item">Home</a></UISref>
+ *   <UISref to="homestate"><a className="menu-item">Home</a></UISref>
  * </UISrefActive>
  *
  * // rendered when state is inactive
@@ -56,6 +59,25 @@ export interface UISrefActiveProps {
  *
  * // rendered when state is active
  * <a href="/path/to/homestate" class="menu-item active-item">Home</a>
+ * ```
+ *
+ * Note: A `UISrefActive` will add the class if any child `UISref` is active.
+ * This can be used to highlight a parent nav item if any nested child nav items are active.
+ *
+ *
+ * ```jsx
+ * <UISrefActive class="active">
+ *   <div className="menu-item-dropdown">
+ *     <span>Admin<span>
+ *     <ul>
+ *       <li><UISref to="users"><a className="menu-item">Users</a></UISref></li>
+ *       <li><UISref to="groups"><a className="menu-item">Groups</a></UISref></li>
+ *     </ul>
+ *   </div>
+ * </UISrefActive>
+ *
+ * // rendered with either users or groups states are active
+ * <div className="active menu-item-dropdown">
  * ```
  */
 export function UISrefActive({ children, className, class: classToApply, exact }: UISrefActiveProps) {

@@ -18,7 +18,11 @@ export interface UISrefProps {
 }
 
 /**
- * This component lets create links to router states, allowing the user to navigate through the application.
+ * A component to links to router states
+ *
+ * If you are using functional components, consider using the [[useSref]] hook instead.
+ *
+ * This component creates links to router states, allowing the user to navigate through the application.
  * It works well together with `<a>` and `<button>` nodes.
  *
  * You can wrap your anchor/button and define the router state you want it to link to via props.
