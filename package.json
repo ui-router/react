@@ -42,7 +42,7 @@
     "url": "https://github.com/ui-router/react.git"
   },
   "dependencies": {
-    "@uirouter/core": "v7beta",
+    "@uirouter/core": "file:.yalc/@uirouter/core",
     "classnames": "^2.2.5",
     "prop-types": "^15.6.1"
   },

@@ -1,17 +1,17 @@
 /** @packageDocumentation @internalapi @module react_hooks */
 
-import { StateObject } from '@uirouter/core';
+import { StateDeclaration, StateObject } from '@uirouter/core';
 import { useContext } from 'react';
 import { ViewIdContext } from '../components';
 import { useRouter } from './useRouter';
 
 /** @internalapi Gets information about the state contexts that the current render is happening within */
-export function useStateContext(): { portalState: StateObject; contentState?: StateObject } {
+export function useStateContext(): { portalState: StateDeclaration; contentState?: StateDeclaration } {
   const router = useRouter();
   const viewId = useContext(ViewIdContext);
   if (viewId === undefined) {
     return {
-      portalState: router.stateRegistry.root(),
+      portalState: router.stateRegistry.root().self,
     };
   }
 

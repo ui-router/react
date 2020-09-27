@@ -91,7 +91,7 @@ describe('<UIView>', () => {
 
     describe('injects the right props:', () => {
       let lastProps = undefined;
-      const Comp = props => {
+      const Comp = (props) => {
         lastProps = props;
         return <span>component</span>;
       };
@@ -246,8 +246,8 @@ describe('<UIView>', () => {
     });
 
     it('deregisters the UIView when unmounted', () => {
-      const Component = props => <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>;
-      const deregisterSpy = jest.spyOn(router.viewService, 'deregisterView');
+      const Component = (props) => <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>;
+      const deregisterSpy = jest.spyOn(router.viewService._pluginapi, '_deregisterView');
       const wrapper = mount(<Component show={true} />);
       wrapper.setProps({ show: false });
       expect(deregisterSpy).toHaveBeenCalled();
