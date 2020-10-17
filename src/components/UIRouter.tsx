@@ -108,8 +108,8 @@ export const InstanceOrPluginsMissingError = `Router instance or plugins missing
  * ```
  *
  * #### Manual Setup (advanced)
- * Alternatevely you may setup the router manually (i.e. exctracting the router configuration to another file).
- * You can do that by createing a new instance of the router and pass it to the component, this way the component will skip the previous props and just use the provided instance.
+ * Alternatively you may setup the router manually (i.e. extracting the router configuration to another file).
+ * You can do that by creating a new instance of the router and pass it to the component, this way the component will skip the previous props and just use the provided instance.
  *
  * > NB: since you are manually bootstrapping the router, you must register the servicesPlugin as well as the location plugin of your choice (in this example the [[pushStateLocationPlugin]]).
  *
