@@ -1,3 +1,24 @@
+## 1.0.4 (2020-12-16)
+[Compare `@uirouter/react` versions 1.0.3 and 1.0.4](https://github.com/ui-router/react/compare/1.0.3...1.0.4)
+
+
+---
+
+
+### Updated `@uirouter/core` from 6.0.5 to 6.0.6
+
+
+Changelog for `@uirouter/core`:
+
+
+[Compare `@uirouter/core` versions 6.0.5 and 6.0.6](https://github.com/ui-router/core/compare/6.0.5...6.0.6)
+
+### Bug Fixes
+
+* **params:** Bi-directionally en/decode path and search params. ([#618](https://github.com/ui-router/core/issues/618)) ([89e99cd](https://github.com/ui-router/core/commit/89e99cd))
+
+
+
 ## 1.0.3 (2020-04-29)
 [Compare `@uirouter/react` versions 1.0.2 and 1.0.3](https://github.com/ui-router/react/compare/1.0.2...1.0.3)
 
