@@ -1,3 +1,22 @@
+## 1.0.5 (2020-12-21)
+[Compare `@uirouter/react` versions 1.0.4 and 1.0.5](https://github.com/ui-router/react/compare/1.0.4...1.0.5)
+
+
+---
+
+
+### Updated `@uirouter/core` from 6.0.6 to 6.0.7
+
+
+Changelog for `@uirouter/core`:
+
+
+[Compare `@uirouter/core` versions 6.0.6 and 6.0.7](https://github.com/ui-router/core/compare/6.0.6...6.0.7)
+
+### Bug Fixes
+
+* **array:** Fix decoding of array-type query parameters ([44ebfae](https://github.com/ui-router/core/commit/44ebfae))
+
 ## 1.0.4 (2020-12-16)
 [Compare `@uirouter/react` versions 1.0.3 and 1.0.4](https://github.com/ui-router/react/compare/1.0.3...1.0.4)
 
