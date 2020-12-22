@@ -1,7 +1,7 @@
 /** @packageDocumentation @reactapi @module react_hooks */
 
 import * as React from 'react';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ReactHTMLElement, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { isString, StateDeclaration, TransitionOptions, UIRouter } from '@uirouter/core';
 import { UISrefActiveContext } from '../components';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
@@ -84,7 +84,9 @@ export function useSref(stateName: string, params: object = {}, options: Transit
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
-      if (!e.defaultPrevented && !(e.button == 1 || e.metaKey || e.ctrlKey)) {
+      const targetAttr = (e.target as any)?.attributes?.target;
+      const modifierKey = e.button >= 1 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey;
+      if (!e.defaultPrevented && targetAttr == null && !modifierKey) {
         e.preventDefault();
         router.stateService.go(stateName, paramsMemo, optionsMemo);
       }
