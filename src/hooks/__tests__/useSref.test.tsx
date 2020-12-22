@@ -10,12 +10,16 @@ const state = { name: 'state', url: '/state' };
 const state2 = { name: 'state2', url: '/state2' };
 const state3 = { name: 'state3', url: '/state3/:param' };
 
-const Link = ({ to, params = undefined, children = undefined }) => {
+const Link = ({ to, params = undefined, children = undefined, target = undefined }) => {
   const sref = useSref(to, params);
-  return <a {...sref}>{children}</a>;
+  return (
+    <a {...sref} target={target}>
+      {children}
+    </a>
+  );
 };
 
-describe('useUiSref', () => {
+describe('useSref', () => {
   let { router, routerGo, mountInRouter } = makeTestRouter([]);
   beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter([state, state2, state3])));
 
@@ -29,21 +33,51 @@ describe('useUiSref', () => {
     expect(wrapper.html()).toBe('<a href="/state2">state2</a>');
   });
 
-  it('returns an onClick function which activates the target state', () => {
-    const spy = jest.spyOn(router.stateService, 'go');
-    const wrapper = mountInRouter(<Link to="state" />);
-    wrapper.simulate('click');
+  describe('onClick function', () => {
+    it('activates the target state', () => {
+      const spy = jest.spyOn(router.stateService, 'go');
+      const wrapper = mountInRouter(<Link to="state" />);
+      wrapper.simulate('click');
 
-    expect(spy).toBeCalledTimes(1);
-    expect(spy).toBeCalledWith('state', expect.anything(), expect.anything());
-  });
+      expect(spy).toBeCalledTimes(1);
+      expect(spy).toBeCalledWith('state', expect.anything(), expect.anything());
+    });
 
-  it('returns an onClick function which respects defaultPrevented', () => {
-    const spy = jest.spyOn(router.stateService, 'go');
-    const wrapper = mountInRouter(<Link to="state" />);
-    wrapper.simulate('click', { defaultPrevented: true });
+    it('respects defaultPrevented', () => {
+      const spy = jest.spyOn(router.stateService, 'go');
+      const wrapper = mountInRouter(<Link to="state" />);
+      wrapper.simulate('click', { defaultPrevented: true });
 
-    expect(spy).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('does not get called when middle or right clicked', () => {
+      const spy = jest.spyOn(router.stateService, 'go');
+      const wrapper = mountInRouter(<Link to="state" />);
+
+      wrapper.simulate('click', { button: 1 });
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('does not get called if any of these modifiers are present: ctrl, meta, shift, alt', () => {
+      const spy = jest.spyOn(router.stateService, 'go');
+      const wrapper = mountInRouter(<Link to="state" />);
+
+      wrapper.simulate('click', { ctrlKey: true });
+      wrapper.simulate('click', { metaKey: true });
+      wrapper.simulate('click', { shiftKey: true });
+      wrapper.simulate('click', { altKey: true });
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('does not get called if the underlying DOM element has a "target" attribute', () => {
+      const spy = jest.spyOn(router.stateService, 'go');
+      const wrapper = mountInRouter(<Link to="state" target="_blank" />);
+
+      wrapper.simulate('click');
+      expect(spy).not.toHaveBeenCalled();
+    });
   });
 
   it('updates the href when the stateName changes', () => {
@@ -96,7 +130,7 @@ describe('useUiSref', () => {
   it('calls go() with the actual string provided (not with the name of the matched future state)', async () => {
     router.stateRegistry.register({ name: 'future.**', url: '/future' });
 
-    const Link = props => {
+    const Link = (props) => {
       const sref = useSref('future.child', { param: props.param });
       return <a {...sref} />;
     };
@@ -112,7 +146,7 @@ describe('useUiSref', () => {
   it('participates in parent UISrefActive component active state', async () => {
     await routerGo('state2');
 
-    const State2Link = props => {
+    const State2Link = (props) => {
       const sref = useSref('state2');
       return (
         <a {...sref} {...props}>
@@ -150,7 +184,7 @@ describe('useUiSref', () => {
   it('participates in grandparent UISrefActive component active state', async () => {
     await routerGo('state2');
 
-    const State2Link = props => {
+    const State2Link = (props) => {
       const sref = useSref('state2');
       return (
         <a {...sref} className={props.className}>
@@ -178,7 +212,7 @@ describe('useUiSref', () => {
   it('stops participating in parent/grandparent UISrefActive component active state when unmounted', async () => {
     await routerGo('state2');
 
-    const State2Link = props => {
+    const State2Link = (props) => {
       const sref = useSref('state2');
       return (
         <a {...sref} className={props.className}>
@@ -187,7 +221,7 @@ describe('useUiSref', () => {
       );
     };
 
-    const Component = props => {
+    const Component = (props) => {
       return (
         <UISrefActive class="grandparentactive">
           <div>
