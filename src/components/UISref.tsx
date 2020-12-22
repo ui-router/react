@@ -47,7 +47,11 @@ export interface UISrefProps {
  * <a href="#/shop/catalog?productId=103">Product 103</a>
  * ```
  *
- * It will also respect the default behavior when the user Cmd+Click / Ctrl+Click on the link by canceling the transition event and opening a new tab instead.
+ * UISref falls back to native browser behavior (does not initiate a state transition) when:
+ *
+ * - the user Ctrl+Click / Alt+Click / Meta+Click / Shift+Click
+ * - the underlying tag (e.g.: anchor tag) has a 'target' attribute, such as `<a target="_blank">Open in new window</a>`
+ * - preventDefault has been called on the event, e.g.: `<a onClick={e => e.preventDefault()}>no-op</a>`
  */
 export const UISref: React.FC<UISrefProps> = ({ children, className, options, params, to }) => {
   const { onClick, href } = useSref(to, params, options);

@@ -60,6 +60,12 @@ function useTargetState(router: UIRouter, stateName: string, relative: string): 
  * }
  * ```
  *
+ * The `onClick` handler falls back to native browser behavior (does not initiate a state transition) when:
+ *
+ * - the user Ctrl+Click / Alt+Click / Meta+Click / Shift+Click
+ * - the underlying tag (e.g.: anchor tag) has a 'target' attribute, such as `<a target="_blank">Open in new window</a>`
+ * - preventDefault has been called on the event, e.g.: `<a onClick={e => e.preventDefault()}>no-op</a>`
+ *
  * @param stateName The name of the state to link to
  * @param params Any parameter values
  * @param options Transition options used when the onClick handler fires.
