@@ -1,3 +1,10 @@
+## 1.0.6 (2020-12-22)
+[Compare `@uirouter/react` versions 1.0.5 and 1.0.6](https://github.com/ui-router/react/compare/1.0.5...1.0.6)
+
+### Bug Fixes
+
+* **sref:** do not handle clicks if the dom element has a 'target' attribute ([#799](https://github.com/ui-router/react/issues/799)) ([a13b3cd](https://github.com/ui-router/react/commit/a13b3cd)), closes [#786](https://github.com/ui-router/react/issues/786)
+
 ## 1.0.5 (2020-12-21)
 [Compare `@uirouter/react` versions 1.0.4 and 1.0.5](https://github.com/ui-router/react/compare/1.0.4...1.0.5)
 
