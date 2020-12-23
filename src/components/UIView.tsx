@@ -13,11 +13,10 @@ import {
   useState,
   Component,
   forwardRef,
-  useImperativeHandle,
   useRef,
+  useContext,
 } from 'react';
 import {
-  ActiveUIView,
   ResolveContext,
   StateParams,
   Transition,
@@ -27,8 +26,10 @@ import {
   ViewContext,
   applyPairs,
   UIRouter,
+  StateObject,
 } from '@uirouter/core';
-import { useParentView } from '../hooks/useParentView';
+import { useStableCallback } from '../hooks';
+import { useIsMountedRef } from '../hooks/useIsMountedRef';
 import { useRouter } from '../hooks/useRouter';
 import { ReactViewConfig } from '../reactViews';
 
@@ -105,9 +106,7 @@ export const TransitionPropCollisionError =
   'Please rename your resolve to avoid conflicts with the router transition.';
 
 /** @internal */
-export const UIViewContext = createContext<UIViewAddress>(undefined);
-/** @deprecated use [[useParentView]] or React.useContext(UIViewContext) */
-export const UIViewConsumer = UIViewContext.Consumer;
+export const ViewIdContext = createContext<string>(undefined);
 
 /** @hidden */
 function useResolvesWithStringTokens(resolveContext: ResolveContext, injector: UIInjector) {
@@ -162,23 +161,16 @@ function useRoutedComponentProps(
 
 /** @hidden */
 function useViewConfig() {
+  const isMountedRef = useIsMountedRef();
   const [viewConfig, setViewConfig] = useState<ReactViewConfig>();
-  const viewConfigRef = useRef(viewConfig);
-  viewConfigRef.current = viewConfig;
-  const configUpdated = (newConfig: ViewConfig) => {
-    if (newConfig !== viewConfigRef.current) {
+
+  const updateConfig = useStableCallback((newConfig: ViewConfig) => {
+    if (viewConfig !== newConfig && isMountedRef.current) {
       setViewConfig(newConfig as ReactViewConfig);
     }
-  };
-  return { viewConfig, configUpdated };
-}
+  });
 
-/** @hidden */
-function useReactHybridApi(ref: React.Ref<unknown>, uiViewData: ActiveUIView, uiViewAddress: UIViewAddress) {
-  const reactHybridApi = useRef({ uiViewData, uiViewAddress });
-  reactHybridApi.current.uiViewData = uiViewData;
-  reactHybridApi.current.uiViewAddress = uiViewAddress;
-  useImperativeHandle(ref, () => reactHybridApi.current);
+  return { viewConfig, updateConfig };
 }
 
 /**
@@ -222,23 +214,30 @@ const View = forwardRef(function View(props: UIViewProps, forwardedRef) {
   const { children, render, className, style } = props;
 
   const router = useRouter();
-  const parent = useParentView();
-  const creationContext = parent.context;
-
-  const { viewConfig, configUpdated } = useViewConfig();
-  const component = useMemo(() => viewConfig?.viewDecl?.component, [viewConfig]);
-
+  const parentId = useContext(ViewIdContext);
   const name = props.name || '$default';
-  const fqn = parent.fqn ? parent.fqn + '.' + name : name;
-  const id = useMemo(() => ++viewIdCounter, []);
+  const { viewConfig, updateConfig } = useViewConfig();
+  const component = useMemo(() => viewConfig?.viewDecl?.component, [viewConfig]);
+  const idRef = useRef(null as string);
 
-  // This object contains all the metadata for this UIView
-  const uiViewData: ActiveUIView = useMemo(() => {
-    return { $type: 'react', id, name, fqn, creationContext, configUpdated, config: viewConfig as ViewConfig };
-  }, [id, name, fqn, parent, creationContext, viewConfig]);
-  const viewContext: ViewContext = viewConfig?.viewDecl?.$context;
-  const stateName: string = viewContext?.name;
-  const uiViewAddress: UIViewAddress = { fqn, context: viewContext };
+  // Register/deregister any time the uiViewData changes
+  useEffect(() => {
+    if (idRef.current) {
+      router.viewService.deregisterView(idRef.current);
+    }
+    idRef.current = router.viewService.registerView('react', parentId, name, updateConfig);
+  }, [name, parentId, updateConfig]);
+
+  // Deregister on unmount
+  useEffect(() => {
+    return () => {
+      if (idRef.current) {
+        router.viewService.deregisterView(idRef.current);
+      }
+    };
+  }, []);
+
+  const stateName: string = viewConfig?.viewDecl?.$context?.name;
   const resolveContext = useMemo(() => (viewConfig ? new ResolveContext(viewConfig.path) : undefined), [viewConfig]);
   const injector = useMemo(() => resolveContext?.injector(), [resolveContext]);
   const transition = useMemo(() => injector?.get(Transition), [injector]);
@@ -255,12 +254,6 @@ const View = forwardRef(function View(props: UIViewProps, forwardedRef) {
     transition
   );
 
-  // temporarily expose a ref with an API on it for @uirouter/react-hybrid to use
-  useReactHybridApi(forwardedRef, uiViewData, uiViewAddress);
-
-  // Register/deregister any time the uiViewData changes
-  useEffect(() => router.viewService.registerUIView(uiViewData), [uiViewData]);
-
   const childElement =
     !component && isValidElement(children)
       ? cloneElement(children, childProps)
@@ -269,7 +262,12 @@ const View = forwardRef(function View(props: UIViewProps, forwardedRef) {
   // if a render function is passed, use that. otherwise render the component normally
   const ChildOrRenderFunction =
     typeof render !== 'undefined' && component ? render(component, childProps) : childElement;
-  return <UIViewContext.Provider value={uiViewAddress}>{ChildOrRenderFunction}</UIViewContext.Provider>;
+
+  return (
+    <ViewIdContext.Provider value={idRef.current}>
+      {idRef.current ? ChildOrRenderFunction : null}
+    </ViewIdContext.Provider>
+  );
 });
 
 View.displayName = 'UIView';

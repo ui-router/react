@@ -5,7 +5,7 @@ import { ReactHTMLElement, useCallback, useContext, useEffect, useMemo, useState
 import { isString, StateDeclaration, TransitionOptions, UIRouter } from '@uirouter/core';
 import { UISrefActiveContext } from '../components';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
-import { useParentView } from './useParentView';
+import { useStateContext } from './useStateContext';
 import { useRouter } from './useRouter';
 
 export interface LinkProps {
@@ -78,8 +78,8 @@ export function useSref(stateName: string, params: object = {}, options: Transit
   const router = useRouter();
   // memoize the params object until the nested values actually change so they can be used as deps
   const paramsMemo = useMemo(() => params, [useDeepObjectDiff(params)]);
-
-  const relative: string = useParentView().context.name;
+  const { contentState } = useStateContext();
+  const relative = contentState?.name;
   const optionsMemo = useMemo(() => ({ relative, inherit: true, ...options }), [relative, options]);
   const targetState = useTargetState(router, stateName, relative);
   // Update href when the target StateDeclaration changes (in case the the state definition itself changes)

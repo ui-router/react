@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { UIRouter } from '@uirouter/core';
 import { useDeepObjectDiff } from './useDeepObjectDiff';
 import { useOnStateChanged } from './useOnStateChanged';
-import { useParentView } from './useParentView';
+import { useStateContext } from './useStateContext';
 import { useRouter } from './useRouter';
 
 /** @hidden */
@@ -40,7 +40,8 @@ function checkIfActive(router: UIRouter, stateName: string, params: object, rela
  */
 export function useIsActive(stateName: string, params = null, exact = false) {
   const router = useRouter();
-  const relative = useParentView().context.name;
+  const { contentState } = useStateContext();
+  const relative = contentState?.name;
   // Don't re-compute initialIsActive on every render
   const initialIsActive = useMemo(() => checkIfActive(router, stateName, params, relative, exact), []);
   const [isActive, setIsActive] = useState(initialIsActive);
