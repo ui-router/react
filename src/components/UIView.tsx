@@ -31,15 +31,6 @@ import { useRouter } from '../hooks/useRouter';
 import { ReactViewConfig } from '../reactViews';
 import { useUiCanExitClassComponentHook } from './hooks/useUiCanExitClassComponent.hook';
 
-/** @internal */
-let viewIdCounter = 0;
-
-/** @internal */
-export interface UIViewAddress {
-  context: ViewContext;
-  fqn: string;
-}
-
 /**
  * Interface for [[InjectedProps.resolves]]
  *
