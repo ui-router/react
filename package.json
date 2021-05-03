@@ -76,7 +76,7 @@
     "react-dom": "^16.12.0",
     "react-test-renderer": "^16.12.0",
     "ts-jest": "^26.4.4",
-    "ts-loader": "^8.0.12",
+    "ts-loader": "^9.1.1",
     "ts-node": "^9.1.1",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
     "typescript": "^4.1.3",
