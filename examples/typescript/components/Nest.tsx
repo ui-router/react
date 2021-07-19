@@ -7,7 +7,7 @@ interface NextInjectedProps extends UIViewInjectedProps {
 
 export class Nest extends React.Component<NextInjectedProps, any> {
   uiCanExit = () => {
-    return new Promise(resolve => {
+    return new Promise<void>((resolve) => {
       setTimeout(() => {
         resolve();
       }, 1000);
