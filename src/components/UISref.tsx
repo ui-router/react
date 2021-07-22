@@ -1,13 +1,10 @@
 import { isFunction, TransitionOptions } from '@uirouter/core';
 
-import * as _classNames from 'classnames';
+import classNames from 'classnames';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { cloneElement, useCallback, useMemo } from 'react';
 import { useSref } from '../hooks/useSref';
-
-/** @hidden */
-let classNames = _classNames;
 
 export interface UISrefProps {
   children?: any;

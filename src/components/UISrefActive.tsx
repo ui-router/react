@@ -1,11 +1,8 @@
 import * as React from 'react';
 import { useState, useCallback, useContext, useMemo, cloneElement } from 'react';
-import * as _classNames from 'classnames';
+import classNames from 'classnames';
 
 import { useCurrentStateAndParams, useRouter } from '../hooks';
-
-/** @hidden */
-let classNames = _classNames;
 
 export interface UISrefActiveState {
   stateName: string;
