@@ -17,11 +17,10 @@ describe('useUiSrefActive', () => {
     };
     await routerGo('other');
     const wrapper = mountInRouter(<Component />);
-    expect(wrapper.html()).toBe('<a href="/parent" class="">parent</a>');
+    expect(wrapper.container.innerHTML).toBe('<a href="/parent" class="">parent</a>');
 
     await routerGo('parent');
-    wrapper.update();
-    expect(wrapper.html()).toBe('<a href="/parent" class="active">parent</a>');
+    expect(wrapper.container.innerHTML).toBe('<a href="/parent" class="active">parent</a>');
   });
 
   it('returns the activeClass if a child state is active', async () => {
@@ -31,10 +30,9 @@ describe('useUiSrefActive', () => {
     };
     await routerGo('other');
     const wrapper = mountInRouter(<Component />);
-    expect(wrapper.html()).toBe('<a href="/parent" class="">parent</a>');
+    expect(wrapper.container.innerHTML).toBe('<a href="/parent" class="">parent</a>');
 
     await routerGo('parent.child');
-    wrapper.update();
-    expect(wrapper.html()).toBe('<a href="/parent" class="active">parent</a>');
+    expect(wrapper.container.innerHTML).toBe('<a href="/parent" class="active">parent</a>');
   });
 });

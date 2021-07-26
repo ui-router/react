@@ -1,5 +1,5 @@
+import { render } from '@testing-library/react';
 import * as React from 'react';
-import { mount } from 'enzyme';
 import { useEffect } from 'react';
 import { useDeepObjectDiff } from '../useDeepObjectDiff';
 
@@ -11,9 +11,9 @@ describe('normal react behavior', () => {
       return null;
     }
 
-    const wrapper = mount(<TestComponent prop={123} />);
-    wrapper.setProps({ prop: 123 });
-    wrapper.setProps({ prop: 123 });
+    const wrapper = render(<TestComponent prop={123} />);
+    wrapper.rerender(<TestComponent prop={123} />);
+    wrapper.rerender(<TestComponent prop={123} />);
 
     expect(spy).toHaveBeenCalledTimes(3);
   });
@@ -27,14 +27,14 @@ describe('useDeepObjectDiff', () => {
       return null;
     }
 
-    const wrapper = mount(<TestComponent prop={123} />);
-    wrapper.setProps({ prop: 123 });
-    wrapper.setProps({ prop: 123 });
-    wrapper.setProps({ prop: 123 });
-    wrapper.setProps({ prop: 123 });
+    const wrapper = render(<TestComponent prop={123} />);
+    wrapper.rerender(<TestComponent prop={123} />);
+    wrapper.rerender(<TestComponent prop={123} />);
+    wrapper.rerender(<TestComponent prop={123} />);
+    wrapper.rerender(<TestComponent prop={123} />);
     expect(spy).toHaveBeenCalledTimes(1);
 
-    wrapper.setProps({ prop: 456 });
+    wrapper.rerender(<TestComponent prop={456} />);
     expect(spy).toHaveBeenCalledTimes(2);
   });
 });

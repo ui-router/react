@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TransitionOptions, RawParams, StateOrName, TransitionPromise, memoryLocationPlugin } from '@uirouter/core';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { UIRouterReact } from '../core';
 import { servicesPlugin, UIRouter } from '../index';
@@ -11,18 +11,19 @@ export const makeTestRouter = (states: ReactStateDeclaration[]) => {
   router.plugin(servicesPlugin);
   router.plugin(memoryLocationPlugin);
   router.locationConfig.html5Mode = () => true;
-  states.forEach(state => router.stateRegistry.register(state));
+  states.forEach((state) => router.stateRegistry.register(state));
 
-  const mountInRouter: typeof mount = (children, opts) => {
-    const WrapperComponent = props => {
+  const mountInRouter: typeof render = (children, opts?) => {
+    const WrapperComponent = (props) => {
       const cloned = React.cloneElement(children, props);
       return <UIRouter router={router}>{cloned}</UIRouter>;
     };
-    return mount(<WrapperComponent />, opts);
+
+    return render(<WrapperComponent />, opts) as any;
   };
 
-  const routerGo = function(to: StateOrName, params?: RawParams, options?: TransitionOptions) {
-    return (act(() => router.stateService.go(to, params, options)) as any) as TransitionPromise;
+  const routerGo = function (to: StateOrName, params?: RawParams, options?: TransitionOptions): TransitionPromise {
+    return act(() => router.stateService.go(to, params, options) as any) as any;
   };
 
   return { router, routerGo, mountInRouter };
