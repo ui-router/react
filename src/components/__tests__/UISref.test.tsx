@@ -1,3 +1,4 @@
+import { fireEvent } from '@testing-library/react';
 import * as React from 'react';
 import { UISref, UIView } from '../../components';
 import { UISrefActiveContext } from '../UISrefActive';
@@ -21,8 +22,9 @@ const states = [
 ];
 
 describe('<UISref>', () => {
-  beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
-  afterAll(() => (React.useEffect as any).mockRestore());
+  let mockUseEffect: any;
+  beforeEach(() => (mockUseEffect = jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect)));
+  afterEach(() => mockUseEffect.mockRestore());
 
   let { router, routerGo, mountInRouter } = makeTestRouter([]);
   beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter(states)));
@@ -30,13 +32,15 @@ describe('<UISref>', () => {
   it('renders its child with injected props', async () => {
     const wrapper = mountInRouter(
       <UISref to="state2">
-        <a>state2</a>
+        <a data-testid="anchor">state2</a>
       </UISref>
     );
     await routerGo('state');
-    const props = wrapper.find('a').props();
-    expect(typeof props.onClick).toBe('function');
-    expect(props.href.includes('/state2')).toBe(true);
+    const goSpy = jest.spyOn(router.stateService, 'go');
+    const anchor = wrapper.getByTestId('anchor');
+    expect(anchor.getAttribute('href').includes('/state2')).toBe(true);
+    anchor.click();
+    expect(goSpy).toHaveBeenCalledTimes(1);
   });
 
   it('throws if state name is not a string', () => {
@@ -50,13 +54,12 @@ describe('<UISref>', () => {
     const deregisterFn = jest.fn();
     const parentUISrefActiveAddStateFn = jest.fn(() => deregisterFn);
 
-    const wrapper = mountInRouter(
+    mountInRouter(
       <UISrefActiveContext.Provider value={parentUISrefActiveAddStateFn}>
         <UIView />
       </UISrefActiveContext.Provider>
     );
 
-    expect(wrapper.html()).toBe('<a href="/state2" class="">state2</a>');
     expect(parentUISrefActiveAddStateFn).toHaveBeenCalled();
     await routerGo('state2');
     expect(deregisterFn).toHaveBeenCalled();
@@ -64,13 +67,13 @@ describe('<UISref>', () => {
 
   it('triggers a transition to target state', async () => {
     const goSpy = jest.spyOn(router.stateService, 'go');
-    const wrapper = mountInRouter(
+    const rendered = mountInRouter(
       <UISref to="state2">
-        <a />
+        <a data-testid="anchor" />
       </UISref>
     );
 
-    wrapper.find('a').simulate('click');
+    rendered.getByTestId('anchor').click();
 
     expect(goSpy).toHaveBeenCalledTimes(1);
     expect(goSpy).toHaveBeenCalledWith('state2', expect.anything(), expect.anything());
@@ -80,12 +83,14 @@ describe('<UISref>', () => {
     const log = [];
     const goSpy = jest.spyOn(router.stateService, 'go').mockImplementation(() => log.push('go') as any);
     const onClickSpy = jest.fn(() => log.push('onClick'));
-    const wrapper = mountInRouter(
+    const rendered = mountInRouter(
       <UISref to="state2">
-        <a onClick={onClickSpy}>state2</a>
+        <a data-testid="anchor" onClick={onClickSpy}>
+          state2
+        </a>
       </UISref>
     );
-    wrapper.find('a').simulate('click');
+    rendered.getByTestId('anchor').click();
 
     expect(onClickSpy).toHaveBeenCalled();
     expect(goSpy).toHaveBeenCalled();
@@ -95,12 +100,14 @@ describe('<UISref>', () => {
   it('calls the child elements onClick function and honors e.preventDefault()', async () => {
     const goSpy = jest.spyOn(router.stateService, 'go');
     const onClickSpy = jest.fn((e) => e.preventDefault());
-    const wrapper = mountInRouter(
+    const rendered = mountInRouter(
       <UISref to="state2">
-        <a onClick={onClickSpy}>state2</a>
+        <a data-testid="anchor" onClick={onClickSpy}>
+          state2
+        </a>
       </UISref>
     );
-    wrapper.find('a').simulate('click');
+    rendered.getByTestId('anchor').click();
 
     expect(onClickSpy).toHaveBeenCalled();
     expect(goSpy).not.toHaveBeenCalled();
@@ -108,55 +115,56 @@ describe('<UISref>', () => {
 
   it("doesn't trigger a transition when middle-clicked", async () => {
     const stateServiceGoSpy = jest.spyOn(router.stateService, 'go');
-    const wrapper = mountInRouter(
+    const rendered = mountInRouter(
       <UISref to="state2">
-        <a>state2</a>
+        <a data-testid="anchor">state2</a>
       </UISref>
     );
 
-    const link = wrapper.find('a');
-    link.simulate('click');
+    const link = rendered.getByTestId('anchor');
+    link.click();
     expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
 
-    link.simulate('click', { button: 1 });
+    fireEvent(link, new MouseEvent('click', { button: 1 }));
     expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
   });
 
   it("doesn't trigger a transition when ctrl/meta/shift/alt+clicked", async () => {
     const stateServiceGoSpy = jest.spyOn(router.stateService, 'go');
-    const wrapper = mountInRouter(
+    const rendered = mountInRouter(
       <UISref to="state2">
-        <a>state2</a>
+        <a data-testid="anchor">state2</a>
       </UISref>
     );
 
-    const link = wrapper.find('a');
-    link.simulate('click');
+    const link = rendered.getByTestId('anchor');
+    link.click();
     expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
 
-    link.simulate('click', { ctrlKey: true });
+    fireEvent(link, new MouseEvent('click', { ctrlKey: true }));
     expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
 
-    link.simulate('click', { metaKey: true });
+    fireEvent(link, new MouseEvent('click', { metaKey: true }));
     expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
 
-    link.simulate('click', { shiftKey: true });
+    fireEvent(link, new MouseEvent('click', { shiftKey: true }));
     expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
 
-    link.simulate('click', { altKey: true });
+    fireEvent(link, new MouseEvent('click', { altKey: true }));
     expect(stateServiceGoSpy).toHaveBeenCalledTimes(1);
   });
 
   it("doesn't trigger a transition when the anchor has a 'target' attribute", async () => {
     const stateServiceGoSpy = jest.spyOn(router.stateService, 'go');
-    const wrapper = mountInRouter(
+    const rendered = mountInRouter(
       <UISref to="state2">
-        <a target="_blank">state2</a>
+        <a data-testid="anchor" target="_blank">
+          state2
+        </a>
       </UISref>
     );
 
-    const link = wrapper.find('a');
-    link.simulate('click');
+    rendered.getByTestId('anchor').click();
     expect(stateServiceGoSpy).not.toHaveBeenCalled();
   });
 });

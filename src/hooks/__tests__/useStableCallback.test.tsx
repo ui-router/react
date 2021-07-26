@@ -1,5 +1,5 @@
+import { render } from '@testing-library/react';
 import * as React from 'react';
-import { mount } from 'enzyme';
 import { useStableCallback } from '../useStableCallback';
 
 describe('useStableCallback', () => {
@@ -12,9 +12,9 @@ describe('useStableCallback', () => {
 
   it('returns the same stable callback reference over multiple renders', async () => {
     const spy = jest.fn();
-    const wrapper = mount(<TestComponent spy={spy} />);
-    wrapper.setProps({ prop: 'newvalue' });
-    wrapper.setProps({ prop: 'nextvalue' });
+    const wrapper = render(<TestComponent spy={spy} />);
+    wrapper.rerender(<TestComponent spy={spy} prop="newvalue" />);
+    wrapper.rerender(<TestComponent spy={spy} prop="nextvalue" />);
     expect(spy).toHaveBeenCalledTimes(3);
 
     const stableArg1 = spy.mock.calls[0][1];
@@ -28,9 +28,9 @@ describe('useStableCallback', () => {
 
   it('returns the most recent unstable callback reference over multiple renders', async () => {
     const spy = jest.fn();
-    const wrapper = mount(<TestComponent spy={spy} />);
-    wrapper.setProps({ prop: 'newvalue' });
-    wrapper.setProps({ prop: 'nextvalue' });
+    const wrapper = render(<TestComponent spy={spy} />);
+    wrapper.rerender(<TestComponent spy={spy} prop="newvalue" />);
+    wrapper.rerender(<TestComponent spy={spy} prop="nextvalue" />);
     expect(spy).toHaveBeenCalledTimes(3);
 
     const stableArg1 = spy.mock.calls[0][0];
@@ -48,9 +48,9 @@ describe('useStableCallback', () => {
 
   it('allows a stable callback reference to access the latest render closure values', async () => {
     const spy = jest.fn();
-    const wrapper = mount(<TestComponent spy={spy} />);
-    wrapper.setProps({ prop: 'firstvalue' });
-    wrapper.setProps({ prop: 'nextvalue' });
+    const wrapper = render(<TestComponent spy={spy} />);
+    wrapper.rerender(<TestComponent spy={spy} prop="newvalue" />);
+    wrapper.rerender(<TestComponent spy={spy} prop="nextvalue" />);
     expect(spy).toHaveBeenCalledTimes(3);
 
     const stableArg3 = spy.mock.calls[2][1];

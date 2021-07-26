@@ -1,5 +1,5 @@
+import { render } from '@testing-library/react';
 import * as React from 'react';
-import { mount } from 'enzyme';
 import { makeTestRouter } from '../../__tests__/util';
 import { ReactStateDeclaration } from '../../index';
 import { UISref, UISrefActive, UIRouter } from '../../components';
@@ -14,41 +14,44 @@ const states: ReactStateDeclaration[] = [
 describe('<UISrefActive>', () => {
   let { router, routerGo, mountInRouter } = makeTestRouter([]);
   beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter(states)));
-  beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
-  afterAll(() => (React.useEffect as any).mockRestore());
+  beforeEach(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
+  afterEach(() => (React.useEffect as any).mockRestore());
 
-  function UISrefActiveTestComponent(props: { to?: string; activeClass?: string; params?: object; exact?: boolean }) {
-    const { to = 'parent', activeClass = 'active', exact = false, params } = props;
+  function UISrefActiveTestComponent(props: {
+    to?: string;
+    activeClass?: string;
+    params?: object;
+    exact?: boolean;
+    testid?: string;
+  }) {
+    const { to = 'parent', activeClass = 'active', exact = false, params, testid = 'anchor' } = props;
     return (
       <UISrefActive class={activeClass} exact={exact}>
         <UISref to={to} params={params}>
-          <a />
+          <a data-testid={testid} className="baseclass" />
         </UISref>
       </UISrefActive>
     );
   }
 
   it('renders its child', async () => {
-    const wrapper = mountInRouter(<UISrefActiveTestComponent to="parent.child1" />);
-    const props = wrapper.find('a').props();
-    expect(typeof props.onClick).toBe('function');
-    expect(props.href).toBe('/parent/child1');
+    const rendered = mountInRouter(<UISrefActiveTestComponent to="parent.child1" />);
+    const anchor = rendered.getByTestId('anchor');
+    expect(anchor.getAttribute('href')).toBe('/parent/child1');
   });
 
   it('updates class for child <UISref>', async () => {
-    const wrapper = mountInRouter(<UISrefActiveTestComponent to="parent.child1" />);
-    expect(wrapper.find('a')).toHaveLength(1);
-    expect(wrapper.find('a').props().className).toBe('');
+    const rendered = mountInRouter(<UISrefActiveTestComponent to="parent.child1" />);
+    expect(await rendered.findAllByRole('link')).toHaveLength(1);
+    expect(rendered.getByTestId('anchor').getAttribute('class')).toBe('baseclass');
 
     await routerGo('parent.child1');
-    wrapper.update();
-    expect(wrapper.find('a')).toHaveLength(1);
-    expect(wrapper.find('a').props().className).toBe('active');
+    expect(await rendered.findAllByRole('link')).toHaveLength(1);
+    expect(rendered.getByTestId('anchor').getAttribute('class')).toBe('active baseclass');
 
     await routerGo('parent.child2');
-    wrapper.update();
-    expect(wrapper.find('a')).toHaveLength(1);
-    expect(wrapper.find('a').props().className).toBe('');
+    expect(await rendered.findAllByRole('link')).toHaveLength(1);
+    expect(rendered.getByTestId('anchor').getAttribute('class')).toBe('baseclass');
   });
 
   it('registers onSuccess transition hook to listen for state changes', async () => {
@@ -60,150 +63,171 @@ describe('<UISrefActive>', () => {
   it('deregisters the transition hook when unmounted', async () => {
     const deregisterSpy = jest.fn();
     jest.spyOn(router.transitionService, 'onSuccess').mockImplementation(() => deregisterSpy);
+    const Component = () => {
+      const [show, setShow] = React.useState(true);
+      return (
+        <div>
+          <button data-testid="btn" onClick={() => setShow(false)}>
+            hide
+          </button>
+          {show && <UISrefActive />}
+        </div>
+      );
+    };
 
-    const wrapper = mountInRouter(<UISrefActive />);
+    const rendered = mountInRouter(<Component />);
     expect(deregisterSpy).not.toHaveBeenCalled();
-    wrapper.unmount();
+    rendered.getByTestId('btn').click();
     expect(deregisterSpy).toHaveBeenCalled();
   });
 
   it('works with state parameters', async () => {
     await routerGo('withParams', { param: 5 });
-    const wrapper = mountInRouter(<UISrefActiveTestComponent to="withParams" params={{ param: 5 }} />);
-    expect(wrapper.find('a').props().className).toBe('active');
+    const rendered = mountInRouter(<UISrefActiveTestComponent to="withParams" params={{ param: 5 }} />);
+    expect(rendered.getByTestId('anchor').getAttribute('class')).toBe('active baseclass');
 
     await routerGo('withParams', { param: 3 });
-    wrapper.update();
-    expect(wrapper.find('a').props().className).toBe('');
+    expect(rendered.getByTestId('anchor').getAttribute('class')).toBe('baseclass');
   });
 
   it('applies the active class when any nested <UISref> is active', async () => {
-    const wrapper = mountInRouter(
+    const rendered = mountInRouter(
       <UISrefActive class="active">
-        <div>
+        <div className="baseclass" data-testid="div">
           <UISref to="parent.child1">
-            <a>child1</a>
+            <a data-testid="child1">child1</a>
           </UISref>
           <UISref to="parent.child2">
-            <a>child2</a>
+            <a data-testid="child2">child2</a>
           </UISref>
         </div>
       </UISrefActive>
     );
+
+    const divClass = () => rendered.getByTestId('div').getAttribute('class').split(/ +/).sort().join(' ');
+
     await routerGo('parent.child1');
-    wrapper.update();
-    expect(wrapper.find('div.active')).toHaveLength(1);
+    expect(divClass()).toBe('active baseclass');
 
     await routerGo('parent.child2');
-    wrapper.update();
-    expect(wrapper.find('div.active')).toHaveLength(1);
+    expect(divClass()).toBe('active baseclass');
 
     await routerGo('parent.child2');
-    wrapper.update();
-    expect(wrapper.find('div.active')).toHaveLength(1);
+    expect(divClass()).toBe('active baseclass');
 
     await routerGo('parent');
-    wrapper.update();
-    expect(wrapper.find('div.active')).toHaveLength(0);
+    expect(divClass()).toBe('baseclass');
   });
 
   it('works with nested <UISrefActive>', async () => {
-    const wrapper = mountInRouter(
+    const rendered = mountInRouter(
       <UISrefActive class="active">
-        <div>
+        <div className="baseclass" data-testid="div">
           <UISrefActive class="child1">
             <UISref to="parent.child1">
-              <a>child1</a>
+              <a data-testid="child1">child1</a>
             </UISref>
           </UISrefActive>
           <UISrefActive class="child2">
             <UISref to="parent.child2">
-              <a>child2</a>
+              <a data-testid="child2">child2</a>
             </UISref>
           </UISrefActive>
         </div>
       </UISrefActive>
     );
 
+    const classFor = (testid: string) =>
+      rendered.getByTestId(testid).getAttribute('class').split(/ +/).sort().join(' ');
+
     await routerGo('parent');
-    wrapper.update();
-    expect(wrapper.find('div.active')).toHaveLength(0);
-    expect(wrapper.find('a.child1')).toHaveLength(0);
-    expect(wrapper.find('a.child2')).toHaveLength(0);
+    expect(classFor('div')).toBe('baseclass');
+    expect(classFor('child1')).toBe('');
+    expect(classFor('child2')).toBe('');
 
     await routerGo('parent.child1');
-    wrapper.update();
-    expect(wrapper.find('div.active')).toHaveLength(1);
-    expect(wrapper.find('a.child1')).toHaveLength(1);
-    expect(wrapper.find('a.child2')).toHaveLength(0);
+    expect(classFor('div')).toBe('active baseclass');
+    expect(classFor('child1')).toBe('child1');
+    expect(classFor('child2')).toBe('');
 
     await routerGo('parent.child2');
-    wrapper.update();
-    expect(wrapper.find('div.active')).toHaveLength(1);
-    expect(wrapper.find('a.child1')).toHaveLength(0);
-    expect(wrapper.find('a.child2')).toHaveLength(1);
+    expect(classFor('div')).toBe('active baseclass');
+    expect(classFor('child1')).toBe('');
+    expect(classFor('child2')).toBe('child2');
   });
 
   it('passes down className from parent correctly', async () => {
-    const wrapper = mountInRouter(
-      <UISrefActive class="active">
-        <UISrefActive class="child1">
+    const rendered = mountInRouter(
+      <UISrefActive class="parent">
+        <UISrefActive class="child">
           <UISref to="parent.child1">
-            <a>child1</a>
+            <a className="baseclass" data-testid="anchor">
+              child1
+            </a>
           </UISref>
         </UISrefActive>
       </UISrefActive>
     );
 
+    const classFor = (testid: string) =>
+      rendered.getByTestId(testid).getAttribute('class').split(/ +/).sort().join(' ');
+
     await routerGo('parent.child1');
-    wrapper.update();
-    expect(wrapper.find('a.active.child1')).toHaveLength(1);
+    expect(classFor('anchor')).toBe('baseclass child parent');
 
     await routerGo('parent');
-    wrapper.update();
-    expect(wrapper.find('a.active')).toHaveLength(0);
-    expect(wrapper.find('a.child1')).toHaveLength(0);
+    expect(classFor('anchor')).toBe('baseclass');
   });
 
   it('removes active state if underlying UISref is unmounted', async () => {
-    const Comp = ({ show }) => {
-      const sref = (
+    const Comp = () => {
+      const [show, setShow] = React.useState(true);
+      const sref = show ? (
         <UISref to="parent.child1">
           <a>child1</a>
         </UISref>
-      );
+      ) : null;
 
       return (
         <UIRouter router={router}>
-          <UISrefActive class="active">{show ? sref : <div id="test" />}</UISrefActive>
+          <button data-testid="hidebtn" onClick={() => setShow(false)} />
+          <UISrefActive class="active">
+            <div className="baseclass" data-testid="div">
+              {sref}
+            </div>
+          </UISrefActive>
         </UIRouter>
       );
     };
 
-    await routerGo('parent.child1');
-    const wrapper = mount(<Comp show={true} />);
-    const activeLink = wrapper.find('a.active');
-    expect(activeLink).toHaveLength(1);
+    const classFor = (testid: string) =>
+      rendered.getByTestId(testid).getAttribute('class').split(/ +/).sort().join(' ');
 
-    wrapper.setProps({ show: false });
-    expect(wrapper.html()).toBe('<div id="test"></div>');
+    await routerGo('parent.child1');
+    const rendered = render(<Comp />);
+    expect(classFor('div')).toBe('active baseclass');
+
+    rendered.getByTestId('hidebtn').click();
+    expect(classFor('div')).toBe('baseclass');
   });
 
   it('checks for exact state match when exact prop is provided', async () => {
-    const wrapper = mountInRouter(
+    const rendered = mountInRouter(
       <>
-        <UISrefActiveTestComponent activeClass="fuzzy" to="parent" />
-        <UISrefActiveTestComponent activeClass="exact" to="parent" exact={true} />
+        <UISrefActiveTestComponent activeClass="fuzzy" testid="fuzzy" to="parent" />
+        <UISrefActiveTestComponent activeClass="exact" testid="exact" to="parent" exact={true} />
       </>
     );
+
+    const classFor = (testid: string) =>
+      rendered.getByTestId(testid).getAttribute('class').split(/ +/).sort().join(' ');
+
     await routerGo('parent.child1');
-    wrapper.update();
-    expect(wrapper.find('a.fuzzy')).toHaveLength(1);
-    expect(wrapper.find('a.exact')).toHaveLength(0);
+    expect(classFor('fuzzy')).toBe('baseclass fuzzy');
+    expect(classFor('exact')).toBe('baseclass');
 
     await routerGo('parent');
-    wrapper.update();
-    expect(wrapper.find('a.fuzzy')).toHaveLength(1);
-    expect(wrapper.find('a.exact')).toHaveLength(1);
+    expect(classFor('fuzzy')).toBe('baseclass fuzzy');
+    expect(classFor('exact')).toBe('baseclass exact');
   });
 });
