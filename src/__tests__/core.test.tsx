@@ -12,8 +12,8 @@ describe('UIRouterReact class', () => {
   });
 
   it('starts the router with start() method', () => {
-    let urlRouterListenSpy = jest.spyOn(router.urlRouter, 'listen');
-    let urlRouterSyncSpy = jest.spyOn(router.urlRouter, 'sync');
+    let urlRouterListenSpy = jest.spyOn(router.urlService, 'listen');
+    let urlRouterSyncSpy = jest.spyOn(router.urlService, 'sync');
     router.start();
     expect(urlRouterListenSpy).toHaveBeenCalled();
     expect(urlRouterSyncSpy).toHaveBeenCalled();
