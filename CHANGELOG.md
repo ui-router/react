@@ -1,3 +1,10 @@
+## 1.0.7 (2021-07-27)
+[Compare `@uirouter/react` versions 1.0.6 and 1.0.7](https://github.com/ui-router/react/compare/1.0.6...1.0.7)
+
+### Bug Fixes
+
+* update classnames library which has default export type ([#939](https://github.com/ui-router/react/issues/939)) ([c771405](https://github.com/ui-router/react/commit/c771405))
+
 ## 1.0.6 (2020-12-22)
 [Compare `@uirouter/react` versions 1.0.5 and 1.0.6](https://github.com/ui-router/react/compare/1.0.5...1.0.6)
 
