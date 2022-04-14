@@ -1,4 +1,4 @@
-import { StatelessComponent, ComponentClass, ClassicComponentClass } from 'react';
+import { FunctionComponent, ComponentClass, ClassicComponentClass } from 'react';
 import { StateDeclaration, _ViewDeclaration, Transition } from '@uirouter/core';
 
 /**
@@ -169,7 +169,7 @@ export interface ReactViewDeclaration extends _ViewDeclaration {
    * }
    * ```
    */
-  component?: StatelessComponent<any> | ComponentClass<any> | ClassicComponentClass<any>;
+  component?: FunctionComponent<any> | ComponentClass<any> | ClassicComponentClass<any>;
 
   /**
    * @hidden
