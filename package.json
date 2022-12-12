@@ -65,7 +65,7 @@
     "babel-preset-react": "^6.24.1",
     "bufferutil": "4.0.3",
     "canvas": "2.8.0",
-    "chalk": "^4.0.0",
+    "chalk": "^5.2.0",
     "cross-env": "^7.0.3",
     "husky": "^4.3.6",
     "jest": "27.0.6",
