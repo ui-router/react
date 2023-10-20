@@ -398,7 +398,7 @@ Changelog for `@uirouter/core`:
 
 * **react:** from version `0.7.0` `@uirouter/react` only supports react from version `16.3.x` because of the new Context API.
 If you need to use it with previous versions of React you should check the `0.6.x`, but bear in mind that it’s no longer supported and it’s advised to update React instead.
-* `@uirouter/react` now uses the new React 16.3 Context API. If you were accessing the router instance via the legacy context api (which was never explecitly supported) you need to update your code accordingly:
+* `@uirouter/react` now uses the new React 16.3 Context API. If you were accessing the router instance via the legacy context api (which was never explicitly supported) you need to update your code accordingly:
 
 before:
 ```jsx
@@ -460,7 +460,7 @@ class SomeComponent extends React.Component {
 
 * **react:** from version `0.7.0` `@uirouter/react` only supports react from version `16.3.x` because of the new Context API.
 If you need to use it with previous versions of React you should check the `0.6.x`, but bear in mind that it’s no longer supported and it’s advised to update React instead.
-* `@uirouter/react` now uses the new React 16.3 Context API. If you were accessing the router instance via the legacy context api (which was never explecitly supported) you need to update your code accordingly:
+* `@uirouter/react` now uses the new React 16.3 Context API. If you were accessing the router instance via the legacy context api (which was never explicitly supported) you need to update your code accordingly:
 
 before:
 ```jsx
@@ -581,7 +581,7 @@ render () {
 * **pathNode:** add backwards compat for PathNode.clone(). Add retainedWithToParams to treeChanges interface. ([4833a32](https://github.com/ui-router/core/commit/4833a32))
 * **pushStateLocation:** Fix URLs: add slash between base and path when necessary ([bfa5755](https://github.com/ui-router/core/commit/bfa5755))
 * **pushStateLocation:** When url is "" or "/", use baseHref for pushState ([042a950](https://github.com/ui-router/core/commit/042a950))
-* **resolve:** Add onFinish hook to resolve any dynamicly added resolvables ([7d1ca54](https://github.com/ui-router/core/commit/7d1ca54))
+* **resolve:** Add onFinish hook to resolve any dynamically added resolvables ([7d1ca54](https://github.com/ui-router/core/commit/7d1ca54))
 * **trace:** Fix null reference in uiview name sort function ([59cb067](https://github.com/ui-router/core/commit/59cb067))
 * **treeChanges:** apply toParams to 'retained' path ([#72](https://github.com/ui-router/core/issues/72)) ([cf63d11](https://github.com/ui-router/core/commit/cf63d11))
 * **urlRouter:** Update query params when resetting url via .update() ([7664cd0](https://github.com/ui-router/core/commit/7664cd0))
@@ -603,7 +603,7 @@ render () {
 
 ### Features
 
-* move prop-types from peerDependencies to dependecies ([5c6b2dd](https://github.com/ui-router/react/commit/5c6b2dd)), closes [#70](https://github.com/ui-router/react/issues/70)
+* move prop-types from peerDependencies to dependencies ([5c6b2dd](https://github.com/ui-router/react/commit/5c6b2dd)), closes [#70](https://github.com/ui-router/react/issues/70)
 * **UIRouterReact:** throw if `start` is called more than once ([d48c9fb](https://github.com/ui-router/react/commit/d48c9fb)), closes [#65](https://github.com/ui-router/react/issues/65)
 
 ## 0.5.4 (2017-10-17)
@@ -1008,7 +1008,7 @@ Version 0.4.0 is based on ui-router-ore 3.1.0 and as such introduced a lot of ne
 
 ### Added
 - `UISref` and `UISrefActive` properly copy over all props and class names of thir children, adding more flexibility for the user.
-- `UIView` rendered component exposes two props from the router: `resolves` and `transition`. They act as an injected dependecy of the state-component, and are used to interact with the router itself.
+- `UIView` rendered component exposes two props from the router: `resolves` and `transition`. They act as an injected dependency of the state-component, and are used to interact with the router itself.
 - `UIView` registers as `onBefore` hook the `uiCanExit` method of the component instance it renders.
 - `UISrefActive`: by passing a `extact={true}` props it will only activate when the exact target state used in the `UISref` is active.
 - `html5Mode` added to UIRouterReact class for using `pushStateLocation` instead of `hashLocation` as history strategy (WARNING: This is a temporary api and will likely change in the future)
