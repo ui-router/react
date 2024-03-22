@@ -90,11 +90,7 @@ export function useSref(stateName: string, params: object = {}, options: Transit
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
-      /* For scenario where we specify target="_blank" on a link that has a div as a child, to use browser's default onClick behavior,
-          the onClick event gets triggered on the div rather than the anchor tag.
-          The actual target is present inside the currentTarget property instead. So, targetAttr should be assigned from currentTarget,
-          so that router's go method does not get called and browser's default onClick behavior is triggered 
-          currentTarget will always be set irrespective of anchor contains a child or not*/
+      /* We want to check attributes on the element that the click handler is on and not on whichever other element was clicked*/
 
       const targetAttr = (e.currentTarget as any)?.attributes?.target;
       const modifierKey = e.button >= 1 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey;
