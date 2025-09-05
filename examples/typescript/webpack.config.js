@@ -29,6 +29,11 @@ var config = {
       },
     ],
   },
+  devServer: {
+    static: {
+      directory: './examples/typescript',
+    },
+  },
 };
 
 module.exports = config;
