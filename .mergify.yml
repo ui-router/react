@@ -1,21 +1,19 @@
 pull_request_rules:
-  - name: Auto Squash and Merge
+  - name: 'Auto Squash and Merge'
     conditions:
       - base=master
-      - status-success=ci
-      - 'label=ready to squash and merge'
+      - check-success=ci
+      - label=ready to squash and merge
     actions:
-      delete_head_branch: {}
+      delete_head_branch:
       merge:
         method: squash
-        strict: smart
-  - name: Auto Rebase and Merge
+  - name: 'Auto Rebase and Merge'
     conditions:
       - base=master
-      - status-success=ci
-      - 'label=ready to rebase and merge'
+      - check-success=ci
+      - label=ready to rebase and merge
     actions:
-      delete_head_branch: {}
+      delete_head_branch:
       merge:
         method: rebase
-        strict: smart
