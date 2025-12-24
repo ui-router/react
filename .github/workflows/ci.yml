@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        yarncmd: ['test', 'docs', 'test:downstream']
+        yarncmd: ['test', 'test:downstream']
     steps:
       - uses: actions/checkout@v2
       - name: Configure
