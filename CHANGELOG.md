@@ -1,3 +1,29 @@
+## 1.0.8 (2025-12-31)
+[Compare `@uirouter/react` versions 1.0.7 and 1.0.8](https://github.com/ui-router/react/compare/1.0.7...1.0.8)
+
+### Bug Fixes
+
+* **gha:** Remove scripts-prepend-node-path from GHA config ([c4ae8b0](https://github.com/ui-router/react/commit/c4ae8b0))
+
+
+---
+
+
+### Updated `@uirouter/core` from 6.0.7 to 6.1.2
+
+
+Changelog for `@uirouter/core`:
+
+
+[Compare `@uirouter/core` versions 6.0.7 and 6.1.2](https://github.com/ui-router/core/compare/6.0.7...6.1.2)
+
+### Bug Fixes
+
+* **angular-compiler:** remove index.metadata.json from uirouter core, ([37b5ebe](https://github.com/ui-router/core/commit/37b5ebe))
+* **stateParams:** $inherit is not affected by enumerable prototype custom methods ([#841](https://github.com/ui-router/core/issues/841)) ([9c94c2a](https://github.com/ui-router/core/commit/9c94c2a))
+* **stateService:** make sure `$state.href` (and by extension `uiSref`) handle `inherit: false` ([#834](https://github.com/ui-router/core/issues/834)) ([12cd951](https://github.com/ui-router/core/commit/12cd951)), closes [/github.com/ui-router/core/pull/834#issuecomment-1379019917](https://github.com//github.com/ui-router/core/pull/834/issues/issuecomment-1379019917) [/github.com/ui-router/core/pull/834#issuecomment-1379195131](https://github.com//github.com/ui-router/core/pull/834/issues/issuecomment-1379195131)
+* **urlMatcher:** Fix potential ReDoS, thanks to www.HeroDevs.com ([0c00a12](https://github.com/ui-router/core/commit/0c00a12))
+
 ## 1.0.7 (2021-07-27)
 [Compare `@uirouter/react` versions 1.0.6 and 1.0.7](https://github.com/ui-router/react/compare/1.0.6...1.0.7)
 
