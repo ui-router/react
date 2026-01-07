@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
@@ -22,10 +23,16 @@ const Link = ({ to, params = undefined, children = undefined, target = undefined
 
 describe('useSref', () => {
   let { router, routerGo, mountInRouter } = makeTestRouter([]);
-  beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter([state, state2, state3])));
+  beforeEach(() => {
+    muteConsoleErrors([/Not implemented: navigation to another Document/]);
+    return ({ router, routerGo, mountInRouter } = makeTestRouter([state, state2, state3]));
+  });
 
   it('throws if to is not a string', () => {
-    muteConsoleErrors();
+    muteConsoleErrors([
+      /Error: The state name passed to useSref must be a string./,
+      /The above error occurred in the <Link> component/,
+    ]);
     expect(() => mountInRouter(<Link to={5} />)).toThrow(/must be a string/);
   });
 
@@ -34,9 +41,9 @@ describe('useSref', () => {
     expect(rendered.container.innerHTML).toBe('<a data-testid="anchor" href="/state2">state2</a>');
   });
 
-  fdescribe('onClick function', () => {
+  describe('onClick function', () => {
     it('activates the target state', () => {
-      const spy = jest.spyOn(router.stateService, 'go');
+      const spy = vi.spyOn(router.stateService, 'go');
       const rendered = mountInRouter(<Link to="state" />);
       rendered.getByTestId('anchor').click();
 
@@ -45,7 +52,7 @@ describe('useSref', () => {
     });
 
     it('respects defaultPrevented', () => {
-      const spy = jest.spyOn(router.stateService, 'go');
+      const spy = vi.spyOn(router.stateService, 'go');
       const rendered = mountInRouter(<Link to="state" />);
       const mouseEvent = new MouseEvent('click');
       mouseEvent.preventDefault();
@@ -55,17 +62,15 @@ describe('useSref', () => {
     });
 
     it('does not get called when middle or right clicked', () => {
-      debugger;
-      const spy = jest.spyOn(router.stateService, 'go');
+      const spy = vi.spyOn(router.stateService, 'go');
       const rendered = mountInRouter(<Link to="state" />);
 
       fireEvent(rendered.getByTestId('anchor'), new MouseEvent('click', { button: 1 }));
       expect(spy).not.toHaveBeenCalled();
-      debugger;
     });
 
     it('does not get called if any of these modifiers are present: ctrl, meta, shift, alt', () => {
-      const spy = jest.spyOn(router.stateService, 'go');
+      const spy = vi.spyOn(router.stateService, 'go');
       const rendered = mountInRouter(<Link to="state" />);
 
       fireEvent(rendered.getByTestId('anchor'), new MouseEvent('click', { ctrlKey: true }));
@@ -77,7 +82,7 @@ describe('useSref', () => {
     });
 
     it('does not get called if the underlying DOM element has a "target" attribute', () => {
-      const spy = jest.spyOn(router.stateService, 'go');
+      const spy = vi.spyOn(router.stateService, 'go');
       const rendered = mountInRouter(<Link to="state" target="_blank" />);
 
       rendered.getByTestId('anchor').click();
@@ -131,7 +136,7 @@ describe('useSref', () => {
     expect(rendered.container.innerHTML).toBe('<a data-testid="anchor" href="/asdfasdf"></a>');
   });
 
-  fit('updates future state hrefs when the list of registered states changes', async () => {
+  it('updates future state hrefs when the list of registered states changes', async () => {
     const lazyLoadFutureStates = () =>
       Promise.resolve({
         states: [
@@ -148,7 +153,7 @@ describe('useSref', () => {
     expect(rendered.container.innerHTML).toBe('<a data-testid="anchor" href="/future/child"></a>');
   });
 
-  fit('calls go() with the actual string provided (not with the name of the matched future state)', async () => {
+  it('calls go() with the actual string provided (not with the name of the matched future state)', async () => {
     router.stateRegistry.register({ name: 'future.**', url: '/future' });
 
     const Link = (props) => {
@@ -156,7 +161,7 @@ describe('useSref', () => {
       return <a data-testid="anchor" {...sref} />;
     };
 
-    jest.spyOn(router.stateService, 'go');
+    vi.spyOn(router.stateService, 'go');
     const rendered = mountInRouter(<Link />);
 
     rendered.getByTestId('anchor').click();
@@ -164,7 +169,7 @@ describe('useSref', () => {
     expect(router.stateService.go).toHaveBeenCalledWith('future.child', expect.anything(), expect.anything());
   });
 
-  fit('participates in parent UISrefActive component active state', async () => {
+  it('participates in parent UISrefActive component active state', async () => {
     await routerGo('state2');
 
     const State2Link = (props) => {
@@ -185,7 +190,7 @@ describe('useSref', () => {
   });
 
   it('provides a fully qualified state name to the parent UISrefActive', async () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     const State2Link = () => {
       return (
         <UISrefActiveContext.Provider value={spy}>
@@ -263,9 +268,9 @@ describe('useSref', () => {
     expect(rendered.container.innerHTML).toBe('<div><span></span></div>');
   });
 
-  fdescribe('implementation detail: ', () => {
+  describe('implementation detail: ', () => {
     it('registers itself with the parent UISrefActive addStateInfo callback', () => {
-      const spy = jest.fn();
+      const spy = vi.fn();
       const Component = () => {
         const uiSref = useSref('state', {});
         return <a {...uiSref} />;
@@ -281,7 +286,7 @@ describe('useSref', () => {
     });
 
     it('deregisters itself with the parent UISrefActive addStateInfo callback when unmounted', () => {
-      const spy = jest.fn();
+      const spy = vi.fn();
       const Component = () => {
         const uiSref = useSref('state', {});
         return <a {...uiSref} />;

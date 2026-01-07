@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
@@ -17,7 +18,7 @@ class Child extends React.Component<any, any> {
 
 describe('<UIRouter>', () => {
   it('throws an error if no plugin or router instance is passed via prop', () => {
-    muteConsoleErrors();
+    muteConsoleErrors([/Router instance or plugins missing/, /The above error occurred in the <UIRouter> component:/]);
     expect(() =>
       render(
         <UIRouter>
@@ -54,7 +55,7 @@ describe('<UIRouter>', () => {
   it('starts the router', () => {
     const router = new UIRouterReact();
     router.plugin(memoryLocationPlugin);
-    const spy = jest.spyOn(router, 'start');
+    const spy = vi.spyOn(router, 'start');
     render(
       <UIRouter router={router}>
         <UIRouterContext.Consumer>{(router) => <Child router={router} />}</UIRouterContext.Consumer>

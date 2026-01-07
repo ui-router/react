@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { servicesPlugin, memoryLocationPlugin } from '@uirouter/core';
 
 import { UIRouterReact, StartMethodCalledMoreThanOnceError } from '../index';
@@ -12,8 +13,8 @@ describe('UIRouterReact class', () => {
   });
 
   it('starts the router with start() method', () => {
-    let urlRouterListenSpy = jest.spyOn(router.urlService, 'listen');
-    let urlRouterSyncSpy = jest.spyOn(router.urlService, 'sync');
+    let urlRouterListenSpy = vi.spyOn(router.urlService, 'listen');
+    let urlRouterSyncSpy = vi.spyOn(router.urlService, 'sync');
     router.start();
     expect(urlRouterListenSpy).toHaveBeenCalled();
     expect(urlRouterSyncSpy).toHaveBeenCalled();

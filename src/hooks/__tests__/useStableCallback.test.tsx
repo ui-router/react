@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import * as React from 'react';
 import { useStableCallback } from '../useStableCallback';
@@ -11,7 +12,7 @@ describe('useStableCallback', () => {
   }
 
   it('returns the same stable callback reference over multiple renders', async () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     const wrapper = render(<TestComponent spy={spy} />);
     wrapper.rerender(<TestComponent spy={spy} prop="newvalue" />);
     wrapper.rerender(<TestComponent spy={spy} prop="nextvalue" />);
@@ -27,7 +28,7 @@ describe('useStableCallback', () => {
   });
 
   it('returns the most recent unstable callback reference over multiple renders', async () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     const wrapper = render(<TestComponent spy={spy} />);
     wrapper.rerender(<TestComponent spy={spy} prop="newvalue" />);
     wrapper.rerender(<TestComponent spy={spy} prop="nextvalue" />);
@@ -47,7 +48,7 @@ describe('useStableCallback', () => {
   });
 
   it('allows a stable callback reference to access the latest render closure values', async () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     const wrapper = render(<TestComponent spy={spy} />);
     wrapper.rerender(<TestComponent spy={spy} prop="newvalue" />);
     wrapper.rerender(<TestComponent spy={spy} prop="nextvalue" />);

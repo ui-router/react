@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import * as React from 'react';
 import { makeTestRouter } from '../../__tests__/util';
 import { useSrefActive } from '../useSrefActive';
