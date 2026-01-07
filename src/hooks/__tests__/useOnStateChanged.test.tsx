@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as React from 'react';
 import { RawParams, StateDeclaration } from '@uirouter/core';
 import { defer, makeTestRouter } from '../../__tests__/util';
@@ -9,7 +10,7 @@ const state2 = { name: 'state2', url: '/state2/:param', params: { param: null } 
 describe('useOnStateChanged', () => {
   let { router, routerGo, mountInRouter } = makeTestRouter([]);
   beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter([state1, state2])));
-  let hookSpy = jest.fn();
+  let hookSpy = vi.fn();
 
   function TestComponent({ spy }: { spy: (state: StateDeclaration, params: RawParams) => void }) {
     useOnStateChanged(spy);
@@ -17,7 +18,7 @@ describe('useOnStateChanged', () => {
   }
 
   beforeEach(() => {
-    hookSpy = jest.fn();
+    hookSpy = vi.fn();
     mountInRouter(<TestComponent spy={hookSpy} />);
     hookSpy.mockReset();
   });
@@ -40,7 +41,7 @@ describe('useOnStateChanged', () => {
     expect(hookSpy).toHaveBeenCalledWith(expect.objectContaining({ name: 'state1' }), expect.anything());
 
     const { promise, resolve } = defer();
-    router.transitionService.onStart({ to: 'state2' }, transition => promise);
+    router.transitionService.onStart({ to: 'state2' }, (transition) => promise);
     const goPromise = routerGo('state2', { param: '456' });
 
     expect(hookSpy).toHaveBeenCalledTimes(1);
@@ -56,7 +57,7 @@ describe('useOnStateChanged', () => {
     expect(hookSpy).toHaveBeenCalledWith(expect.objectContaining({ name: 'state1' }), expect.anything());
 
     const { promise, reject } = defer();
-    router.transitionService.onStart({ to: 'state2' }, transition => promise);
+    router.transitionService.onStart({ to: 'state2' }, (transition) => promise);
     const goPromise = routerGo('state2', { param: '456' });
 
     expect(hookSpy).toHaveBeenCalledTimes(1);

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as React from 'react';
 import { RawParams, StateDeclaration, StateService } from '@uirouter/core';
 import { UIRouterReact } from '../../core';
@@ -11,7 +12,7 @@ describe('useCurrentStateAndParams', () => {
   let router: UIRouterReact;
   let routerGo: StateService['go'];
   let mountInRouter;
-  let hookSpy = jest.fn();
+  let hookSpy = vi.fn();
 
   function TestComponent({ spy }: { spy: (state: StateDeclaration, params: RawParams) => void }) {
     const current = useCurrentStateAndParams();
@@ -21,7 +22,7 @@ describe('useCurrentStateAndParams', () => {
 
   beforeEach(() => {
     ({ router, routerGo, mountInRouter } = makeTestRouter([state1, state2]));
-    hookSpy = jest.fn();
+    hookSpy = vi.fn();
     mountInRouter(<TestComponent spy={hookSpy} />);
     hookSpy.mockReset();
   });
@@ -44,7 +45,7 @@ describe('useCurrentStateAndParams', () => {
     expect(hookSpy).toHaveBeenCalledWith(expect.objectContaining({ name: 'state1' }), expect.anything());
 
     const { promise, resolve } = defer();
-    router.transitionService.onStart({ to: 'state2' }, transition => promise);
+    router.transitionService.onStart({ to: 'state2' }, (transition) => promise);
     const goPromise = routerGo('state2', { param: '456' });
 
     expect(hookSpy).toHaveBeenCalledTimes(1);
@@ -60,7 +61,7 @@ describe('useCurrentStateAndParams', () => {
     expect(hookSpy).toHaveBeenCalledWith(expect.objectContaining({ name: 'state1' }), expect.anything());
 
     const { promise, reject } = defer();
-    router.transitionService.onStart({ to: 'state2' }, transition => promise);
+    router.transitionService.onStart({ to: 'state2' }, (transition) => promise);
     const goPromise = routerGo('state2', { param: '456' });
 
     expect(hookSpy).toHaveBeenCalledTimes(1);

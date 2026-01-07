@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import * as React from 'react';
 import { useEffect } from 'react';
@@ -5,7 +6,7 @@ import { useDeepObjectDiff } from '../useDeepObjectDiff';
 
 describe('normal react behavior', () => {
   it('triggers effects every time if a new object literal is provided', () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     function TestComponent(props) {
       useEffect(spy, [props]);
       return null;
@@ -21,7 +22,7 @@ describe('normal react behavior', () => {
 
 describe('useDeepObjectDiff', () => {
   it('changes its return value when the object has changed between renders', () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     function TestComponent(props) {
       useEffect(spy, [useDeepObjectDiff(props)]);
       return null;

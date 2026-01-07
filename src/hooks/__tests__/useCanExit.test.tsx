@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as React from 'react';
 import { TransitionHookFn } from '@uirouter/core';
 import { makeTestRouter } from '../../__tests__/util';
@@ -22,7 +23,7 @@ describe('useCanExit', () => {
   }
 
   it('can block a transition that exits the state it was used in', async () => {
-    const callback = jest.fn(() => false);
+    const callback = vi.fn(() => false);
     await registerAndGo({ name: 'state2', component: () => <TestComponent callback={callback} /> });
     mountInRouter(<UIView />);
     expect(routerGo('state1')).rejects.toMatchObject({
@@ -33,7 +34,7 @@ describe('useCanExit', () => {
   });
 
   it('can block a transition using a Promise that resolves to false', async () => {
-    const callback = jest.fn(() => Promise.resolve(false));
+    const callback = vi.fn(() => Promise.resolve(false));
     await registerAndGo({ name: 'state2', component: () => <TestComponent callback={callback} /> });
     mountInRouter(<UIView />);
     expect(routerGo('state1')).rejects.toMatchObject({
@@ -44,7 +45,7 @@ describe('useCanExit', () => {
   });
 
   it('can allow a transition using a Promise that resolves to true', async () => {
-    const callback = jest.fn(() => Promise.resolve(true));
+    const callback = vi.fn(() => Promise.resolve(true));
     await registerAndGo({ name: 'state2', component: () => <TestComponent callback={callback} /> });
     mountInRouter(<UIView />);
     await routerGo('state1');
@@ -52,7 +53,7 @@ describe('useCanExit', () => {
   });
 
   it('can allow a transition using a Promise that resolves to undefined', async () => {
-    const callback = jest.fn(() => Promise.resolve(undefined));
+    const callback = vi.fn(() => Promise.resolve(undefined));
     await registerAndGo({ name: 'state2', component: () => <TestComponent callback={callback} /> });
     mountInRouter(<UIView />);
     await routerGo('state1');
@@ -60,7 +61,7 @@ describe('useCanExit', () => {
   });
 
   it('can allow a transition that exits the state it was used in', async () => {
-    const callback = jest.fn(() => true);
+    const callback = vi.fn(() => true);
     await registerAndGo({ name: 'state2', component: () => <TestComponent callback={callback} /> });
     mountInRouter(<UIView />);
     await routerGo('state1');
@@ -69,7 +70,7 @@ describe('useCanExit', () => {
   });
 
   it('can block a transition that goes to the parent state', async () => {
-    const callback = jest.fn(() => false);
+    const callback = vi.fn(() => false);
     await registerAndGo({ name: 'state1.child', component: () => <TestComponent callback={callback} /> });
     mountInRouter(<UIView />);
     expect(routerGo('state1')).rejects.toMatchObject({
@@ -80,7 +81,7 @@ describe('useCanExit', () => {
   });
 
   it('does not block a transition which retains (does not exit) the state the hook was used in', async () => {
-    const callback = jest.fn(() => false);
+    const callback = vi.fn(() => false);
     const state2Component = () => (
       <>
         <TestComponent callback={callback} />
@@ -105,16 +106,16 @@ describe('useCanExit', () => {
     it('registers an onBefore transition hook', async () => {
       const callback = () => true;
       await registerAndGo({ name: 'state2', component: () => <TestComponent callback={callback} /> });
-      const spy = jest.spyOn(router.transitionService, 'onBefore');
+      const spy = vi.spyOn(router.transitionService, 'onBefore');
       mountInRouter(<UIView />);
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith({ exiting: 'state2' }, expect.any(Function), undefined);
     });
 
     it('deregisters the onBefore transition hook when unmounted', async () => {
-      const deregisterSpy = jest.fn();
+      const deregisterSpy = vi.fn();
       await registerAndGo({ name: 'state2', component: () => <TestComponent callback={() => true} /> });
-      jest.spyOn(router.transitionService, 'onBefore').mockImplementation(() => deregisterSpy);
+      vi.spyOn(router.transitionService, 'onBefore').mockImplementation(() => deregisterSpy);
       mountInRouter(<UIView />);
       expect(deregisterSpy).toHaveBeenCalledTimes(0);
 

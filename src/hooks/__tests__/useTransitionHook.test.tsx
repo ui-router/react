@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as React from 'react';
 import { makeTestRouter } from '../../__tests__/util';
 import { useTransitionHook } from '../useTransitionHook';
@@ -12,7 +13,7 @@ describe('useRouterHook', () => {
       return <div />;
     }
 
-    jest.spyOn(router.transitionService, 'onBefore');
+    vi.spyOn(router.transitionService, 'onBefore');
     mountInRouter(<TestComponent />);
     expect(router.transitionService.onBefore).toHaveBeenCalledTimes(1);
   });
@@ -23,8 +24,8 @@ describe('useRouterHook', () => {
       return <div />;
     }
 
-    const deregisterSpy = jest.fn();
-    jest.spyOn(router.transitionService, 'onBefore').mockImplementation(() => deregisterSpy);
+    const deregisterSpy = vi.fn();
+    vi.spyOn(router.transitionService, 'onBefore').mockImplementation(() => deregisterSpy);
     const wrapper = mountInRouter(<TestComponent />);
     expect(router.transitionService.onBefore).toHaveBeenCalledTimes(1);
     expect(deregisterSpy).not.toHaveBeenCalled();

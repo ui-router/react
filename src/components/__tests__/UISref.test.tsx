@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent } from '@testing-library/react';
 import * as React from 'react';
 import { UISref, UIView } from '../../components';
@@ -22,12 +23,11 @@ const states = [
 ];
 
 describe('<UISref>', () => {
-  let mockUseEffect: any;
-  beforeEach(() => (mockUseEffect = jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect)));
-  afterEach(() => mockUseEffect.mockRestore());
-
   let { router, routerGo, mountInRouter } = makeTestRouter([]);
-  beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter(states)));
+  beforeEach(() => {
+    muteConsoleErrors([/Not implemented: navigation to another Document/]);
+    return ({ router, routerGo, mountInRouter } = makeTestRouter(states));
+  });
 
   it('renders its child with injected props', async () => {
     const wrapper = mountInRouter(
@@ -36,23 +36,34 @@ describe('<UISref>', () => {
       </UISref>
     );
     await routerGo('state');
-    const goSpy = jest.spyOn(router.stateService, 'go');
+    const goSpy = vi.spyOn(router.stateService, 'go');
     const anchor = wrapper.getByTestId('anchor');
-    expect(anchor.getAttribute('href').includes('/state2')).toBe(true);
+    expect(anchor?.getAttribute('href')).toContain('/state2');
     anchor.click();
     expect(goSpy).toHaveBeenCalledTimes(1);
   });
 
   it('throws if state name is not a string', () => {
-    muteConsoleErrors();
-    expect(() => mountInRouter(<UISref to={5 as any} />)).toThrow(/must be a string/);
+    muteConsoleErrors([
+      /The state name passed to useSref must be a string./,
+      /Warning: Failed %s type: %s%s/,
+      /The above error occurred in the <UISref> component:/,
+    ]);
+
+    expect(() =>
+      mountInRouter(
+        <UISref to={5 as any}>
+          <div>test</div>
+        </UISref>
+      )
+    ).toThrow(/must be a string/);
   });
 
   it('registers and deregisters active state from parent UISrefActive when mounting/unmounting', async () => {
     await routerGo('state');
 
-    const deregisterFn = jest.fn();
-    const parentUISrefActiveAddStateFn = jest.fn(() => deregisterFn);
+    const deregisterFn = vi.fn();
+    const parentUISrefActiveAddStateFn = vi.fn(() => deregisterFn);
 
     mountInRouter(
       <UISrefActiveContext.Provider value={parentUISrefActiveAddStateFn}>
@@ -66,7 +77,7 @@ describe('<UISref>', () => {
   });
 
   it('triggers a transition to target state', async () => {
-    const goSpy = jest.spyOn(router.stateService, 'go');
+    const goSpy = vi.spyOn(router.stateService, 'go');
     const rendered = mountInRouter(
       <UISref to="state2">
         <a data-testid="anchor" />
@@ -81,8 +92,8 @@ describe('<UISref>', () => {
 
   it('calls the child elements onClick function first', async () => {
     const log = [];
-    const goSpy = jest.spyOn(router.stateService, 'go').mockImplementation(() => log.push('go') as any);
-    const onClickSpy = jest.fn(() => log.push('onClick'));
+    const goSpy = vi.spyOn(router.stateService, 'go').mockImplementation(() => log.push('go') as any);
+    const onClickSpy = vi.fn(() => log.push('onClick'));
     const rendered = mountInRouter(
       <UISref to="state2">
         <a data-testid="anchor" onClick={onClickSpy}>
@@ -98,8 +109,8 @@ describe('<UISref>', () => {
   });
 
   it('calls the child elements onClick function and honors e.preventDefault()', async () => {
-    const goSpy = jest.spyOn(router.stateService, 'go');
-    const onClickSpy = jest.fn((e) => e.preventDefault());
+    const goSpy = vi.spyOn(router.stateService, 'go');
+    const onClickSpy = vi.fn((e) => e.preventDefault());
     const rendered = mountInRouter(
       <UISref to="state2">
         <a data-testid="anchor" onClick={onClickSpy}>
@@ -114,7 +125,7 @@ describe('<UISref>', () => {
   });
 
   it("doesn't trigger a transition when middle-clicked", async () => {
-    const stateServiceGoSpy = jest.spyOn(router.stateService, 'go');
+    const stateServiceGoSpy = vi.spyOn(router.stateService, 'go');
     const rendered = mountInRouter(
       <UISref to="state2">
         <a data-testid="anchor">state2</a>
@@ -130,7 +141,7 @@ describe('<UISref>', () => {
   });
 
   it("doesn't trigger a transition when ctrl/meta/shift/alt+clicked", async () => {
-    const stateServiceGoSpy = jest.spyOn(router.stateService, 'go');
+    const stateServiceGoSpy = vi.spyOn(router.stateService, 'go');
     const rendered = mountInRouter(
       <UISref to="state2">
         <a data-testid="anchor">state2</a>
@@ -155,7 +166,7 @@ describe('<UISref>', () => {
   });
 
   it("doesn't trigger a transition when the anchor has a 'target' attribute", async () => {
-    const stateServiceGoSpy = jest.spyOn(router.stateService, 'go');
+    const stateServiceGoSpy = vi.spyOn(router.stateService, 'go');
     const rendered = mountInRouter(
       <UISref to="state2">
         <a data-testid="anchor" target="_blank">

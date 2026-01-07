@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { describe, expect, it, vi } from 'vitest';
 import { TransitionOptions, RawParams, StateOrName, TransitionPromise, memoryLocationPlugin } from '@uirouter/core';
 import { render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
@@ -29,9 +30,22 @@ export const makeTestRouter = (states: ReactStateDeclaration[]) => {
   return { router, routerGo, mountInRouter };
 };
 
-// silence console errors that are logged by react-dom or other actors
-export function muteConsoleErrors() {
-  jest.spyOn(console, 'error').mockImplementation(() => undefined);
+// Silence errors from React error boundaries during tests that expect errors.
+// React logs to console.error AND writes stack traces directly to stderr.
+const originalStderrWrite = process.stderr.write.bind(process.stderr);
+const originalConsoleError = console.error.bind(console);
+export function muteConsoleErrors(messages: RegExp[] = []) {
+  const maybeMute =
+    (originalWriteFn: (...args: any[]) => boolean) =>
+    (...args: any[]) => {
+      if (messages.some((regex) => regex.test(args[0]?.toString?.() ?? ''))) {
+        return true;
+      }
+      return originalWriteFn(...args);
+    };
+
+  vi.spyOn(console, 'error').mockImplementation(maybeMute(originalConsoleError));
+  vi.spyOn(process.stderr, 'write').mockImplementation(maybeMute(originalStderrWrite));
 }
 
 export function defer<T = any>() {

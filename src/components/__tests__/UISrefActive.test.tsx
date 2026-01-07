@@ -1,4 +1,5 @@
-import { render } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { makeTestRouter } from '../../__tests__/util';
 import { ReactStateDeclaration } from '../../index';
@@ -14,8 +15,6 @@ const states: ReactStateDeclaration[] = [
 describe('<UISrefActive>', () => {
   let { router, routerGo, mountInRouter } = makeTestRouter([]);
   beforeEach(() => ({ router, routerGo, mountInRouter } = makeTestRouter(states)));
-  beforeEach(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect));
-  afterEach(() => (React.useEffect as any).mockRestore());
 
   function UISrefActiveTestComponent(props: {
     to?: string;
@@ -55,14 +54,14 @@ describe('<UISrefActive>', () => {
   });
 
   it('registers onSuccess transition hook to listen for state changes', async () => {
-    const onSuccessSpy = jest.spyOn(router.transitionService, 'onSuccess');
+    const onSuccessSpy = vi.spyOn(router.transitionService, 'onSuccess');
     mountInRouter(<UISrefActiveTestComponent />);
     expect(onSuccessSpy).toHaveBeenCalled();
   });
 
   it('deregisters the transition hook when unmounted', async () => {
-    const deregisterSpy = jest.fn();
-    jest.spyOn(router.transitionService, 'onSuccess').mockImplementation(() => deregisterSpy);
+    const deregisterSpy = vi.fn();
+    vi.spyOn(router.transitionService, 'onSuccess').mockImplementation(() => deregisterSpy);
     const Component = () => {
       const [show, setShow] = React.useState(true);
       return (
@@ -78,7 +77,7 @@ describe('<UISrefActive>', () => {
     const rendered = mountInRouter(<Component />);
     expect(deregisterSpy).not.toHaveBeenCalled();
     rendered.getByTestId('btn').click();
-    expect(deregisterSpy).toHaveBeenCalled();
+    await waitFor(() => expect(deregisterSpy).toHaveBeenCalled());
   });
 
   it('works with state parameters', async () => {
@@ -200,15 +199,16 @@ describe('<UISrefActive>', () => {
       );
     };
 
+    await routerGo('parent.child1');
+    const rendered = render(<Comp />);
+
     const classFor = (testid: string) =>
       rendered.getByTestId(testid).getAttribute('class').split(/ +/).sort().join(' ');
 
-    await routerGo('parent.child1');
-    const rendered = render(<Comp />);
     expect(classFor('div')).toBe('active baseclass');
 
     rendered.getByTestId('hidebtn').click();
-    expect(classFor('div')).toBe('baseclass');
+    await waitFor(() => expect(classFor('div')).toBe('baseclass'));
   });
 
   it('checks for exact state match when exact prop is provided', async () => {

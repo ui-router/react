@@ -1,7 +1,7 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-// import { mount } from 'enzyme';
 import { Transition } from '@uirouter/core';
 
 import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
@@ -161,7 +161,10 @@ describe('<UIView>', () => {
 
       await routerGo('__state');
 
-      muteConsoleErrors();
+      muteConsoleErrors([
+        /`transition` cannot be used as resolve token/,
+        /The above error occurred in the <UIView> component:/,
+      ]);
       expect(() => mountInRouter(<UIView />)).toThrow(TransitionPropCollisionError);
     });
 
@@ -206,7 +209,7 @@ describe('<UIView>', () => {
       }
 
       it('calls the uiCanExit function of a Class Component when unmounting', async () => {
-        const uiCanExitSpy = jest.fn();
+        const uiCanExitSpy = vi.fn();
         router.stateRegistry.register({ name: '__state', component: makeSpyComponent(uiCanExitSpy) } as any);
 
         await routerGo('__state');
@@ -219,7 +222,7 @@ describe('<UIView>', () => {
       });
 
       it('calls uiCanExit function of a React.forwardRef() Class Component when unmounting', async () => {
-        const uiCanExitSpy = jest.fn();
+        const uiCanExitSpy = vi.fn();
         const Comp = makeSpyComponent(uiCanExitSpy);
         const ForwardRef = React.forwardRef((props, ref: any) => <Comp {...props} ref={ref} />);
         router.stateRegistry.register({ name: '__state', component: ForwardRef } as ReactStateDeclaration);
@@ -234,7 +237,7 @@ describe('<UIView>', () => {
       });
 
       it('does not transition if uiCanExit function of its State Component returns false', async () => {
-        let uiCanExitSpy = jest.fn().mockImplementation(() => false);
+        let uiCanExitSpy = vi.fn().mockImplementation(() => false);
         router.stateRegistry.register({ name: '__state', component: makeSpyComponent(uiCanExitSpy) } as any);
         await routerGo('__state');
         const rendered = mountInRouter(<UIView />);
@@ -250,8 +253,8 @@ describe('<UIView>', () => {
 
     it('deregisters the UIView when unmounted', () => {
       const Component = (props) => <UIRouter router={router}>{props.show ? <UIView /> : <div />}</UIRouter>;
-      const deregisterSpy = jest.fn();
-      jest.spyOn(router.viewService, 'registerUIView').mockImplementation(() => deregisterSpy);
+      const deregisterSpy = vi.fn();
+      vi.spyOn(router.viewService, 'registerUIView').mockImplementation(() => deregisterSpy);
       const rendered = render(<Component show={true} />);
       rendered.rerender(<Component show={false} />);
       expect(deregisterSpy).toHaveBeenCalled();
@@ -268,8 +271,8 @@ describe('<UIView>', () => {
     });
 
     it('unmounts the State Component when calling stateService.reload(true)', async () => {
-      const componentDidMountSpy = jest.fn();
-      const componentWillUnmountSpy = jest.fn();
+      const componentDidMountSpy = vi.fn();
+      const componentWillUnmountSpy = vi.fn();
       class TestUnmountComponent extends React.Component {
         componentDidMount = componentDidMountSpy;
         componentWillUnmount = componentWillUnmountSpy;
