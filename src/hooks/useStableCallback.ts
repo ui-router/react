@@ -25,5 +25,5 @@ export function useStableCallback<T extends Function>(unstableCallback: T): T {
   const callback = useCallback(function () {
     return ref.current && ref.current.apply(this, arguments);
   }, []);
-  return (callback as unknown) as T;
+  return callback as unknown as T;
 }
