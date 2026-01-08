@@ -2,24 +2,36 @@
   "name": "@uirouter/react",
   "version": "1.0.8",
   "description": "State based routing for React",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
-  "jsnext:main": "lib-esm/index.js",
-  "module": "lib-esm/index.js",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "unpkg": "./dist/ui-router-react.min.iife.js",
+  "jsdelivr": "./dist/ui-router-react.min.iife.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:downstream": "npm run build && test_downstream_projects",
     "test:integration": "npm run build && test_downstream_projects --group=react-versions",
-    "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config ./examples/typescript/webpack.config.js --history-api-fallback",
-    "clean": "shx rm -rf _bundles lib lib-esm build _doc",
-    "compile": "npm run clean && tsc && tsc -m es6 --outDir lib-esm",
-    "bundle": "cross-env NODE_ENV=production webpack",
-    "build": "run-s compile bundle fixmaps:*",
+    "clean": "shx rm -rf dist _doc",
+    "build": "tsdown",
     "release": "release --deps @uirouter/core",
-    "fixmaps:lib": "tweak_sourcemap_paths -a --include 'lib/**/*.js.map' 'lib-esm/**/*.js.map'",
-    "fixmaps:bundle": "tweak_sourcemap_paths -a --include '_bundles/**/*.js.map'",
     "docs": "generate_docs",
     "docs:publish": "generate_docs && publish_docs",
     "prepublishOnly": "npm run build",
@@ -61,20 +73,15 @@
     "@types/react-dom": "^19",
     "@uirouter/publish-scripts": "^2.7.0",
     "@vitest/ui": "^4.0.16",
-    "cross-env": "^10.1.0",
     "husky": "^9.1.7",
     "jsdom": "^27.4.0",
     "prettier": "^3.7.4",
     "pretty-quick": "^4.2.2",
     "react": "^19",
     "react-dom": "^19",
-    "ts-loader": "^9.5.4",
-    "tsconfig-paths-webpack-plugin": "^4.2.0",
+    "tsdown": "^0.19.0-beta.5",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.16",
-    "webpack": "^5.104.1",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.2"
+    "vitest": "^4.0.16"
   },
   "checkPeerDependencies": {
     "ignore": [

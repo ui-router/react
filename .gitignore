@@ -3,9 +3,7 @@ tslint.json
 *.ipr
 *.iml
 *.iws
-lib/
-lib-esm/
-_bundles/
+dist/
 node_modules/
 _doc
 yarn-error.log
