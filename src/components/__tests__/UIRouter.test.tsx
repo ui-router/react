@@ -8,7 +8,7 @@ import { memoryLocationPlugin } from '../../index';
 import { muteConsoleErrors } from '../../__tests__/util';
 
 class Child extends React.Component<any, any> {
-  static propTypes: React.ValidationMap<any> = {
+  static propTypes = {
     router: PropTypes.object,
   };
   render() {

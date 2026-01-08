@@ -132,7 +132,7 @@ export const InstanceOrPluginsMissingError = `Router instance or plugins missing
  * ```
  */
 export function UIRouter(props: UIRouterProps) {
-  const uiRouter = useRef<UIRouterReact>();
+  const uiRouter = useRef<UIRouterReact>(undefined);
   const [started, setStarted] = useState<boolean>(false);
 
   useEffect(() => {

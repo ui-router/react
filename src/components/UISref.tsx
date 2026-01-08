@@ -50,7 +50,7 @@ export interface UISrefProps {
  * - the underlying tag (e.g.: anchor tag) has a 'target' attribute, such as `<a target="_blank">Open in new window</a>`
  * - preventDefault has been called on the event, e.g.: `<a onClick={e => e.preventDefault()}>no-op</a>`
  */
-export const UISref: React.FC<UISrefProps> = ({ children, className, options, params, to }) => {
+export const UISref: React.FC<UISrefProps> = ({ children, className = null, options = {}, params = {}, to }) => {
   const { onClick, href } = useSref(to, params, options);
   const childrenProps = children.props;
 
@@ -87,10 +87,4 @@ UISref.propTypes = {
   params: PropTypes.object,
   options: PropTypes.object,
   className: PropTypes.string,
-};
-
-UISref.defaultProps = {
-  params: {},
-  options: {},
-  className: null,
 };

@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:downstream": "npm run build && test_downstream_projects",
+    "test:integration": "npm run build && test_downstream_projects --group=react-versions",
     "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config ./examples/typescript/webpack.config.js --history-api-fallback",
     "clean": "shx rm -rf _bundles lib lib-esm build _doc",
     "compile": "npm run clean && tsc && tsc -m es6 --outDir lib-esm",
@@ -49,14 +50,15 @@
     "prop-types": "^15.8.1"
   },
   "peerDependencies": {
-    "react": ">=16.8.0"
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10",
     "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^12.0.0",
+    "@testing-library/react": "^16",
     "@types/prop-types": "^15.7.15",
-    "@types/react": "17.0.14",
-    "@types/react-dom": "17.0.9",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "@uirouter/publish-scripts": "^2.7.0",
     "@vitest/ui": "^4.0.16",
     "cross-env": "^10.1.0",
@@ -64,8 +66,8 @@
     "jsdom": "^27.4.0",
     "prettier": "^3.7.4",
     "pretty-quick": "^4.2.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^19",
+    "react-dom": "^19",
     "ts-loader": "^9.5.4",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "typescript": "^5.9.3",

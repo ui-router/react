@@ -2,8 +2,8 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import {
   ComponentType,
+  FunctionComponent,
   ReactNode,
-  ValidationMap,
   cloneElement,
   createContext,
   createElement,
@@ -15,6 +15,7 @@ import {
   forwardRef,
   useImperativeHandle,
   useRef,
+  JSX,
 } from 'react';
 import {
   ActiveUIView,
@@ -129,7 +130,7 @@ function useRoutedComponentProps(
   router: UIRouter,
   stateName: string,
   viewConfig: ViewConfig,
-  component: React.FunctionComponent<any> | React.ComponentClass<any> | React.ClassicComponentClass<any>,
+  component: FunctionComponent<any> | React.ComponentClass<any>,
   resolves: TypedMap<any> | {},
   className: string,
   style: Object,
@@ -190,7 +191,7 @@ function useReactHybridApi(ref: React.Ref<unknown>, uiViewData: ActiveUIView, ui
  */
 function useUiCanExitClassComponentHook(router: UIRouter, stateName: string, maybeComponentClass: any) {
   // Use refs and run the callback outside of any render pass
-  const componentInstanceRef = useRef<any>();
+  const componentInstanceRef = useRef<any>(undefined);
   const deregisterRef = useRef<Function>(() => undefined);
 
   function callbackRef(componentInstance) {
@@ -278,7 +279,7 @@ View.propTypes = {
   className: PropTypes.string,
   style: PropTypes.object,
   render: PropTypes.func,
-} as ValidationMap<UIViewProps>;
+};
 
 /**
  * UIView Viewport

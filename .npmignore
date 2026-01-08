@@ -5,6 +5,7 @@
 **/tsconfig.webpack.json
 **/node_modules
 downstream_projects
+integration
 logo
 src
 scripts
