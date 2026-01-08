@@ -90,7 +90,9 @@ export function useSref(stateName: string, params: object = {}, options: Transit
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
-      const targetAttr = (e.target as any)?.attributes?.target;
+      /* We want to check attributes on the element that the click handler is on and not on whichever other element was clicked*/
+
+      const targetAttr = (e.currentTarget as any)?.attributes?.target;
       const modifierKey = e.button >= 1 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey;
       if (!e.defaultPrevented && targetAttr == null && !modifierKey) {
         e.preventDefault();
