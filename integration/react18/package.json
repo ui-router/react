@@ -1,0 +1,27 @@
+{
+  "name": "integration-test-react18",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Integration tests for @uirouter/react with React 18",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run && npm run build && npx playwright install chromium && npx playwright test"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@testing-library/react": "^14.3.1",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^27.4.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.0.7",
+    "vitest": "^4.0.16"
+  }
+}

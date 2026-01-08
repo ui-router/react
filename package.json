@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:downstream": "npm run build && test_downstream_projects",
+    "test:integration": "npm run build && test_downstream_projects --group=react-versions",
     "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8000 --config ./examples/typescript/webpack.config.js --history-api-fallback",
     "clean": "shx rm -rf _bundles lib lib-esm build _doc",
     "compile": "npm run clean && tsc && tsc -m es6 --outDir lib-esm",
