@@ -84,6 +84,9 @@
       "pre-commit": "pretty-quick --staged"
     }
   },
+  "checkPeerDependencies": {
+    "ignore": ["@types/node", "terser", "yaml"]
+  },
   "docgen": {
     "publishDir": "_react_docs",
     "navigation": {
