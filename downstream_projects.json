@@ -1,3 +1,8 @@
 {
-  "sample-app-react": "https://github.com/ui-router/sample-app-react.git"
+  "sample-app-react": "https://github.com/ui-router/sample-app-react.git",
+  "react-versions": {
+    "react17": "./integration/react17",
+    "react18": "./integration/react18",
+    "react19": "./integration/react19"
+  }
 }
