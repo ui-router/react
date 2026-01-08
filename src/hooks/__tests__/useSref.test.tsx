@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/react';
 import * as React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
 import { UIRouter, UIView } from '../../components';
 import { UISrefActive, UISrefActiveContext } from '../../components/UISrefActive';
