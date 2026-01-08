@@ -23,7 +23,8 @@
     "docs:publish": "generate_docs && publish_docs",
     "prepublishOnly": "npm run build",
     "artifacts": "artifact_tagging",
-    "prettier": "npx prettier --write src/**/*.[jt]s src/**/*.[jt]sx"
+    "prettier": "npx prettier --write src/**/*.[jt]s src/**/*.[jt]sx",
+    "prepare": "husky"
   },
   "homepage": "https://ui-router.github.io/react",
   "contributors": [
@@ -64,10 +65,10 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "cross-env": "^7.0.3",
-    "husky": "^4.3.6",
+    "husky": "^9.1.7",
     "jsdom": "^27.4.0",
-    "prettier": "^2.3.2",
-    "pretty-quick": "^3.1.1",
+    "prettier": "^3.7.4",
+    "pretty-quick": "^4.2.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-test-renderer": "^17.0.2",
@@ -79,13 +80,12 @@
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
   "checkPeerDependencies": {
-    "ignore": ["@types/node", "terser", "yaml"]
+    "ignore": [
+      "@types/node",
+      "terser",
+      "yaml"
+    ]
   },
   "docgen": {
     "publishDir": "_react_docs",
