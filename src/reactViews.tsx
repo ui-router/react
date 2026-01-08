@@ -50,7 +50,10 @@ export class ReactViewConfig implements ViewConfig {
   loaded: boolean = true;
   $id: number = id++;
 
-  constructor(public path: [PathNode], public viewDecl: ReactViewDeclaration) {}
+  constructor(
+    public path: [PathNode],
+    public viewDecl: ReactViewDeclaration
+  ) {}
 
   load() {
     return services.$q.when(this);
