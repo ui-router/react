@@ -1,8 +1,8 @@
 import * as React from 'react';
+import { act } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { TransitionOptions, RawParams, StateOrName, TransitionPromise, memoryLocationPlugin } from '@uirouter/core';
 import { render } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
 import { UIRouterReact } from '../core';
 import { servicesPlugin, UIRouter } from '../index';
 import { ReactStateDeclaration } from '../interface';

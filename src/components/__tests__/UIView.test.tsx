@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import * as React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import { Transition } from '@uirouter/core';
 
 import { makeTestRouter, muteConsoleErrors } from '../../__tests__/util';
@@ -90,7 +90,7 @@ describe('<UIView>', () => {
     });
 
     describe('injects the right props:', () => {
-      let lastProps = undefined;
+      let lastProps: any = undefined;
       const Comp = (props) => {
         lastProps = props;
         return <span>component</span>;
