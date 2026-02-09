@@ -13,12 +13,16 @@ export default defineConfig([
   },
   // IIFE bundle for browsers (non-minified)
   // Bundles @uirouter/core and other deps, only React is external
+  // react/jsx-runtime must be in noExternal because tsdown prefix-matches
+  // external: ['react'] to also externalize react/* subpaths.
+  // Bundling it is fine — it's a tiny shim whose internal require('react')
+  // resolves to the React global.
   {
     entry: { 'ui-router-react': 'src/index.ts' },
     format: 'iife',
     sourcemap: true,
-    external: ['react', 'react-dom', 'react/jsx-runtime'],
-    noExternal: ['@uirouter/core', 'prop-types', 'classnames'],
+    external: ['react', 'react-dom'],
+    noExternal: ['@uirouter/core', 'prop-types', 'classnames', 'react/jsx-runtime'],
     outDir: 'dist',
     globalName: 'UIRouterReact',
     platform: 'browser',
@@ -26,7 +30,6 @@ export default defineConfig([
       globals: {
         react: 'React',
         'react-dom': 'ReactDOM',
-        'react/jsx-runtime': 'React',
       },
     },
   },
@@ -36,8 +39,8 @@ export default defineConfig([
     format: 'iife',
     sourcemap: true,
     minify: true,
-    external: ['react', 'react-dom', 'react/jsx-runtime'],
-    noExternal: ['@uirouter/core', 'prop-types', 'classnames'],
+    external: ['react', 'react-dom'],
+    noExternal: ['@uirouter/core', 'prop-types', 'classnames', 'react/jsx-runtime'],
     outDir: 'dist',
     globalName: 'UIRouterReact',
     platform: 'browser',
@@ -45,7 +48,6 @@ export default defineConfig([
       globals: {
         react: 'React',
         'react-dom': 'ReactDOM',
-        'react/jsx-runtime': 'React',
       },
     },
   },
