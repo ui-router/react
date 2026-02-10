@@ -18,8 +18,6 @@
     "./package.json": "./package.json"
   },
   "sideEffects": false,
-  "unpkg": "./dist/ui-router-react.min.iife.js",
-  "jsdelivr": "./dist/ui-router-react.min.iife.js",
   "files": [
     "dist"
   ],
