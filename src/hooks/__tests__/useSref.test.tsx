@@ -21,6 +21,15 @@ const Link = ({ to, params = undefined, children = undefined, target = undefined
   );
 };
 
+const LinkWithChildElement = ({ to, params = undefined, children = undefined, target = undefined }) => {
+  const sref = useSref(to, params);
+  return (
+    <a data-testid="anchor" {...sref} target={target}>
+      <div data-testid="inner-child">{children}</div>
+    </a>
+  );
+};
+
 describe('useSref', () => {
   let { router, routerGo, mountInRouter } = makeTestRouter([]);
   beforeEach(() => {
@@ -86,6 +95,16 @@ describe('useSref', () => {
       const rendered = mountInRouter(<Link to="state" target="_blank" />);
 
       rendered.getByTestId('anchor').click();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('does not get called if the underlying DOM element that has a child has a "target" attribute', () => {
+      const spy = jest.spyOn(router.stateService, 'go');
+      const rendered = mountInRouter(<LinkWithChildElement to="state" target="_blank" />);
+
+      // clicking on the div to mimick the actual behaviour
+      // behaviour: when anchor has a child element and user clicks on anchor, the event is fired on child element rather than on anchor
+      rendered.getByTestId('inner-child').click();
       expect(spy).not.toHaveBeenCalled();
     });
   });
