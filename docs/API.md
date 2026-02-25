@@ -339,7 +339,7 @@ Resolves can be injected into other resolves.
 
 Since resolve functions are injected, a common pattern is to inject a custom service such as `userService` and delegate to a custom service method, such as `userService.list()`;
 
-You can use the `resolve` machanism to inject services in other `resolves` and components.
+You can use the `resolve` mechanism to inject services in other `resolves` and components.
 
 ```js
 const userService = new UserService();
