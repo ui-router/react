@@ -4,6 +4,7 @@
  * This is a collection of [react hooks](https://reactjs.org/docs/hooks-intro.html)
  * that can be used in functional components.
  */
+export { useCanExit } from './useCanExit';
 export { useCurrentStateAndParams } from './useCurrentStateAndParams';
 export { useIsActive } from './useIsActive';
 export { useOnStateChanged } from './useOnStateChanged';
