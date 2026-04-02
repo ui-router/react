@@ -5,7 +5,6 @@ pull_request_rules:
       - check-success=ci
       - label=ready to squash and merge
     actions:
-      delete_head_branch:
       merge:
         method: squash
   - name: 'Auto Rebase and Merge'
@@ -14,6 +13,5 @@ pull_request_rules:
       - check-success=ci
       - label=ready to rebase and merge
     actions:
-      delete_head_branch:
       merge:
         method: rebase
